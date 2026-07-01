@@ -173,3 +173,8 @@ footer .logo{font-size:15px;font-family:var(--sans)}
   .hero{padding:44px 0}
   .hero-media figure{min-height:320px}
 }
+
+/* built-works process videos */
+.bw-video-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.bw-video-grid video{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:6px;background:#000}
+@media(max-width:760px){.bw-video-grid{grid-template-columns:1fr}}
