@@ -229,7 +229,8 @@ def refine_title_en(p: dict, text: str) -> None:
     # Heuristic known titles
     known = {
         "第九师校园文化建设": "Campus Culture, Ninth Division",
-        "医药企业形象空间": "Pharmaceutical Brand Space",
+        "商业形象空间": "Commercial Brand Space",
+        "医药企业形象空间": "Commercial Brand Space",  # legacy title fallback
     }
     p["title_en"] = known.get(p["title_cn"], p["summary_en"] or p["title_cn"])
 
@@ -379,14 +380,17 @@ def render_works_block(all_projects: list[dict]) -> str:
 
 
 def patch_works_in_file(path: Path, works_html: str) -> None:
+    """Replace the works (+ optional works-extra) block inside its parent section.
+
+    Match from <div class="works"> through any leftover markup until the next
+    </section>, so a previously broken patch cannot leave orphan cards.
+    """
     text = path.read_text(encoding="utf-8")
-    # Replace from <div class="works"> through the closing of works (+ works-extra if present)
-    # up to the next </section> after works — keep section structure
     pat = re.compile(
-        r'(<div class="works">.*?</div>\s*</div>)(\s*<div class="works-extra">.*?</div>)?',
+        r'<div class="works">.*?(?=</section>)',
         re.S,
     )
-    new_text, n = pat.subn(works_html, text, count=1)
+    new_text, n = pat.subn(works_html.rstrip() + "\n    ", text, count=1)
     if n == 0:
         raise SystemExit(f"Could not find works block in {path.name}")
     path.write_text(new_text, encoding="utf-8")

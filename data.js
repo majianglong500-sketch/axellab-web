@@ -30,7 +30,7 @@ const AXEL_DATA = {
     },
     {
       id: "AL_2026_005",
-      title: { cn: "医药企业形象空间", en: "Pharmaceutical Brand Space" },
+      title: { cn: "商业形象空间", en: "Commercial Brand Space" },
       intro: { cn: "门头、大厅形象墙、文化墙与楼梯灯光。", en: "Storefront, lobby identity wall, culture wall and stair lighting." },
       heroImage: "assets/projects/al-2026-005/cover.jpg",
       url: "al-2026-005.html"
