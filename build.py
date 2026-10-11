@@ -63,23 +63,59 @@ NAV = '''  <header class="nav">
     </div>
   </header>'''
 
-FOOT_SCRIPTS = '''  <div class="lightbox" id="lb"><span class="close" id="lbClose">CLOSE ✕</span><img id="lbImg" alt=""></div>
-  <script src="main.js"></script>
+FOOT_SCRIPTS = """  <div class=\"lightbox\" id=\"lb\"><span class=\"close\" id=\"lbClose\">CLOSE ✕</span><img id=\"lbImg\" alt=\"\"></div>
+  <script src=\"main.js\"></script>
   <script>
     (function(){
       var lb=document.getElementById('lb'),li=document.getElementById('lbImg');
-      if(!lb)return;
-      document.querySelectorAll('.gallery-grid img,.detail-hero img,.gallery2 img').forEach(function(i){
-        i.style.cursor='zoom-in';
-        i.onclick=function(){li.src=i.src;lb.classList.add('open');};
-      });
-      document.getElementById('lbClose').onclick=function(){lb.classList.remove('open');};
-      lb.onclick=function(e){if(e.target===lb)lb.classList.remove('open');};
+      if(lb){
+        document.querySelectorAll('.gallery-grid img,.detail-hero img,.gallery2 img,.detail-module__media img').forEach(function(i){
+          i.style.cursor='zoom-in';
+          i.onclick=function(){li.src=i.src;lb.classList.add('open');};
+        });
+        document.getElementById('lbClose').onclick=function(){lb.classList.remove('open');};
+        lb.onclick=function(e){if(e.target===lb)lb.classList.remove('open');};
+      }
+      var toc=document.getElementById('detailToc');
+      if(toc){
+        var links=[].slice.call(toc.querySelectorAll('a[href^=\"#\"]'));
+        var map={};
+        links.forEach(function(a){
+          var id=a.getAttribute('href').slice(1);
+          var el=document.getElementById(id);
+          if(el) map[id]={el:el,a:a};
+        });
+        var ids=Object.keys(map);
+        if(ids.length && 'IntersectionObserver' in window){
+          var io=new IntersectionObserver(function(entries){
+            entries.forEach(function(en){
+              if(en.isIntersecting){
+                links.forEach(function(a){a.classList.remove('is-active');});
+                var hit=map[en.target.id];
+                if(hit) hit.a.classList.add('is-active');
+              }
+            });
+          },{rootMargin:'-30% 0px -55% 0px',threshold:0});
+          ids.forEach(function(id){io.observe(map[id].el);});
+        }
+      }
+      var reveal=document.querySelectorAll('.detail-module,.metric-chip,.gallery-grid figure,.detail-hero');
+      if(reveal.length && 'IntersectionObserver' in window){
+        var rio=new IntersectionObserver(function(entries){
+          entries.forEach(function(en){
+            if(en.isIntersecting){en.target.classList.add('is-in');rio.unobserve(en.target);}
+          });
+        },{rootMargin:'0px 0px -8% 0px',threshold:0.08});
+        reveal.forEach(function(el){el.classList.add('will-in');rio.observe(el);});
+      } else {
+        reveal.forEach(function(el){el.classList.add('is-in');});
+      }
     })();
   </script>
 </body>
 </html>
-'''
+"""
+
 
 
 def meta_line(text: str, key: str) -> str:
@@ -187,6 +223,18 @@ def parse_project(folder: Path) -> dict | None:
                 "title_en": ten.group(1).strip() if ten else "Short film",
             }
 
+    metrics = []
+    met_sec = section_body(text, "指标")
+    for line in met_sec.splitlines():
+        line = line.strip().lstrip("-").strip()
+        if not line or line.startswith("#") or line.startswith("<!--"):
+            continue
+        parts = [x.strip() for x in line.split("|")]
+        if len(parts) >= 3:
+            metrics.append({"value": parts[0], "label_cn": parts[1], "label_en": parts[2]})
+        elif len(parts) == 2:
+            metrics.append({"value": parts[0], "label_cn": parts[1], "label_en": parts[1]})
+
     related = []
     rel_sec = section_body(text, "相关项目")
     for line in rel_sec.splitlines():
@@ -213,6 +261,7 @@ def parse_project(folder: Path) -> dict | None:
         "modules": modules,
         "gallery": gallery,
         "video": video,
+        "metrics": metrics,
         "related": related,
         "url": f"{slug}.html",
         "cover_web": f"assets/projects/{slug}/{cover}",
@@ -252,22 +301,90 @@ def copy_assets(p: dict) -> None:
 def render_detail(p: dict, by_slug: dict) -> str:
     tags_html = "".join(f'<span class="tag">{t}</span>' for t in p["tags"])
 
+    # Metric chips (optional)
+    metrics_html = ""
+    if p.get("metrics"):
+        chips = []
+        for m in p["metrics"]:
+            chips.append(
+                "      <div class=\"metric-chip\">\n"
+                f"        <span class=\"metric-chip__value\">{m['value']}</span>\n"
+                f"        <span class=\"metric-chip__label\"><span class=\"cn\">{m['label_cn']}</span>"
+                f"<span class=\"en\">{m['label_en']}</span></span>\n"
+                "      </div>"
+            )
+        metrics_html = "\n    <div class=\"metric-chips\">\n" + "\n".join(chips) + "\n    </div>"
+
+    gallery = p["gallery"]
     modules_html = []
+    toc_items = []
     for i, mod in enumerate(p["modules"], 1):
+        mid = f"mod-{i:02d}"
+        toc_items.append(
+            f'      <a href="#{mid}" data-n="{i:02d}">'
+            f'<span class="toc-n">{i:02d}</span>'
+            f'<span class="toc-label"><span class="cn">{mod["title_cn"]}</span>'
+            f'<span class="en">{mod["title_en"]}</span></span></a>'
+        )
+        alt = "media-right" if i % 2 == 1 else "media-left"
+        g = gallery[i - 1] if i - 1 < len(gallery) else None
+        if g:
+            src = f'assets/projects/{p["slug"]}/{g["file"]}'
+            por = " portrait" if g["portrait"] else ""
+            media_html = (
+                f'      <div class="detail-module__media{por}">\n'
+                f'        <img src="{src}" alt="{g["caption_cn"]}" loading="lazy">\n'
+                f'        <figcaption><span class="cn">{g["caption_cn"]}</span>'
+                f'<span class="en">{g["caption_en"]}</span></figcaption>\n'
+                f"      </div>"
+            )
+        else:
+            media_html = (
+                '      <div class="detail-module__media detail-module__media--empty"'
+                ' aria-hidden="true"></div>'
+            )
         modules_html.append(
-            f'''    <section class="detail-block">
-      <h2><span class="cn">{i:02d} {mod["title_cn"]}</span><span class="en">{i:02d} {mod["title_en"]}</span></h2>
-      <p><span class="cn">{mod["cn"]}</span><span class="en">{mod["en"]}</span></p>
-    </section>'''
+            f'    <section class="detail-module detail-module--{alt}" id="{mid}">\n'
+            f'      <div class="detail-module__text">\n'
+            f'        <h2><span class="mod-n">{i:02d}</span> '
+            f'<span class="cn">{mod["title_cn"]}</span>'
+            f'<span class="en">{mod["title_en"]}</span></h2>\n'
+            f'        <p><span class="cn">{mod["cn"]}</span>'
+            f'<span class="en">{mod["en"]}</span></p>\n'
+            f"      </div>\n"
+            f"{media_html}\n"
+            f"    </section>"
+        )
+
+    if gallery:
+        toc_items.append(
+            '      <a href="#gallery" data-n="GAL"><span class="toc-n">GAL</span>'
+            '<span class="toc-label"><span class="cn">图库</span>'
+            '<span class="en">Gallery</span></span></a>'
+        )
+    if p.get("video"):
+        toc_items.append(
+            '      <a href="#film" data-n="FILM"><span class="toc-n">FILM</span>'
+            '<span class="toc-label"><span class="cn">短片</span>'
+            '<span class="en">Film</span></span></a>'
+        )
+
+    toc_html = ""
+    if toc_items:
+        toc_html = (
+            '    <aside class="detail-toc" id="detailToc" aria-label="Sections">\n'
+            + "\n".join(toc_items)
+            + "\n    </aside>\n"
         )
 
     gal_html = []
-    for g in p["gallery"]:
+    for g in gallery:
         cls = ' class="portrait"' if g["portrait"] else ""
         src = f'assets/projects/{p["slug"]}/{g["file"]}'
         gal_html.append(
-            f'''      <figure{cls}><img src="{src}" alt="{g["caption_cn"]}" loading="lazy">
-        <figcaption><span class="cn">{g["caption_cn"]}</span><span class="en">{g["caption_en"]}</span></figcaption></figure>'''
+            f'      <figure{cls}><img src="{src}" alt="{g["caption_cn"]}" loading="lazy">\n'
+            f'        <figcaption><span class="cn">{g["caption_cn"]}</span>'
+            f'<span class="en">{g["caption_en"]}</span></figcaption></figure>'
         )
 
     video_html = ""
@@ -275,9 +392,13 @@ def render_detail(p: dict, by_slug: dict) -> str:
         v = p["video"]
         poster = f'assets/projects/{p["slug"]}/{v["poster"]}'
         src = f'assets/projects/{p["slug"]}/{v["file"]}'
-        video_html = f'''    <div class="sub-head"><span class="kicker">FILM</span><h2><span class="cn">{v["title_cn"]}</span><span class="en">{v["title_en"]}</span></h2></div>
-    <div class="video-block"><video controls playsinline preload="metadata" poster="{poster}" src="{src}"></video></div>
-'''
+        video_html = (
+            f'    <div class="sub-head" id="film"><span class="kicker">FILM</span>'
+            f'<h2><span class="cn">{v["title_cn"]}</span>'
+            f'<span class="en">{v["title_en"]}</span></h2></div>\n'
+            f'    <div class="video-block"><video controls playsinline preload="metadata" '
+            f'poster="{poster}" src="{src}"></video></div>\n'
+        )
 
     related_html = ""
     if p["related"]:
@@ -285,7 +406,6 @@ def render_detail(p: dict, by_slug: dict) -> str:
         for slug in p["related"]:
             other = by_slug.get(slug)
             if not other:
-                # try legacy
                 for L in LEGACY:
                     if L["slug"] == slug:
                         other = L
@@ -295,14 +415,25 @@ def render_detail(p: dict, by_slug: dict) -> str:
                 url = other.get("url", f"{slug}.html")
                 links.append(f'<a class="btn btn-ghost" href="{url}">{title} →</a>')
         if links:
-            related_html = f'''    <div class="detail-block" style="max-width:760px;margin:0 auto 48px">
-      <h2><span class="cn">相关项目</span><span class="en">Related</span></h2>
-      <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:12px">{"".join(links)}</div>
-    </div>
-'''
+            related_html = (
+                '    <div class="detail-related">\n'
+                '      <h2><span class="cn">相关项目</span><span class="en">Related</span></h2>\n'
+                f'      <div class="detail-related__links">{"".join(links)}</div>\n'
+                "    </div>\n"
+            )
 
     cover_src = p["cover_web"]
-    return f'''<!doctype html>
+    gallery_section = ""
+    if gal_html:
+        gallery_section = (
+            '    <div class="sub-head" id="gallery"><span class="kicker">GALLERY</span>'
+            '<h2><span class="cn">图库</span><span class="en">Gallery</span></h2></div>\n'
+            '    <div class="gallery-grid gallery-masonry">\n'
+            + "\n".join(gal_html)
+            + "\n    </div>\n"
+        )
+
+    return f"""<!doctype html>
 <html lang="zh">
 <head>
   <meta charset="utf-8">
@@ -315,30 +446,31 @@ def render_detail(p: dict, by_slug: dict) -> str:
 </head>
 <body class="lang-cn">
 {NAV}
-  <main class="page">
-    <section>
+  <main class="page detail-page">
+    <section class="detail-intro">
       <div class="eyebrow">{p["id"]} / <span class="cn">{p["cat_cn"]}</span><span class="en">{p["cat_en"]}</span></div>
       <h1 class="page-title"><span class="cn">{p["title_cn"]}</span><span class="en">{p["title_en"]}</span></h1>
       <p class="hero-copy"><span class="cn">{p["lead_cn"]}</span><span class="en">{p["lead_en"]}</span></p>
-      <div class="tag-row">{tags_html}</div>
+      <div class="tag-row">{tags_html}</div>{metrics_html}
     </section>
 
     <figure class="detail-hero"><img src="{cover_src}" alt="{p["title_cn"]}"></figure>
 
+    <div class="detail-body">
+{toc_html}      <div class="detail-modules">
 {chr(10).join(modules_html)}
-
-    <div class="sub-head"><span class="kicker">GALLERY</span><h2><span class="cn">图库</span><span class="en">Gallery</span></h2></div>
-    <div class="gallery-grid">
-{chr(10).join(gal_html)}
+      </div>
     </div>
-{video_html}{related_html}
+
+{gallery_section}{video_html}{related_html}
     <footer>
       <div><span class="cn">© 2026 AXEL LAB</span><span class="en">© 2026 AXEL LAB</span></div>
       <div><a href="projects.html"><span class="cn">← 返回项目</span><span class="en">← Back to Work</span></a></div>
     </footer>
   </main>
 {FOOT_SCRIPTS}
-'''
+"""
+
 
 
 def project_card(p: dict) -> str:
