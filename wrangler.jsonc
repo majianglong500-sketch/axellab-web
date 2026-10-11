@@ -1,5 +1,8 @@
 {
   "name": "axellab-web",
   "compatibility_date": "2025-01-01",
-  "assets": { "directory": "./" }
+  // Deploy only the built site — never the repo root (avoids uploading .git packs >25MiB)
+  "assets": {
+    "directory": "./dist"
+  }
 }
