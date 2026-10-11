@@ -1,25 +1,37 @@
-# AXEL LAB 部署与更新指南
+# AXEL LAB 网站部署指南
 
-## 1. 首次部署到 GitHub
-1. 在您的 GitHub `axellab-web` 仓库页面，点击 **"uploading an existing file"**。
-2. 将此压缩包解压后的所有文件拖入。
-3. 点击 **"Commit changes"**。
+## 当前正式站
 
-## 2. 关联 Cloudflare Pages (自动化部署)
-1. 登录 [Cloudflare Dashboard](https://dash.cloudflare.com/)。
-2. 进入 **Workers & Pages** -> **Create application** -> **Pages** -> **Connect to Git**。
-3. 选择您的 `axellab-web` 仓库。
-4. **构建设置**：框架预设选 `None`，构建命令留空，输出目录填 `/` (或者留空，取决于您的根目录)。
-5. 点击 **Save and Deploy**。
+- 域名：https://axellab.org
+- GitHub：https://github.com/majianglong500-sketch/axellab-web
+- 托管：Cloudflare Pages（连接上述仓库，构建命令留空，输出目录 `/`）
+- 本地源码：`F:\AXEL LAB\axellab-git`（与仓库同步）
 
-## 3. 如何更新内容 (AI 驱动模式)
-以后您想增加新项目或修改文字，只需：
-1. 打开 `data.js` 文件。
-2. 让 AI (Manus/Claude) 根据您的新素材生成一段 JSON 代码。
-3. 替换或增加到 `AXEL_DATA` 对象中。
-4. 提交修改到 GitHub，网站会在 1 分钟内自动更新。
+## 改内容（推荐）
 
-## 4. 图片处理建议
-*   **大图**：放在 `bw-primary` 容器中，会自动适配宽度，建议宽度 1200px 以上。
-*   **细节图**：放在 `bw-thumbs` 中，点击会自动弹出高清大图预览。
-*   **3D 模型**：将 `.glb` 文件放入 `assets/models/`，在 HTML 中使用 `<model-viewer>` 标签引用。
+见根目录 **《怎么换图改字.md》**。
+
+简要流程：
+
+1. 改 `content/某项目/文案.md` 和 `images/`
+2. 运行 `python build.py`
+3. `git add -A && git commit -m "..." && git push`
+
+新增项目：复制 `content/_模板_新项目` → 改名 → 改文案与图 → 再 build。
+
+## 首次 / 重新连接 Cloudflare Pages
+
+1. Cloudflare Dashboard → Workers & Pages → Create → Pages → Connect to Git
+2. 选择 `axellab-web`
+3. 构建命令：空；输出目录：`/`（或留空）
+4. Save and Deploy，并绑定自定义域 `axellab.org`
+
+## wrangler 直传（可选）
+
+仓库含 `wrangler.jsonc`。若本机已登录 Cloudflare：
+
+```bash
+npx wrangler pages deploy . --project-name=axellab-web
+```
+
+（具体项目名以 Dashboard 为准。）
