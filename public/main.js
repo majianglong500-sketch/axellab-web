@@ -116,7 +116,7 @@
         h * 0.5,
         Math.max(w, h) * 0.75
       );
-      g.addColorStop(0, "rgba(24,183,200,0.045)");
+      g.addColorStop(0, "rgba(255,90,42,0.045)");
       g.addColorStop(1, "rgba(7,9,11,0)");
       ctx.fillStyle = g;
       ctx.fillRect(0, 0, w, h);
@@ -162,7 +162,7 @@
           if (i + 1 < cols) {
             var b = points[idx + 1];
             var alpha = 0.045 + Math.max(a._infl || 0, b._infl || 0) * 0.35;
-            ctx.strokeStyle = "rgba(24,183,200," + alpha + ")";
+            ctx.strokeStyle = "rgba(255,90,42," + alpha + ")";
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(b.x, b.y);
@@ -171,7 +171,7 @@
           if (j + 1 < rows) {
             var c = points[idx + cols];
             var alpha2 = 0.045 + Math.max(a._infl || 0, c._infl || 0) * 0.35;
-            ctx.strokeStyle = "rgba(24,183,200," + alpha2 + ")";
+            ctx.strokeStyle = "rgba(255,90,42," + alpha2 + ")";
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(c.x, c.y);
@@ -185,12 +185,12 @@
         var q = points[k];
         var s = 1.1 + (q._infl || 0) * 2.4;
         var al = 0.22 + (q._infl || 0) * 0.75;
-        ctx.fillStyle = "rgba(24,183,200," + al + ")";
+        ctx.fillStyle = "rgba(255,90,42," + al + ")";
         ctx.beginPath();
         ctx.arc(q.x, q.y, s, 0, Math.PI * 2);
         ctx.fill();
         if ((q._infl || 0) > 0.35) {
-          ctx.strokeStyle = "rgba(24,183,200," + (q._infl * 0.5) + ")";
+          ctx.strokeStyle = "rgba(255,90,42," + (q._infl * 0.5) + ")";
           ctx.beginPath();
           ctx.arc(q.x, q.y, 6 + q._infl * 10, 0, Math.PI * 2);
           ctx.stroke();
@@ -223,7 +223,7 @@
         var fullImg = document.createElement("img");
         fullImg.src = img.src;
         fullImg.style.cssText =
-          "max-width:95%;max-height:95%;object-fit:contain;border:1px solid rgba(24,183,200,.35);";
+          "max-width:95%;max-height:95%;object-fit:contain;border:1px solid rgba(255,90,42,.35);";
         overlay.appendChild(fullImg);
         document.body.appendChild(overlay);
         overlay.onclick = function () {
@@ -248,7 +248,7 @@
       var hud = document.createElement("div");
       hud.className = "px-hud";
       hud.innerHTML =
-        '<span>FIELD <em>ACTIVE</em></span><span>GRID <em>PARAMETRIC</em></span><span>LAB <em>AXEL</em></span><span>ACCENT <em>#18B7C8</em></span>';
+        '<span>SCALE <em>1:1</em></span><span>FIELD <em>ACTIVE</em></span><span>GRID <em>PARAMETRIC</em></span><span>LAB <em>AXEL</em></span>';
       hero.appendChild(hud);
     }
   });

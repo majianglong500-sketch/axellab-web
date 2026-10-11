@@ -1,19 +1,20 @@
 /* ===== AXEL LAB — Merged Brand Stylesheet ===== */
 :root{
-  /* AXEL LAB dark parametric system — not a Future X clone */
-  --bg:#07090B;
-  --bg-elev:#0E1216;
-  --soft:#151A20;
-  --ink:#E8EEF2;
-  --muted:#7A8792;
-  --line:rgba(24,183,200,.14);
-  --line-strong:rgba(232,238,242,.12);
-  --blue:#18B7C8;
-  --blue-dim:rgba(24,183,200,.22);
-  --blue-glow:rgba(24,183,200,.45);
-  --white:#F4F8FA;
-  --black:#07090B; /* legacy alias → dark canvas */
-  --paper:#07090B;
+  /* Dark studio system — Future X–adjacent orange/black */
+  --bg:#060709;
+  --bg-elev:#0B0C0D;
+  --soft:#121416;
+  --ink:#F1EFE9;
+  --muted:#7D807E;
+  --line:rgba(241,239,233,.10);
+  --line-strong:rgba(241,239,233,.14);
+  --blue:#FF5A2A;          /* accent (legacy --blue name kept for CSS reuse) */
+  --accent:#FF5A2A;
+  --blue-dim:rgba(255,90,42,.18);
+  --blue-glow:rgba(255,90,42,.40);
+  --white:#F1EFE9;
+  --black:#060709;
+  --paper:#060709;
   --mono:"IBM Plex Mono","SFMono-Regular",ui-monospace,Menlo,Consolas,monospace;
   --sans:"Inter","Helvetica Neue",-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
   --maxw:1280px;
@@ -67,7 +68,7 @@ section{padding:72px 0;border-bottom:1px solid var(--line-strong)}
 
 /* ===== Buttons ===== */
 .btn{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:500;padding:12px 22px;border-radius:8px;cursor:pointer;transition:.15s}
-.btn-primary{background:var(--blue);color:#041016;font-weight:600}
+.btn-primary{background:var(--accent);color:#060709;font-weight:600}
 .btn-primary:hover{background:var(--ink);color:var(--bg);box-shadow:0 0 24px var(--blue-dim)}
 .btn-ghost{border:1px solid var(--line-strong);color:var(--ink);background:rgba(14,18,22,.55)}
 .btn-ghost:hover{border-color:var(--blue);color:var(--blue)}
@@ -315,7 +316,16 @@ footer .logo{font-size:15px;font-family:var(--sans)}
 
 /* ===== HUD / status strip (AXEL-owned) ===== */
 .px-hud{
-  display:flex;flex-wrap:wrap;gap:10px 18px;margin-top:18px;
-  font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:20px;
+  font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
 }
-.px-hud span em{font-style:normal;color:var(--blue)}
+.px-hud span{display:inline-flex;align-items:center;gap:8px}
+.px-hud span::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--blue-glow)}
+.px-hud span em{font-style:normal;color:var(--accent)}
+.hero h1{letter-spacing:-.04em}
+.hero .signal{color:var(--accent);text-shadow:0 0 22px var(--blue-glow)}
+.fx-marquee{overflow:hidden;border-block:1px solid var(--line-strong);margin:0 -24px;padding:14px 0;background:rgba(11,12,13,.55)}
+.fx-marquee__track{display:flex;gap:48px;width:max-content;animation:fx-scroll 32s linear infinite;font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.fx-marquee__track b{color:var(--ink);font-weight:500}
+@keyframes fx-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.fx-marquee__track{animation:none}}
