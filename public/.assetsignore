@@ -1,0 +1,5 @@
+# Never upload VCS or tooling if they appear under public/
+.git
+**/.git/**
+node_modules
+**/.DS_Store

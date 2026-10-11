@@ -8,7 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 CONTENT = ROOT / "content"
 ASSETS_OUT = ROOT / "assets" / "projects"
-DIST = ROOT / "dist"  # Cloudflare / wrangler deploy root (no .git, no content/)
+PUBLIC = ROOT / "public"  # Cloudflare / wrangler deploy root (no .git, no content/)
 
 # Legacy projects already live as static HTML (not content-driven)
 LEGACY = [
@@ -424,33 +424,33 @@ def write_data_js(content_projects: list[dict]) -> None:
 
 
 
-def assemble_dist() -> None:
-    """Copy only public site files into dist/ for Cloudflare Pages / wrangler.
+def assemble_public() -> None:
+    """Copy only public site files into public/ for Cloudflare / wrangler.
 
     Excludes .git, content/ sources, build scripts, and docs so large pack files
     and source images are never uploaded as Workers assets.
     """
-    if DIST.exists():
-        shutil.rmtree(DIST)
-    DIST.mkdir(parents=True)
+    if PUBLIC.exists():
+        shutil.rmtree(PUBLIC)
+    PUBLIC.mkdir(parents=True)
 
     for html in sorted(ROOT.glob("*.html")):
-        shutil.copy2(html, DIST / html.name)
+        shutil.copy2(html, PUBLIC / html.name)
 
     for name in ("styles.css", "main.js", "data.js"):
         src = ROOT / name
         if src.exists():
-            shutil.copy2(src, DIST / name)
+            shutil.copy2(src, PUBLIC / name)
 
     assets = ROOT / "assets"
     if assets.exists():
-        shutil.copytree(assets, DIST / "assets", dirs_exist_ok=True)
+        shutil.copytree(assets, PUBLIC / "assets", dirs_exist_ok=True)
 
     # Belt-and-suspenders if someone later nests unexpected files under dist/
-    (DIST / ".assetsignore").write_text(
+    (PUBLIC / ".assetsignore").write_text(
         "\n".join(
             [
-                "# Never upload VCS or tooling if they appear under dist/",
+                "# Never upload VCS or tooling if they appear under public/",
                 ".git",
                 "**/.git/**",
                 "node_modules",
@@ -462,12 +462,12 @@ def assemble_dist() -> None:
     )
     # Quick size sanity: flag any file >= 25 MiB (Workers asset limit)
     limit = 25 * 1024 * 1024
-    oversized = [p for p in DIST.rglob("*") if p.is_file() and p.stat().st_size >= limit]
+    oversized = [p for p in PUBLIC.rglob("*") if p.is_file() and p.stat().st_size >= limit]
     if oversized:
         for p in oversized:
-            print(f"  WARN oversized (>=25MiB): {p.relative_to(DIST)} ({p.stat().st_size} bytes)")
-    n_files = sum(1 for p in DIST.rglob("*") if p.is_file())
-    print(f"  assembled dist/ ({n_files} files)")
+            print(f"  WARN oversized (>=25MiB): {p.relative_to(PUBLIC)} ({p.stat().st_size} bytes)")
+    n_files = sum(1 for p in PUBLIC.rglob("*") if p.is_file())
+    print(f"  assembled public/ ({n_files} files)")
 
 
 def main() -> None:
@@ -515,7 +515,7 @@ def main() -> None:
     patch_works_in_file(ROOT / "projects.html", works)
     patch_works_in_file(ROOT / "index.html", works)
     write_data_js(content_projects)
-    assemble_dist()
+    assemble_public()
     print("Done.")
 
 

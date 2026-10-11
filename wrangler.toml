@@ -1,0 +1,6 @@
+name = "axellab-web"
+compatibility_date = "2025-01-01"
+
+# Deploy only public/ — never the repo root (avoids uploading .git packs >25MiB)
+[assets]
+directory = "./public"

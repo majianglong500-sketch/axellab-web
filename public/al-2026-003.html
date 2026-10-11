@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>照片雕刻实验 — AXEL LAB</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="lang-cn">
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="logo" href="index.html"><span class="brace">AL</span> AXEL LAB</a>
+      <nav class="nav-links">
+        <a class="active" href="projects.html"><span class="cn">项目</span><span class="en">Work</span></a>
+        <a href="built-works.html"><span class="cn">落地案例</span><span class="en">Built Works</span></a>
+        <a href="labnotes.html"><span class="cn">实验笔记</span><span class="en">Lab Notes</span></a>
+        <a href="about.html"><span class="cn">关于</span><span class="en">About</span></a>
+        <button class="lang-btn">EN</button>
+      </nav>
+    </div>
+  </header>
+  <main class="page">
+    <section>
+      <div class="eyebrow">AL_2026_003 / <span class="cn">实验 / CNC</span><span class="en">Lab / CNC</span></div>
+      <h1 class="page-title"><span class="cn">照片雕刻实验</span><span class="en">Photo Engraving Study</span></h1>
+      <p class="hero-copy"><span class="cn">图像转浮雕的 CNC 雕刻与材料实验。探索如何通过算法将位图信息转化为空间深度，并最终在木质材料上实现细腻的灰度表达。</span><span class="en">Image-to-relief CNC engraving and material experiment. Exploring how to transform bitmap information into spatial depth via algorithms and achieve delicate grayscale expression on wood.</span></p>
+      <div class="tag-row"><span class="tag">CNC</span><span class="tag">Rhino</span><span class="tag">Grasshopper</span><span class="tag">Digital Fabrication</span></div>
+    </section>
+
+    <figure class="detail-hero"><img src="assets/al003-hero.jpg" alt="照片雕刻实验"></figure>
+
+    <section class="detail-block">
+      <h2><span class="cn">实验目标</span><span class="en">Experimental Goal</span></h2>
+      <p><span class="cn">通过数字制造手段，打破平面图像与立体空间的界限。利用 CNC 雕刻机的深度控制，将照片的像素灰度转化为木材表面的起伏，创造出随光影变化的触感图像。</span><span class="en">Breaking the boundary between 2D images and 3D space through digital fabrication. Using CNC depth control to translate pixel grayscale into wood surface relief, creating tactile images that shift with light and shadow.</span></p>
+    </section>
+
+    <div class="gallery2">
+      <figure class="detail-fig"><img src="assets/photo-engraving/engraving_01.jpg" alt="雕刻细节"><figcaption><span class="cn">高精度 CNC 雕刻细节。</span><span class="en">High-precision CNC engraving details.</span></figcaption></figure>
+      <figure class="detail-fig"><img src="assets/photo-engraving/engraving_02.jpg" alt="成品展示"><figcaption><span class="cn">光影下的浮雕效果。</span><span class="en">Relief effect under light and shadow.</span></figcaption></figure>
+    </div>
+
+    <section class="detail-block">
+      <h2><span class="cn">技术逻辑</span><span class="en">Technical Logic</span></h2>
+      <p><span class="cn">1. 图像预处理：增强对比度，提取灰度映射。2. 算法生成：在 Grasshopper 中将灰度值映射为 Z 轴深度。3. 路径优化：生成高密度的刀具路径，确保细节还原。4. 材料实验：测试不同木材（桦木多层板、黑胡桃）的雕刻表现。</span><span class="en">1. Pre-processing: Contrast enhancement and grayscale mapping. 2. Algorithm: Mapping grayscale to Z-depth in Grasshopper. 3. Path Optimization: Generating high-density toolpaths for detail. 4. Material Testing: Comparing performance on different woods.</span></p>
+    </section>
+
+    <div class="bw-thumbs" style="grid-template-columns: repeat(4, 1fr); margin-bottom: 48px;">
+      <img src="assets/photo-engraving/engraving_03.jpg" alt="">
+      <img src="assets/photo-engraving/engraving_04.jpg" alt="">
+      <img src="assets/photo-engraving/engraving_05.jpg" alt="">
+      <img src="assets/photo-engraving/engraving_06.jpg" alt="">
+      <img src="assets/photo-engraving/engraving_07.jpg" alt="">
+      <img src="assets/photo-engraving/engraving_08.jpg" alt="">
+      <img src="assets/photo-engraving/engraving_09.jpg" alt="">
+      <img src="assets/photo-engraving/engraving_10.jpg" alt="">
+    </div>
+
+    <footer><div><span class="cn">© 2026 AXEL LAB</span><span class="en">© 2026 AXEL LAB</span></div><div><a href="projects.html"><span class="cn">← 返回项目</span><span class="en">← Back to Work</span></a></div></footer>
+  </main>
+  <script src="main.js"></script>
+</body>
+</html>

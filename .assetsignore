@@ -6,5 +6,5 @@ node_modules
 **/.DS_Store
 *.md
 build.py
-wrangler.jsonc
+wrangler.toml
 .gitignore

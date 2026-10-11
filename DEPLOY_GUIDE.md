@@ -4,7 +4,7 @@
 
 - 域名：https://axellab.org
 - GitHub：https://github.com/majianglong500-sketch/axellab-web
-- 托管：Cloudflare Pages（连接上述仓库）
+- 托管：Cloudflare Pages / Workers（连接上述仓库）
 - 本地源码：`F:\AXEL LAB\axellab-git`（与仓库同步）
 
 ## 改内容（推荐）
@@ -14,41 +14,41 @@
 简要流程：
 
 1. 改 `content/某项目/文案.md` 和 `images/`
-2. 运行 `python build.py`（会生成页面，并组装可部署目录 `dist/`）
+2. 运行 `python build.py`（会生成页面，并组装可部署目录 `public/`）
 3. `git add -A && git commit -m "..." && git push`
 
 新增项目：复制 `content/_模板_新项目` → 改名 → 改文案与图 → 再 build。
 
-## Cloudflare Pages 构建设置（重要）
+## 为什么是 public/（重要）
 
-不要把仓库根目录当输出目录。根目录含 `.git`，用 `wrangler deploy` 时会把 `.git/objects/pack/*.pack`（常超过 25 MiB）一并上传，导致 Workers 单文件超限失败。
+不要把仓库根目录当 assets 目录。根目录含 `.git`，用 `wrangler deploy` 时会把 `.git/objects/pack/*.pack`（常超过 25 MiB）一并上传，导致 Workers 单文件超限失败。
 
-在 Cloudflare Dashboard → Workers & Pages → **axellab-web** → Settings → Builds：
+`wrangler.toml` 里 `[assets] directory = "./public"`，构建/部署只扫 `public/`，`.git` 再大也碰不到。
 
-| 项 | 值 |
-|----|-----|
-| Build command | `python build.py` |
-| Build output directory | `dist` |
-| Root directory | `/`（默认即可） |
+`public/` **已提交进仓库**（由 `build.py` 组装：html / css / js / `assets/`）。因此 Cloudflare 部署命令只需：
 
-说明：
+```bash
+npx wrangler deploy
+```
 
-- `build.py` 会把仅含站点文件的产物写到 `dist/`（html / css / js / `assets/`），**不含** `.git`、`content/` 源图、文档与脚本。
-- `dist/` 已加入 `.gitignore`，由 Cloudflare 构建生成，请勿把 Build command 留空。
-- 改完设置后点一次 **Retry deployment** 即可；不必删除旧部署。
+不必改 Dashboard 的 Build command / output directory；点 **Retry deployment** 即可。不必删除旧部署。
 
-## wrangler 直传（推荐命令）
+本地改完内容后请先 `python build.py` 再 push，保证 `public/` 与源内容一致。
 
-仓库含 `wrangler.jsonc`，`assets.directory` 已指向 `./dist`。本机已登录 Cloudflare 时：
+## wrangler 直传
+
+仓库含 `wrangler.toml`，`[assets] directory = "./public"`。本机已登录 Cloudflare 时：
 
 ```bash
 python build.py
-npx wrangler pages deploy dist --project-name=axellab-web
+npx wrangler deploy
 ```
 
 不要再使用：
 
 ```bash
-npx wrangler deploy          # 会按旧配置扫整个仓库根
 npx wrangler pages deploy .  # 会带上 .git / content 等无关文件
+npx wrangler deploy          # 若 assets 仍指向仓库根，同样会扫到 .git
 ```
+
+（在本仓库当前配置下，`npx wrangler deploy` 已安全，因为只读 `./public`。）
