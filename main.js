@@ -19,14 +19,9 @@
     saved = localStorage.getItem(KEY) || "cn";
   } catch (e) {}
 
-  /* ---------- Curved 3D space-frame / parametric mesh (Canvas 2D) ----------
-   * Inspired by Future X–style undulating shell lattice:
-   *  1) UV lattice → world XYZ with multi-octave height field (hills/valleys)
-   *  2) Soft parabolic shell bias + X-tilt for horizon foreshortening
-   *  3) Perspective project; depth drives alpha (atmospheric fade)
-   *  4) Full triangulation (H + V + diagonal) for space-frame feel
-   *  5) Pointer → local volumetric swell along surface + glowing nodes
-   * Brand accent #FF5A2A. No WebGL; targets ~60fps on mid laptops.
+  /* ---------- Clean curved 3D space-frame (Canvas 2D) ----------
+   * Future X–adjacent: even spacing, soft low-freq hills, sparse glow nodes.
+   * Avoid dense node blobs / noisy pinches. Brand #FF5A2A.
    */
   function initParametricField() {
     if (document.getElementById("px-grid")) return;
@@ -50,69 +45,33 @@
       window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     var running = true;
 
-    var camZ = 560;
-    var focal = 540;
+    var camZ = 640;
+    var focal = 580;
     var spanX = 1;
     var spanY = 1;
-    var shellAmp = 70;
-    var noiseAmp = 110;
-    var tilt = 0.48;
+    var waveAmp = 70;
+    var tilt = 0.32;
     var cosT = 1,
       sinT = 0;
 
-    // Cheap hash → value noise (no deps)
-    function hash2(ix, iy) {
-      var n = Math.sin(ix * 127.1 + iy * 311.7) * 43758.5453;
-      return n - Math.floor(n);
-    }
-    function smoothstep(t) {
-      return t * t * (3 - 2 * t);
-    }
-    function valueNoise(x, y) {
-      var x0 = Math.floor(x),
-        y0 = Math.floor(y);
-      var fx = x - x0,
-        fy = y - y0;
-      var u = smoothstep(fx),
-        v = smoothstep(fy);
-      var a = hash2(x0, y0);
-      var b = hash2(x0 + 1, y0);
-      var c = hash2(x0, y0 + 1);
-      var d = hash2(x0 + 1, y0 + 1);
-      return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v;
-    }
-    function fbm(x, y) {
-      var amp = 0.55,
-        freq = 1.15,
-        sum = 0,
-        norm = 0;
-      for (var o = 0; o < 4; o++) {
-        sum += amp * (valueNoise(x * freq, y * freq) * 2 - 1);
-        norm += amp;
-        amp *= 0.48;
-        freq *= 2.05;
-      }
-      return sum / norm;
-    }
-
+    // Low-frequency smooth shell — no high-octave noise (avoids messy look)
     function heightField(u, v, t) {
-      // Multi-octave terrain + soft shell bowl — Future X undulation
-      var n = fbm(u * 1.6 + 0.3, v * 1.6 - 0.2);
-      var n2 = fbm(u * 0.7 - t * 0.03, v * 0.7 + t * 0.02);
-      var bowl = (u * u * 0.45 + v * v) * shellAmp - shellAmp * 0.28;
-      var hills = n * noiseAmp + n2 * noiseAmp * 0.45;
-      // Gentle traveling wave so the shell feels alive
-      var wave = Math.sin((u * 2.2 + v * 1.1) * Math.PI + t * 0.55) * 12;
-      return bowl + hills + (reduced ? 0 : wave);
+      var tw = reduced ? 0 : t * 0.28;
+      var h1 = Math.sin((u * 0.9 + 0.2) * Math.PI + tw) * Math.cos((v * 0.75 - 0.1) * Math.PI);
+      var h2 = Math.sin((u * 0.45 - v * 0.35) * Math.PI + tw * 0.7) * 0.55;
+      var h3 = Math.cos((u * 0.3 + v * 0.55) * Math.PI - tw * 0.5) * 0.35;
+      // Very gentle bowl so edges recede slightly without pinching
+      var bowl = (u * u * 0.18 + v * v * 0.12) * waveAmp * 0.35;
+      return (h1 + h2 + h3) * waveAmp + bowl;
     }
 
     function project(x, y, z) {
       var pz = z + camZ;
-      if (pz < 48) pz = 48;
+      if (pz < 80) pz = 80;
       var s = focal / pz;
       return {
         sx: w * 0.5 + x * s,
-        sy: h * 0.5 + y * s,
+        sy: h * 0.52 + y * s,
         depth: s,
         pz: pz,
       };
@@ -121,12 +80,10 @@
     function worldFromUV(u, v, zLocal) {
       var x0 = u * spanX;
       var y0 = v * spanY;
-      var z0 = zLocal;
-      // Tilt around X → foreshortened horizon at top
       return {
         x: x0,
-        y: y0 * cosT - z0 * sinT,
-        z: y0 * sinT + z0 * cosT,
+        y: y0 * cosT - zLocal * sinT,
+        z: y0 * sinT + zLocal * cosT,
       };
     }
 
@@ -139,17 +96,18 @@
       canvas.style.height = h + "px";
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      var dens = w < 720 ? 34 : w < 1100 ? 38 : 42;
-      cols = Math.max(22, Math.min(42, Math.round(w / dens) + 6));
-      rows = Math.max(16, Math.min(32, Math.round(h / dens) + 4));
+      // Wider cells → fewer lines (clean Future X spacing)
+      var dens = w < 720 ? 64 : w < 1100 ? 72 : 80;
+      cols = Math.max(12, Math.min(22, Math.round(w / dens) + 2));
+      rows = Math.max(9, Math.min(16, Math.round(h / dens) + 1));
 
-      spanX = Math.max(w, 960) * 1.05;
-      spanY = Math.max(h, 720) * 1.08;
-      shellAmp = Math.min(100, Math.max(55, Math.min(w, h) * 0.09));
-      noiseAmp = Math.min(170, Math.max(95, Math.min(w, h) * 0.155));
-      camZ = Math.max(480, Math.min(w, h) * 0.62);
-      focal = camZ * 0.95;
-      tilt = 0.44 + Math.min(0.14, (h / Math.max(w, 1)) * 0.1);
+      spanX = Math.max(w, 900) * 0.95;
+      spanY = Math.max(h, 680) * 0.95;
+      waveAmp = Math.min(120, Math.max(60, Math.min(w, h) * 0.11));
+      camZ = Math.max(560, Math.min(w, h) * 0.72);
+      focal = camZ * 0.9;
+      // Mild tilt — enough foreshortening, no bottom knot
+      tilt = 0.28 + Math.min(0.08, (h / Math.max(w, 1)) * 0.06);
       cosT = Math.cos(tilt);
       sinT = Math.sin(tilt);
 
@@ -171,7 +129,8 @@
             depth: 1,
             pz: camZ,
             infl: 0,
-            phase: (i * 0.37 + j * 0.23) % (Math.PI * 2),
+            // Sparse static node markers (every 3rd on checker)
+            showNode: (i + j * 2) % 3 === 0,
           });
         }
       }
@@ -202,31 +161,29 @@
       requestAnimationFrame(frame);
       var t = (now - t0) * 0.001;
 
-      mouse.x += (mouse.tx - mouse.x) * (reduced ? 1 : 0.14);
-      mouse.y += (mouse.ty - mouse.y) * (reduced ? 1 : 0.14);
+      mouse.x += (mouse.tx - mouse.x) * (reduced ? 1 : 0.12);
+      mouse.y += (mouse.ty - mouse.y) * (reduced ? 1 : 0.12);
 
       ctx.clearRect(0, 0, w, h);
 
-      // Central orange atmospheric wash
+      // Very soft central wash
       var g = ctx.createRadialGradient(
         w * 0.5,
-        h * 0.48,
-        20,
+        h * 0.45,
+        40,
         w * 0.5,
         h * 0.5,
-        Math.max(w, h) * 0.72
+        Math.max(w, h) * 0.7
       );
-      g.addColorStop(0, "rgba(255,90,42,0.055)");
-      g.addColorStop(0.55, "rgba(255,90,42,0.012)");
+      g.addColorStop(0, "rgba(255,90,42,0.03)");
       g.addColorStop(1, "rgba(6,7,9,0)");
       ctx.fillStyle = g;
       ctx.fillRect(0, 0, w, h);
 
-      var radius = Math.min(280, Math.max(160, Math.min(w, h) * 0.32));
+      var radius = Math.min(240, Math.max(140, Math.min(w, h) * 0.26));
       var radius2 = radius * radius;
       var hasMouse = mouse.tx > -9000;
 
-      // Update height field → tilt → project
       for (var p = 0; p < points.length; p++) {
         var pt = points[p];
         var zLocal = heightField(pt.u, pt.v, t);
@@ -247,18 +204,18 @@
             var fall = 1 - d / radius;
             fall = fall * fall * (3 - 2 * fall);
             infl = fall;
-            // Volumetric swell toward viewer + soft radial flex
-            var swell = fall * 62;
-            var push = fall * 16;
+            // Subtle volumetric swell (not chaotic)
+            var swell = fall * 28;
+            var push = fall * 8;
             var nx = dx / d;
             var ny = dy / d;
-            tx = W.x - nx * push * 0.4;
-            ty = W.y - ny * push * 0.3;
+            tx = W.x - nx * push * 0.35;
+            ty = W.y - ny * push * 0.25;
             tz = W.z - swell;
           }
         }
 
-        var ease = reduced ? 1 : 0.18;
+        var ease = reduced ? 1 : 0.14;
         pt.x += (tx - pt.x) * ease;
         pt.y += (ty - pt.y) * ease;
         pt.z += (tz - pt.z) * ease;
@@ -274,29 +231,30 @@
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
 
-      // Edge fade from screen center (vignette on mesh itself)
       function edgeFade(sx, sy) {
-        var ex = (sx - w * 0.5) / (w * 0.55);
-        var ey = (sy - h * 0.5) / (h * 0.55);
+        var ex = (sx - w * 0.5) / (w * 0.58);
+        var ey = (sy - h * 0.5) / (h * 0.58);
         var er = Math.sqrt(ex * ex + ey * ey);
-        return Math.max(0, 1 - er * 0.72);
+        return Math.max(0, 1 - er * 0.78);
       }
 
       function strokeEdge(a, b) {
         var midInfl = Math.max(a.infl || 0, b.infl || 0);
         var depthFade = Math.min(a.depth, b.depth);
         var ef = Math.min(edgeFade(a.sx, a.sy), edgeFade(b.sx, b.sy));
-        var alpha = (0.045 + depthFade * 0.085 + midInfl * 0.42) * ef;
-        if (alpha < 0.018) return;
-        ctx.strokeStyle = "rgba(255,90,42," + Math.min(0.78, alpha) + ")";
-        ctx.lineWidth = 0.75 + midInfl * 1.1 + depthFade * 0.35;
+        // Soft orange lines — capped so foreshortened edges don't bloom
+        var alpha = (0.12 + depthFade * 0.07 + midInfl * 0.2) * ef;
+        alpha = Math.min(0.42, alpha);
+        if (alpha < 0.03) return;
+        ctx.strokeStyle = "rgba(255,90,42," + alpha + ")";
+        ctx.lineWidth = 0.9 + midInfl * 0.5;
         ctx.beginPath();
         ctx.moveTo(a.sx, a.sy);
         ctx.lineTo(b.sx, b.sy);
         ctx.stroke();
       }
 
-      // Full triangulation: H, V, and consistent diagonals (space-frame)
+      // H + V + one diagonal family (space-frame, not double-dense)
       for (var j = 0; j < rows; j++) {
         for (var i = 0; i < cols; i++) {
           var idx = j * cols + i;
@@ -304,28 +262,39 @@
           if (i + 1 < cols) strokeEdge(a, points[idx + 1]);
           if (j + 1 < rows) strokeEdge(a, points[idx + cols]);
           if (i + 1 < cols && j + 1 < rows) {
-            // Alternate diagonal direction for clean triangulation
-            if ((i + j) % 2 === 0) strokeEdge(a, points[idx + cols + 1]);
-            else strokeEdge(points[idx + 1], points[idx + cols]);
+            strokeEdge(a, points[idx + cols + 1]);
           }
         }
       }
 
-      // Glowing nodes
+      // Sparse nodes only: static samples + near-mouse highlights
       for (var k = 0; k < points.length; k++) {
         var q = points[k];
         var inf = q.infl || 0;
         var ef = edgeFade(q.sx, q.sy);
-        if (ef < 0.08 && inf < 0.1) continue;
-        var s = (0.65 + q.depth * 1.05) * (1 + inf * 2.2);
-        var al = (0.14 + q.depth * 0.18 + inf * 0.75) * ef;
-        if (al < 0.04) continue;
+        if (ef < 0.15) continue;
 
-        // Soft glow halo near pointer / elevated nodes
-        if (inf > 0.25 || (q.depth > 1.05 && ef > 0.55 && (k % 5 === 0))) {
-          var glowR = s * (2.8 + inf * 4);
+        var draw = false;
+        var s = 0;
+        var al = 0;
+
+        if (inf > 0.2) {
+          draw = true;
+          s = 1.2 + inf * 2.2;
+          al = (0.35 + inf * 0.4) * ef;
+        } else if (q.showNode) {
+          draw = true;
+          s = 0.9 + q.depth * 0.35;
+          al = (0.16 + q.depth * 0.08) * ef;
+          al = Math.min(0.28, al);
+        }
+
+        if (!draw || al < 0.05) continue;
+
+        if (inf > 0.45) {
+          var glowR = s * 3.5;
           var gg = ctx.createRadialGradient(q.sx, q.sy, 0, q.sx, q.sy, glowR);
-          gg.addColorStop(0, "rgba(255,90,42," + (0.22 + inf * 0.35) * ef + ")");
+          gg.addColorStop(0, "rgba(255,90,42," + inf * 0.28 * ef + ")");
           gg.addColorStop(1, "rgba(255,90,42,0)");
           ctx.fillStyle = gg;
           ctx.beginPath();
@@ -333,18 +302,10 @@
           ctx.fill();
         }
 
-        ctx.fillStyle = "rgba(255,90,42," + Math.min(0.95, al) + ")";
+        ctx.fillStyle = "rgba(255,90,42," + al + ")";
         ctx.beginPath();
         ctx.arc(q.sx, q.sy, s, 0, Math.PI * 2);
         ctx.fill();
-
-        if (inf > 0.45) {
-          ctx.strokeStyle = "rgba(255,90,42," + inf * 0.5 + ")";
-          ctx.lineWidth = 1;
-          ctx.beginPath();
-          ctx.arc(q.sx, q.sy, 5 + inf * 10, 0, Math.PI * 2);
-          ctx.stroke();
-        }
       }
     }
 
