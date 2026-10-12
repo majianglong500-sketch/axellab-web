@@ -12,6 +12,7 @@ backend:
   auth_endpoint: api/auth
   # 走本站代理，避免国内浏览器直连 api.github.com 失败
   api_root: https://axellab.org/api/github
+  use_graphql: false
   # 提交信息（中文）
   commit_messages:
     create: "内容：新建 {{collection}}「{{slug}}」"
