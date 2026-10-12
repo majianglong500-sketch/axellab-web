@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>使用说明 · AXEL LAB 后台</title>
+  <link rel="stylesheet" href="admin-chrome.css">
+  <style>
+    .help-wrap { max-width: 720px; margin: 0 auto; padding: 32px 20px 64px; }
+    .help-wrap h1 { font-size: 28px; letter-spacing: -0.02em; margin: 0 0 12px; }
+    .help-wrap h2 { font-size: 18px; margin: 28px 0 10px; }
+    .help-wrap p, .help-wrap li { color: #404040; line-height: 1.7; font-size: 15px; }
+    .help-wrap code { background: #e5e5e5; padding: 1px 6px; border-radius: 6px; font-size: 13px; }
+    .help-card {
+      background: #0a0a0a; color: #fff; border-radius: 20px; padding: 24px 28px; margin: 20px 0;
+    }
+    .help-card a { color: #f97316; }
+    .back { display: inline-flex; margin-bottom: 20px; }
+  </style>
+</head>
+<body>
+  <div class="al-shell">
+    <nav class="al-nav">
+      <a class="al-logo" href="./"><span class="mark">AL</span><span>AXEL LAB</span></a>
+      <a class="al-nav-cta" href="./">返回后台入口</a>
+    </nav>
+    <div class="help-wrap">
+      <a class="al-btn al-btn-ghost back" href="./" style="background:#0a0a0a;color:#fff">← 后台入口</a>
+      <h1>怎么用内容后台</h1>
+      <p>完整说明见仓库《怎么用后台.md》。下面是最短路径。</p>
+      <div class="help-card">
+        <p style="margin:0 0 8px;color:#a3a3a3;font-size:12px;letter-spacing:0.1em;text-transform:uppercase">日常三步</p>
+        <p style="margin:0;font-size:16px;line-height:1.7">打开 <a href="./">/admin/</a> → 用 GitHub 登录 → 改项目并发布。<br>约两三分钟后前台更新。</p>
+      </div>
+      <h2>第一次</h2>
+      <ol>
+        <li>在 GitHub 创建 OAuth App，回调填 <code>https://axellab.org/api/callback</code></li>
+        <li>把 Client ID / Secret 配进 Cloudflare Secrets</li>
+        <li>用有仓库写权限的 GitHub 账号登录</li>
+      </ol>
+      <h2>改图</h2>
+      <p>项目图放在该项目的 <code>images/</code> 下，图库里填文件名；封面字段填如 <code>cover.jpg</code>。</p>
+      <p><a href="https://github.com/majianglong500-sketch/axellab-web/blob/main/怎么用后台.md" target="_blank" rel="noopener">打开完整中文说明 →</a></p>
+    </div>
+  </div>
+</body>
+</html>

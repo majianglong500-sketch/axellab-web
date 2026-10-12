@@ -1,0 +1,115 @@
+# AXEL LAB — Decap CMS 配置
+# 后台地址：https://axellab.org/admin/
+# 登录：用拥有 majianglong500-sketch/axellab-web 仓库权限的 GitHub 账号
+
+locale: zh_Hans
+
+backend:
+  name: github
+  repo: majianglong500-sketch/axellab-web
+  branch: main
+  base_url: https://axellab.org
+  auth_endpoint: api/auth
+  # 提交信息（中文）
+  commit_messages:
+    create: "内容：新建 {{collection}}「{{slug}}」"
+    update: "内容：更新 {{collection}}「{{slug}}」"
+    delete: "内容：删除 {{collection}}「{{slug}}」"
+    uploadMedia: "内容：上传媒体 {{path}}"
+    deleteMedia: "内容：删除媒体 {{path}}"
+
+# 全局媒体库（项目内图片优先用条目相对 images/）
+media_folder: content/_media
+public_folder: /assets/_media
+
+# 发布后由 GitHub Action 跑 build.py，把 content/ 编进 public/
+publish_mode: simple
+
+slug:
+  encoding: ascii
+  clean_accents: true
+  sanitize_replacement: "-"
+
+collections:
+  # ---------- 项目（content/*/文案.md）----------
+  - name: projects
+    label: 项目
+    label_singular: 项目
+    folder: content
+    path: "{{slug}}/文案"
+    extension: md
+    format: yaml-frontmatter
+    create: true
+    delete: true
+    identifier_field: title_cn
+    summary: "{{title_cn}} · {{id}}"
+    sortable_fields: ["order", "title_cn", "id"]
+    # 隐藏模板（cms_ignore: true）
+    filter:
+      field: cms_ignore
+      value: false
+    # 每个项目自己的 images/ 目录
+    media_folder: images
+    public_folder: /assets/projects/{{slug}}
+    editor:
+      preview: true
+    fields:
+      - { label: "上线（显示在网站）", name: online, widget: boolean, default: true }
+      - { label: "后台忽略（模板用）", name: cms_ignore, widget: boolean, default: false, required: false }
+      - { label: "项目 ID", name: id, widget: string, hint: "如 AL_2026_006" }
+      - { label: "中文标题", name: title_cn, widget: string }
+      - { label: "英文标题", name: title_en, widget: string }
+      - { label: "URL 别名 slug", name: slug, widget: string, hint: "如 al-2026-006；决定文件夹名与页面地址" }
+      - { label: "分类中文", name: cat_cn, widget: string }
+      - { label: "分类英文", name: cat_en, widget: string }
+      - { label: "标签", name: tags, widget: list, allow_add: true, hint: "如 Rhino、立体字" }
+      - { label: "列表摘要中文", name: summary_cn, widget: text }
+      - { label: "列表摘要英文", name: summary_en, widget: text }
+      - { label: "封面图文件名", name: cover, widget: string, default: "cover.jpg", hint: "相对本项目 images/ 目录" }
+      - { label: "排序（数字越小越靠前）", name: order, widget: number, value_type: int, default: 100 }
+      - { label: "导语中文", name: lead_cn, widget: text }
+      - { label: "导语英文", name: lead_en, widget: text }
+      - label: 指标 chips
+        name: metrics
+        widget: list
+        required: false
+        summary: "{{value}} · {{label_cn}}"
+        fields:
+          - { label: 数值, name: value, widget: string }
+          - { label: 中文标签, name: label_cn, widget: string }
+          - { label: 英文标签, name: label_en, widget: string }
+      - label: 模块（详情页章节）
+        name: modules
+        widget: list
+        summary: "{{title_cn}}"
+        fields:
+          - { label: 章节中文标题, name: title_cn, widget: string }
+          - { label: 章节英文标题, name: title_en, widget: string }
+          - { label: 正文中文, name: cn, widget: text }
+          - { label: 正文英文, name: en, widget: text }
+      - label: 图库
+        name: gallery
+        widget: list
+        required: false
+        summary: "{{file}} · {{caption_cn}}"
+        fields:
+          - { label: 文件名, name: file, widget: string, hint: "images/ 下的文件名，如 c01.jpg" }
+          - { label: 说明中文, name: caption_cn, widget: string, required: false }
+          - { label: 说明英文, name: caption_en, widget: string, required: false }
+          - { label: 竖图, name: portrait, widget: boolean, default: false }
+      - label: 视频（可选）
+        name: video
+        widget: object
+        required: false
+        fields:
+          - { label: 视频文件名, name: file, widget: string, required: false }
+          - { label: 封面文件名, name: poster, widget: string, required: false }
+          - { label: 标题中文, name: title_cn, widget: string, default: "短片", required: false }
+          - { label: 标题英文, name: title_en, widget: string, default: "Short film", required: false }
+      - label: 相关项目 slug
+        name: related
+        widget: list
+        required: false
+        allow_add: true
+        hint: "其他项目的 slug，如 al-2026-005"
+        field: { label: slug, name: slug, widget: string }

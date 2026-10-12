@@ -5,6 +5,11 @@ from __future__ import annotations
 import re, shutil
 from pathlib import Path
 
+try:
+    import yaml
+except ImportError:  # pragma: no cover
+    yaml = None  # type: ignore
+
 ROOT = Path(__file__).resolve().parent
 CONTENT = ROOT / "content"
 ASSETS_OUT = ROOT / "assets" / "projects"
@@ -129,11 +134,143 @@ def section_body(text: str, heading: str) -> str:
     return m.group(1).strip() if m else ""
 
 
+def split_frontmatter(text: str) -> tuple[dict | None, str]:
+    """Return (yaml_data, body) if file starts with --- frontmatter, else (None, text)."""
+    if not text.lstrip().startswith("---"):
+        return None, text
+    # strip optional BOM / leading whitespace
+    raw = text.lstrip("\ufeff").lstrip()
+    parts = raw.split("---", 2)
+    # parts[0] == '', parts[1] == yaml, parts[2] == rest
+    if len(parts) < 3:
+        return None, text
+    if yaml is None:
+        raise SystemExit(
+            "文案.md 使用了 YAML frontmatter，需要 PyYAML。\n"
+            "  pip install -r requirements.txt\n"
+            "或: python3 -m venv .venv && .venv/bin/pip install -r requirements.txt"
+        )
+    data = yaml.safe_load(parts[1]) or {}
+    if not isinstance(data, dict):
+        return None, text
+    return data, parts[2]
+
+
+def parse_project_from_yaml(folder: Path, data: dict) -> dict | None:
+    online = data.get("online", True)
+    if isinstance(online, str):
+        online = online in ("是", "yes", "Yes", "true", "True", "1")
+    if online is False:
+        print(f"  skip offline: {folder.name}")
+        return None
+
+    slug = str(data.get("slug") or folder.name)
+    pid = str(data.get("id") or slug.upper().replace("-", "_"))
+    cover = str(data.get("cover") or "cover.jpg")
+    try:
+        order = int(data.get("order", 100))
+    except (TypeError, ValueError):
+        order = 100
+
+    tags = data.get("tags") or []
+    if isinstance(tags, str):
+        tags = [t.strip() for t in tags.split(",") if t.strip()]
+
+    modules = []
+    for m in data.get("modules") or []:
+        if not isinstance(m, dict):
+            continue
+        modules.append(
+            {
+                "title_cn": str(m.get("title_cn") or ""),
+                "title_en": str(m.get("title_en") or m.get("title_cn") or ""),
+                "cn": str(m.get("cn") or ""),
+                "en": str(m.get("en") or ""),
+            }
+        )
+
+    gallery = []
+    for g in data.get("gallery") or []:
+        if not isinstance(g, dict) or not g.get("file"):
+            continue
+        por = g.get("portrait", False)
+        if isinstance(por, str):
+            por = por in ("是", "yes", "Yes", "true", "True", "1")
+        gallery.append(
+            {
+                "file": str(g["file"]).strip(),
+                "caption_cn": str(g.get("caption_cn") or ""),
+                "caption_en": str(g.get("caption_en") or ""),
+                "portrait": bool(por),
+            }
+        )
+
+    video = None
+    v = data.get("video")
+    if isinstance(v, dict) and v.get("file"):
+        video = {
+            "file": str(v["file"]).strip(),
+            "poster": str(v.get("poster") or cover).strip(),
+            "title_cn": str(v.get("title_cn") or "短片"),
+            "title_en": str(v.get("title_en") or "Short film"),
+        }
+
+    metrics = []
+    for m in data.get("metrics") or []:
+        if isinstance(m, dict) and m.get("value") is not None:
+            metrics.append(
+                {
+                    "value": str(m["value"]),
+                    "label_cn": str(m.get("label_cn") or ""),
+                    "label_en": str(m.get("label_en") or m.get("label_cn") or ""),
+                }
+            )
+
+    related = []
+    for r in data.get("related") or []:
+        s = str(r).strip()
+        if s:
+            related.append(s)
+
+    title_cn = str(data.get("title_cn") or folder.name)
+    title_en = str(data.get("title_en") or data.get("summary_en") or title_cn)
+
+    return {
+        "folder": folder,
+        "id": pid,
+        "slug": slug,
+        "title_cn": title_cn,
+        "title_en": title_en,
+        "title_en_page": None,
+        "cat_cn": str(data.get("cat_cn") or ""),
+        "cat_en": str(data.get("cat_en") or ""),
+        "tags": list(tags),
+        "summary_cn": str(data.get("summary_cn") or ""),
+        "summary_en": str(data.get("summary_en") or ""),
+        "cover": cover,
+        "order": order,
+        "lead_cn": str(data.get("lead_cn") or ""),
+        "lead_en": str(data.get("lead_en") or ""),
+        "modules": modules,
+        "gallery": gallery,
+        "video": video,
+        "metrics": metrics,
+        "related": related,
+        "url": f"{slug}.html",
+        "cover_web": f"assets/projects/{slug}/{cover}",
+    }
+
+
 def parse_project(folder: Path) -> dict | None:
     md_path = folder / "文案.md"
     if not md_path.exists():
         return None
     text = md_path.read_text(encoding="utf-8")
+    fm, _body = split_frontmatter(text)
+    if fm is not None:
+        return parse_project_from_yaml(folder, fm)
+
+    # --- legacy Chinese section format (怎么换图改字.md) ---
     title_m = re.search(r"^#\s+(.+)$", text, re.M)
     title_cn = title_m.group(1).strip() if title_m else folder.name
 
@@ -602,6 +739,12 @@ def assemble_public() -> None:
     if oversized:
         for p in oversized:
             print(f"  WARN oversized (>=25MiB): {p.relative_to(PUBLIC)} ({p.stat().st_size} bytes)")
+    # Decap CMS admin UI (source lives at repo admin/, served at /admin/)
+    admin_src = ROOT / "admin"
+    if admin_src.exists():
+        shutil.copytree(admin_src, PUBLIC / "admin", dirs_exist_ok=True)
+        print("  copied admin/ → public/admin/")
+
     n_files = sum(1 for p in PUBLIC.rglob("*") if p.is_file())
     print(f"  assembled public/ ({n_files} files)")
 
@@ -621,7 +764,9 @@ def main() -> None:
         p = parse_project(folder)
         if not p:
             continue
-        refine_title_en(p, text)
+        fm, _ = split_frontmatter(text)
+        if fm is None:
+            refine_title_en(p, text)
         content_projects.append(p)
         print(f"  found {p['id']} / {p['slug']} — {p['title_cn']}")
 

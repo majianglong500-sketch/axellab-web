@@ -1,0 +1,224 @@
+/* AXEL LAB admin chrome — Antigravity-inspired: sparse, dark hero, clear CTAs */
+:root {
+  --al-bg: #f4f4f5;
+  --al-ink: #0a0a0a;
+  --al-card: #0a0a0a;
+  --al-orange: #f97316;
+  --al-muted: #737373;
+  --al-pill: #ffffff;
+  --al-pill-ghost: #262626;
+  --al-radius: 28px;
+  --al-font: "Inter", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+}
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--al-bg) !important;
+  font-family: var(--al-font) !important;
+}
+
+/* ---- Custom landing (before / around Decap) ---- */
+.al-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--al-bg);
+  color: var(--al-ink);
+}
+.al-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 28px;
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+.al-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  font-size: 14px;
+  text-decoration: none;
+  color: var(--al-ink);
+}
+.al-logo .mark {
+  width: 28px; height: 28px; border-radius: 8px;
+  background: var(--al-ink); color: var(--al-orange);
+  display: grid; place-items: center; font-size: 11px; font-weight: 800;
+}
+.al-nav-links {
+  display: flex; gap: 22px; font-size: 13px; color: var(--al-muted);
+}
+.al-nav-links a { color: inherit; text-decoration: none; }
+.al-nav-links a:hover { color: var(--al-ink); }
+.al-nav-cta {
+  background: var(--al-ink); color: #fff; border: 0;
+  border-radius: 999px; padding: 8px 16px; font-size: 13px;
+  font-weight: 600; cursor: pointer; text-decoration: none;
+}
+.al-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 20px 48px;
+}
+.al-hero {
+  width: min(920px, 100%);
+  min-height: 320px;
+  border-radius: var(--al-radius);
+  background:
+    radial-gradient(ellipse 70% 80% at 78% 45%, rgba(249,115,22,0.22), transparent 55%),
+    radial-gradient(circle at 20% 80%, rgba(255,255,255,0.06), transparent 40%),
+    var(--al-card);
+  color: #fff;
+  padding: 56px 52px;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.18);
+}
+.al-hero::before {
+  content: "";
+  position: absolute; inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,0.09) 1px, transparent 1px);
+  background-size: 18px 18px;
+  opacity: 0.35;
+  pointer-events: none;
+  mask-image: radial-gradient(ellipse 60% 70% at 75% 50%, #000 20%, transparent 70%);
+}
+.al-hero-inner { position: relative; z-index: 1; max-width: 420px; }
+.al-kicker {
+  font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--al-orange); font-weight: 600; margin-bottom: 14px;
+}
+.al-hero h1 {
+  margin: 0 0 12px; font-size: clamp(28px, 4vw, 40px);
+  font-weight: 700; line-height: 1.15; letter-spacing: -0.02em;
+}
+.al-hero p {
+  margin: 0 0 28px; color: #a3a3a3; font-size: 15px; line-height: 1.65;
+}
+.al-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.al-btn {
+  border: 0; border-radius: 999px; padding: 12px 22px;
+  font-size: 14px; font-weight: 600; cursor: pointer;
+  font-family: inherit; text-decoration: none; display: inline-flex;
+  align-items: center; gap: 8px;
+}
+.al-btn-primary { background: #fff; color: #0a0a0a; }
+.al-btn-primary:hover { background: #f5f5f5; }
+.al-btn-ghost { background: var(--al-pill-ghost); color: #fff; }
+.al-btn-ghost:hover { background: #404040; }
+.al-foot {
+  max-width: 1100px; margin: 0 auto; padding: 0 28px 40px;
+  display: flex; justify-content: space-between; gap: 32px; flex-wrap: wrap;
+  color: var(--al-muted); font-size: 13px;
+}
+.al-foot h2 {
+  margin: 0 0 8px; font-size: clamp(22px, 3vw, 32px);
+  color: var(--al-ink); font-weight: 700; letter-spacing: -0.02em;
+}
+.al-foot a { color: var(--al-muted); text-decoration: none; }
+.al-foot a:hover { color: var(--al-ink); }
+.al-cols { display: flex; gap: 48px; }
+.al-cols strong { display: block; color: var(--al-ink); margin-bottom: 10px; font-size: 12px; letter-spacing: 0.06em; }
+.al-cols ul { list-style: none; margin: 0; padding: 0; line-height: 2; }
+
+/* When Decap mounts, hide landing shell */
+body.al-cms-active .al-shell { display: none !important; }
+
+/* ---- Decap login + app chrome overrides ---- */
+/* Make Decap auth screen feel like the same dark hero world */
+body.al-cms-active {
+  background: var(--al-bg) !important;
+}
+
+/* Root app canvas */
+#nc-root, [data-netlify-cms-root], body > #root {
+  min-height: 100vh;
+}
+
+/* Soften Decap header / sidebar toward sparse dark-orange */
+body.al-cms-active header,
+body.al-cms-active [class*="AppHeader"],
+body.al-cms-active [class*="app-header"] {
+  background: #0a0a0a !important;
+  border-bottom: 1px solid #262626 !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+
+/* Primary buttons → pill */
+body.al-cms-active button[class*="Button"],
+body.al-cms-active a[class*="Button"],
+body.al-cms-active .nc-buttonSave,
+body.al-cms-active button[type="button"] {
+  border-radius: 999px !important;
+}
+
+/* Login page centering card look */
+body.al-cms-active [class*="LoginPage"],
+body.al-cms-active [class*="AuthenticationPage"] {
+  min-height: 100vh !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background:
+    radial-gradient(ellipse 50% 40% at 50% 40%, rgba(249,115,22,0.08), transparent 60%),
+    var(--al-bg) !important;
+  padding: 24px !important;
+}
+
+body.al-cms-active [class*="LoginPage"] > div,
+body.al-cms-active [class*="AuthenticationPage"] > div {
+  background: var(--al-card) !important;
+  color: #fff !important;
+  border-radius: var(--al-radius) !important;
+  padding: 48px 40px !important;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.18) !important;
+  max-width: 420px !important;
+  width: 100% !important;
+  text-align: center !important;
+}
+
+body.al-cms-active [class*="LoginPage"] button,
+body.al-cms-active [class*="AuthenticationPage"] button {
+  background: #fff !important;
+  color: #0a0a0a !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  padding: 12px 28px !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+}
+
+/* Collection list cards — less clutter */
+body.al-cms-active [class*="CollectionContainer"],
+body.al-cms-active [class*="EntryListing"] {
+  background: transparent !important;
+}
+
+@media (max-width: 640px) {
+  .al-hero { padding: 36px 24px; border-radius: 20px; }
+  .al-nav-links { display: none; }
+  .al-foot { flex-direction: column; }
+}
+
+/* Decap 3 Emotion-hashed login — target structure generously */
+body.al-cms-active #nc-root {
+  min-height: 100vh;
+  background: #f4f4f5 !important;
+}
+body.al-cms-active #nc-root > div {
+  min-height: 100vh;
+}
+/* Soften default Decap pink logo area with AL orange accent bar above login */
+body.al-cms-active::after {
+  content: none;
+}

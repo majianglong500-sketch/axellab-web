@@ -52,3 +52,22 @@ npx wrangler deploy          # 若 assets 仍指向仓库根，同样会扫到 .
 ```
 
 （在本仓库当前配置下，`npx wrangler deploy` 已安全，因为只读 `./public`。）
+
+
+## 内容后台（Decap CMS）
+
+- 地址：https://axellab.org/admin/
+- 说明：仓库根目录《怎么用后台.md》
+- OAuth：Worker `worker/oauth.js` 处理 `/api/auth` 与 `/api/callback`
+- Cloudflare Secrets：`GITHUB_CLIENT_ID`、`GITHUB_CLIENT_SECRET`
+- 注册 OAuth App 步骤：`scripts/oauth-setup.md`
+- 保存内容后由 `.github/workflows/build-site.yml` 跑 `python build.py` 更新 `public/`
+
+`wrangler.toml` 现含 `main = "./worker/oauth.js"`，静态资源仍来自 `./public`。部署：
+
+```bash
+python build.py   # 或 .venv/bin/python build.py
+npx wrangler deploy
+```
+
+首次上线后台前务必配置好两个 Secrets，否则登录会失败。

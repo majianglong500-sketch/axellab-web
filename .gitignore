@@ -1,6 +1,9 @@
-__pycache__/
 *.py[cod]
 .DS_Store
+.venv/
 .wrangler/
-node_modules/
+__pycache__/
+content/_media/
 dist/
+node_modules/
+venv/
