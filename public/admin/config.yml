@@ -44,10 +44,6 @@ collections:
     identifier_field: title_cn
     summary: "{{title_cn}} · {{id}}"
     sortable_fields: ["order", "title_cn", "id"]
-    # 隐藏模板（cms_ignore: true）
-    filter:
-      field: cms_ignore
-      value: false
     # 每个项目自己的 images/ 目录
     media_folder: images
     public_folder: /assets/projects/{{slug}}
