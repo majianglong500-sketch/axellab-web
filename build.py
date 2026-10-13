@@ -656,8 +656,8 @@ def patch_works_in_file(path: Path, works_html: str) -> None:
     """
     text = path.read_text(encoding="utf-8")
     pat = re.compile(
-        r'<div class="works">.*?(?=</section>)',
-        re.S,
+        r'^[ \t]*<div class="works">.*?(?=</section>)',
+        re.S | re.M,
     )
     new_text, n = pat.subn(works_html.rstrip() + "\n    ", text, count=1)
     if n == 0:
