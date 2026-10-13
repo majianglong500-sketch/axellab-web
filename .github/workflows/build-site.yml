@@ -1,0 +1,57 @@
+name: Build site from content
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "content/**"
+      - "build.py"
+      - "admin/**"
+      - "worker/**"
+      - "wrangler.toml"
+      - "requirements.txt"
+      - "*.html"
+      - "styles.css"
+      - "main.js"
+      - "data.js"
+      - "assets/**"
+      - ".github/workflows/build-site.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: build-site
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install deps
+        run: pip install -r requirements.txt
+
+      - name: Build
+        run: python build.py
+
+      - name: Commit rebuilt public/ (and generated pages)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "chore: rebuild public/ from content [skip ci]"
+            git push
+          fi
