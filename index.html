@@ -84,6 +84,10 @@
           <a class="btn btn-ghost" data-axel-portable href="#" aria-disabled="true" hidden><span class="cn">下载便携版</span><span class="en">Portable</span></a>
           <span class="axel-download__soon" data-axel-soon><span class="cn">安装包即将开放下载</span><span class="en">Installer coming soon</span></span>
         </div>
+        <div class="axel-download__alts" data-axel-alts hidden>
+          <a class="axel-download__alt" data-axel-setup-alt href="#" hidden>备用下载（无需网盘）· 安装包</a>
+          <a class="axel-download__alt" data-axel-portable-alt href="#" hidden>备用下载（无需网盘）· 便携版</a>
+        </div>
       </div>
     </section>
 
@@ -183,6 +187,9 @@
       var setup = root.querySelector("[data-axel-setup]");
       var portable = root.querySelector("[data-axel-portable]");
       var soon = root.querySelector("[data-axel-soon]");
+      var alts = root.querySelector("[data-axel-alts]");
+      var setupAlt = root.querySelector("[data-axel-setup-alt]");
+      var portableAlt = root.querySelector("[data-axel-portable-alt]");
       function setLink(a, url) {
         if (!a) return;
         if (url) {
@@ -195,6 +202,7 @@
           a.href = "#";
           a.setAttribute("aria-disabled", "true");
           a.onclick = function (e) { e.preventDefault(); };
+          a.hidden = true;
         }
       }
       fetch("axel/latest.json", { cache: "no-store" })
@@ -204,17 +212,23 @@
           if (notes && d.notes) notes.textContent = " · " + d.notes;
           var su = (d.setupUrl || "").trim();
           var pu = (d.portableUrl || "").trim();
+          var sua = (d.setupUrlAlt || "").trim();
+          var pua = (d.portableUrlAlt || "").trim();
           setLink(setup, su);
           setLink(portable, pu);
           if (portable) portable.hidden = !pu;
           if (soon) soon.hidden = !!(su || pu);
           if (!su && setup) setup.hidden = true;
+          setLink(setupAlt, sua);
+          setLink(portableAlt, pua);
+          if (alts) alts.hidden = !(sua || pua);
         })
         .catch(function () {
           if (ver) ver.textContent = "—";
           if (soon) soon.hidden = false;
           if (setup) setup.hidden = true;
           if (portable) portable.hidden = true;
+          if (alts) alts.hidden = true;
         });
     })();
   </script>

@@ -337,3 +337,6 @@ footer .logo{font-size:15px;font-family:var(--sans)}
 .axel-download__notes{display:inline;opacity:.75}
 .axel-download__soon{display:inline-flex;align-items:center;font-size:14px;opacity:.7;margin-left:4px}
 .axel-download a[aria-disabled="true"]{opacity:.45;pointer-events:none}
+.axel-download__alts{margin-top:14px;display:flex;flex-wrap:wrap;gap:10px 18px;font-size:13px}
+.axel-download__alt{color:var(--muted,rgba(255,255,255,.65));text-decoration:underline;text-underline-offset:3px}
+.axel-download__alt:hover{color:var(--blue,#6eb6ff)}

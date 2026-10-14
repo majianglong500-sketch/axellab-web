@@ -15,5 +15,7 @@
       "about",
       "splash"
     ]
-  }
+  },
+  "setupUrlAlt": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.11/AXEL-Setup-1.0.11.exe",
+  "portableUrlAlt": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.11/AXEL-Portable-1.0.11.exe"
 }
