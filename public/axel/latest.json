@@ -1,8 +1,8 @@
 {
   "version": "1.0.11",
-  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.11/AXEL-Setup-1.0.11.exe",
-  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.11/AXEL-Portable-1.0.11.exe",
-  "notes": "1.0.11 测试版，需序列号；含加工体检、切割导出、转矢量参数、彩色转矢量等。",
+  "setupUrl": "https://pan.baidu.com/s/1xwQJM0_TiuyidSzWXnw6BA?pwd=AXEL",
+  "portableUrl": "https://pan.baidu.com/s/1giAd_S3vBSlWs1Izrsf1zA?pwd=AXEL",
+  "notes": "1.0.11 测试版，需序列号；国内请用网盘下载（提取码 AXEL）。含加工体检、切割导出、转矢量参数、彩色转矢量等。",
   "ad": {
     "enabled": false,
     "image": "https://axellab.org/assets/ad/banner.png",
