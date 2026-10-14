@@ -1,11 +1,18 @@
 /**
  * GitHub OAuth + API proxy for Decap CMS (Cloudflare Workers + Assets).
- * Secrets: GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET
+ * + AXEL presence heartbeat (/api/axel-presence)
+ * Secrets: GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, AXEL_ADMIN_TOKEN
+ * KV: AXEL_PRESENCE
  * Routes:
  *   /api/auth      → redirect to GitHub OAuth
  *   /api/callback  → exchange code, postMessage to CMS popup
  *   /api/github/*  → proxy to api.github.com (国内浏览器可走本站)
+ *   /api/axel-presence → AXEL 在线心跳 / 管理列表
+ *   /api/axel-license  → AXEL 序列号在线核验 / 停用 / 发号（KV AXEL_LICENSE，Secret AXEL_LICENSE_SECRET）
  */
+import { handleAxelPresence } from "./axel-presence.js";
+import { handleAxelLicense } from "./axel-license.js";
+
 function renderBody(status, content) {
   const payload = JSON.stringify({ token: content.token, provider: content.provider });
   const msg =
@@ -65,6 +72,13 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     const path = url.pathname.replace(/\/$/, "") || "/";
+
+    if (path === "/api/axel-license" || path === "/api/axel-license/admin") {
+      return handleAxelLicense(request, env);
+    }
+    if (path === "/api/axel-presence") {
+      return handleAxelPresence(request, env);
+    }
 
     if (request.method === "OPTIONS" && path.startsWith("/api/github")) {
       return new Response(null, {

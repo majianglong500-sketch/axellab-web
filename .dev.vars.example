@@ -1,0 +1,8 @@
+# 复制为 .dev.vars 供 `wrangler dev` 本地使用（.dev.vars 已 gitignore，勿提交）
+# AXEL 管理页口令：打开 /axel/admin.html 时填写同一串
+AXEL_ADMIN_TOKEN=change-me-to-a-long-random-string
+
+# Decap OAuth（可选，本地测 CMS 时才需要）
+# GITHUB_CLIENT_ID=
+# GITHUB_CLIENT_SECRET=
+AXEL_LICENSE_SECRET=与软件 scripts/license-secret.local.json 中 secret 相同

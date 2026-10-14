@@ -329,3 +329,11 @@ footer .logo{font-size:15px;font-family:var(--sans)}
 .fx-marquee__track b{color:var(--ink);font-weight:500}
 @keyframes fx-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 @media (prefers-reduced-motion:reduce){.fx-marquee__track{animation:none}}
+
+/* AXEL quote app download panel */
+.axel-download{margin:48px 0 24px;padding:28px;border:1px solid var(--border,rgba(255,255,255,.12));border-radius:16px;background:rgba(255,255,255,.02)}
+.axel-download__panel{margin-top:8px}
+.axel-download__meta{font-size:14px;opacity:.85;line-height:1.6}
+.axel-download__notes{display:inline;opacity:.75}
+.axel-download__soon{display:inline-flex;align-items:center;font-size:14px;opacity:.7;margin-left:4px}
+.axel-download a[aria-disabled="true"]{opacity:.45;pointer-events:none}

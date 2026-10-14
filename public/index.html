@@ -64,6 +64,29 @@
       </div>
     </div>
 
+
+    <section id="axel-download" class="axel-download">
+      <div class="section-head">
+        <div class="kicker"><span class="cn">软件</span><span class="en">Software</span></div>
+        <div>
+          <h2><span class="cn">下载 AXEL 报价软件</span><span class="en">Download AXEL Quote</span></h2>
+          <p class="section-intro"><span class="cn">广告制作报价单与材料库（离线本地软件）。安装包将挂到网盘外链，填写版本清单后即可在此下载。</span><span class="en">Offline quote &amp; materials app for ad production. Installer links will appear here once published.</span></p>
+        </div>
+      </div>
+      <div class="axel-download__panel" data-axel-download>
+        <div class="axel-download__meta">
+          <span class="cn">当前清单版本</span><span class="en">Manifest version</span>：
+          <strong data-axel-ver>—</strong>
+          <span class="axel-download__notes" data-axel-notes></span>
+        </div>
+        <div class="cta" style="margin-top:16px">
+          <a class="btn btn-primary" data-axel-setup href="#" aria-disabled="true"><span class="cn">下载安装包</span><span class="en">Download installer</span></a>
+          <a class="btn btn-ghost" data-axel-portable href="#" aria-disabled="true" hidden><span class="cn">下载便携版</span><span class="en">Portable</span></a>
+          <span class="axel-download__soon" data-axel-soon><span class="cn">安装包即将开放下载</span><span class="en">Installer coming soon</span></span>
+        </div>
+      </div>
+    </section>
+
     <section id="work">
       <div class="section-head">
         <div class="kicker"><span class="cn">精选作品</span><span class="en">Selected Works</span></div>
@@ -151,5 +174,49 @@
     </footer>
   </main>
   <script src="main.js"></script>
+  <script>
+    (function () {
+      var root = document.querySelector("[data-axel-download]");
+      if (!root) return;
+      var ver = root.querySelector("[data-axel-ver]");
+      var notes = root.querySelector("[data-axel-notes]");
+      var setup = root.querySelector("[data-axel-setup]");
+      var portable = root.querySelector("[data-axel-portable]");
+      var soon = root.querySelector("[data-axel-soon]");
+      function setLink(a, url) {
+        if (!a) return;
+        if (url) {
+          a.href = url;
+          a.target = "_blank";
+          a.rel = "noopener";
+          a.removeAttribute("aria-disabled");
+          a.hidden = false;
+        } else {
+          a.href = "#";
+          a.setAttribute("aria-disabled", "true");
+          a.onclick = function (e) { e.preventDefault(); };
+        }
+      }
+      fetch("axel/latest.json", { cache: "no-store" })
+        .then(function (r) { if (!r.ok) throw new Error("bad"); return r.json(); })
+        .then(function (d) {
+          if (ver) ver.textContent = d.version ? ("v" + d.version) : "—";
+          if (notes && d.notes) notes.textContent = " · " + d.notes;
+          var su = (d.setupUrl || "").trim();
+          var pu = (d.portableUrl || "").trim();
+          setLink(setup, su);
+          setLink(portable, pu);
+          if (portable) portable.hidden = !pu;
+          if (soon) soon.hidden = !!(su || pu);
+          if (!su && setup) setup.hidden = true;
+        })
+        .catch(function () {
+          if (ver) ver.textContent = "—";
+          if (soon) soon.hidden = false;
+          if (setup) setup.hidden = true;
+          if (portable) portable.hidden = true;
+        });
+    })();
+  </script>
 </body>
 </html>

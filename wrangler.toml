@@ -3,12 +3,27 @@ compatibility_date = "2025-01-01"
 main = "./worker/oauth.js"
 
 # Deploy only public/ — never the repo root (avoids uploading .git packs >25MiB)
-# Worker handles /api/* (Decap GitHub OAuth); everything else is static assets.
+# Worker handles /api/* (Decap GitHub OAuth + AXEL presence); everything else is static assets.
 [assets]
 directory = "./public"
 binding = "ASSETS"
 run_worker_first = ["/api/*"]
 
-# Secrets (set via dashboard or: wrangler secret put GITHUB_CLIENT_ID / GITHUB_CLIENT_SECRET)
+# AXEL 在线心跳存储（先 wrangler kv namespace create AXEL_PRESENCE，再把 id 填到下面）
+# 未填真实 id 时本地 mock 仍可用；部署前务必替换。
+[[kv_namespaces]]
+binding = "AXEL_PRESENCE"
+id = "5b61324d24f24da6919349dba91bba83"
+preview_id = "3d170ec0979445a4bb2155c469672846"
+
+# AXEL 序列号在线核验 / 停用名单（wrangler kv namespace create AXEL_LICENSE，把 id 填到下面）
+[[kv_namespaces]]
+binding = "AXEL_LICENSE"
+id = "82998eac3c844fd28ceefffdace10405"
+preview_id = "1dde93e19c2b4b89b6cbaf1eaddc7432"
+
+# Secrets（Dashboard 或 wrangler secret put；勿写入仓库）
 # GITHUB_CLIENT_ID
 # GITHUB_CLIENT_SECRET
+# AXEL_ADMIN_TOKEN
+# AXEL_LICENSE_SECRET   （= 软件 scripts/license-secret.local.json 里的 secret，勿公开）

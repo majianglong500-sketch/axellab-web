@@ -745,6 +745,12 @@ def assemble_public() -> None:
         shutil.copytree(admin_src, PUBLIC / "admin", dirs_exist_ok=True)
         print("  copied admin/ → public/admin/")
 
+    # AXEL 报价软件版本清单（几 KB，供客户端检查更新）
+    axel_src = ROOT / "axel"
+    if axel_src.exists():
+        shutil.copytree(axel_src, PUBLIC / "axel", dirs_exist_ok=True)
+        print("  copied axel/ → public/axel/")
+
     n_files = sum(1 for p in PUBLIC.rglob("*") if p.is_file())
     print(f"  assembled public/ ({n_files} files)")
 

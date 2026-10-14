@@ -7,3 +7,10 @@ content/_media/
 dist/
 node_modules/
 venv/
+
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
+
+.admin-token.local
+.license-secret.local

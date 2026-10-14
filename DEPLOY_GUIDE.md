@@ -71,3 +71,13 @@ npx wrangler deploy
 ```
 
 首次上线后台前务必配置好两个 Secrets，否则登录会失败。
+
+## AXEL 在线汇报（管理页）
+
+- 管理页：https://axellab.org/axel/admin.html
+- API：`POST/GET /api/axel-presence`（Worker 内，见 `worker/axel-presence.js`）
+- 配置说明：`scripts/axel-presence.md`
+- Secrets：`AXEL_ADMIN_TOKEN`（`wrangler secret put AXEL_ADMIN_TOKEN`）
+- KV：绑定名 `AXEL_PRESENCE`（先 `wrangler kv namespace create`，再改 `wrangler.toml` 里的 id）
+- 本地：复制 `.dev.vars.example` → `.dev.vars`
+

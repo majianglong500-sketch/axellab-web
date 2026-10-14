@@ -1,0 +1,19 @@
+{
+  "version": "1.0.11",
+  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.11/AXEL-Setup-1.0.11.exe",
+  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.11/AXEL-Portable-1.0.11.exe",
+  "notes": "1.0.11 测试版，需序列号；含加工体检、切割导出、转矢量参数、彩色转矢量等。",
+  "ad": {
+    "enabled": false,
+    "image": "https://axellab.org/assets/ad/banner.png",
+    "link": "https://axellab.org/",
+    "label": "推广",
+    "text": "",
+    "until": "2026-12-31",
+    "maxPerDay": 3,
+    "slots": [
+      "about",
+      "splash"
+    ]
+  }
+}
