@@ -1,8 +1,8 @@
 {
-  "version": "1.0.11",
-  "setupUrl": "https://pan.baidu.com/s/1xwQJM0_TiuyidSzWXnw6BA?pwd=AXEL",
-  "portableUrl": "https://pan.baidu.com/s/1giAd_S3vBSlWs1Izrsf1zA?pwd=AXEL",
-  "notes": "1.0.11 测试版，需序列号；国内请用网盘下载（提取码 AXEL）。含加工体检、切割导出、转矢量参数、彩色转矢量等。",
+  "version": "1.0.13",
+  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.13/AXEL-Setup-1.0.13.exe",
+  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.13/AXEL-Portable-1.0.13.exe",
+  "notes": "1.0.13：图片提取「把每一页导出成图片」清晰度增加「原图尺寸」与自定义 DPI（72～1200）；需序列号。当前下载为 GitHub 直链。百度网盘若尚未更新，仍可能是旧版，可作备用（提取码 AXEL）。",
   "ad": {
     "enabled": false,
     "image": "https://axellab.org/assets/ad/banner.png",
@@ -16,6 +16,6 @@
       "splash"
     ]
   },
-  "setupUrlAlt": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.11/AXEL-Setup-1.0.11.exe",
-  "portableUrlAlt": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.11/AXEL-Portable-1.0.11.exe"
+  "setupUrlAlt": "https://pan.baidu.com/s/1xwQJM0_TiuyidSzWXnw6BA?pwd=AXEL",
+  "portableUrlAlt": "https://pan.baidu.com/s/1giAd_S3vBSlWs1Izrsf1zA?pwd=AXEL"
 }
