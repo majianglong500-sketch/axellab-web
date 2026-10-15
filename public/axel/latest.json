@@ -1,8 +1,8 @@
 {
-  "version": "1.0.13",
-  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.13/AXEL-Setup-1.0.13.exe",
-  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.13/AXEL-Portable-1.0.13.exe",
-  "notes": "1.0.13：图片提取「把每一页导出成图片」清晰度增加「原图尺寸」与自定义 DPI（72～1200）；需序列号。当前下载为 GitHub 直链。百度网盘若尚未更新，仍可能是旧版，可作备用（提取码 AXEL）。",
+  "version": "1.0.14",
+  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.14/AXEL-Setup-1.0.14.exe",
+  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.14/AXEL-Portable-1.0.14.exe",
+  "notes": "1.0.14：材料库扩到16类144条（含参考价）+铁艺造型模板；「导出与纹理」新增参数纹理（SVG/DXF、镂空面积加入报价）；新增小册子/打印排版（书籍折页、每版多页、拼页、拼多份、封面只打半张、手动双面、出血裁切线、实时预览）；需序列号。当前下载为 GitHub 直链。百度网盘若尚未更新，仍可能是旧版，可作备用（提取码 AXEL）。",
   "ad": {
     "enabled": false,
     "image": "https://axellab.org/assets/ad/banner.png",
