@@ -1,8 +1,8 @@
 {
-  "version": "1.0.15",
-  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.15/AXEL-Setup-1.0.15.exe",
-  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.15/AXEL-Portable-1.0.15.exe",
-  "notes": "1.0.15：大 PDF 不再卡死——图片提取与小册子支持页码范围、逐页处理带进度和取消、缩略图懒加载、单张像素上限、小册子逐面写入 PDF；含 1.0.14 的材料库扩展、参数纹理、小册子排版。需序列号。当前下载为 GitHub 直链。百度网盘若尚未更新，仍可能是旧版，可作备用（提取码 AXEL）。",
+  "version": "1.0.16",
+  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.16/AXEL-Setup-1.0.16.exe",
+  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.16/AXEL-Portable-1.0.16.exe",
+  "notes": "1.0.16：升级不再丢序列号（授权固定本机、与安装路径无关，旧授权自动迁移）；含大 PDF 优化、材料库扩展、参数纹理、小册子排版。需序列号。当前下载为 GitHub 直链。百度网盘若尚未更新，仍可能是旧版，可作备用（提取码 AXEL）。",
   "ad": {
     "enabled": false,
     "image": "https://axellab.org/assets/ad/banner.png",
