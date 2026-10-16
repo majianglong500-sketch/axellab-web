@@ -1,8 +1,8 @@
 {
-  "version": "1.0.17",
-  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.17/AXEL-Setup-1.0.17.exe",
-  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.17/AXEL-Portable-1.0.17.exe",
-  "notes": "1.0.17：报价可改名/另存对照、导出导入可编辑.axelquote包；图片提取页码范围更醒目、CAD标明整图不用选页；含升级不丢序列号、大PDF优化、材料库与小册子。需序列号。GitHub直链；百度若未更新可能仍是旧包（提取码AXEL）。",
+  "version": "1.0.18",
+  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.18/AXEL-Setup-1.0.18.exe",
+  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.18/AXEL-Portable-1.0.18.exe",
+  "notes": "1.0.18：报价按名字保存——同名确认替换、换名存新版本、版本列表可打开旧版编辑；保留另存为新报价与.axelquote；含升级不丢序列号、大PDF、材料库与小册子。需序列号。GitHub直链；百度若未更新可能仍是旧包（提取码AXEL）。",
   "ad": {
     "enabled": false,
     "image": "https://axellab.org/assets/ad/banner.png",
