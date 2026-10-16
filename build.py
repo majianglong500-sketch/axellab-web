@@ -648,12 +648,23 @@ def render_works_block(all_projects: list[dict]) -> str:
     return html
 
 
+EDITOR_MARK = 'name="axel-editor"'
+
+
+def edited_by_editor(path: Path) -> bool:
+    """页面被可视化编辑器（/admin/）保存过：以页面为准，build 不再覆盖它。"""
+    return path.exists() and EDITOR_MARK in path.read_text(encoding="utf-8")
+
+
 def patch_works_in_file(path: Path, works_html: str) -> None:
     """Replace the works (+ optional works-extra) block inside its parent section.
 
     Match from <div class="works"> through any leftover markup until the next
     </section>, so a previously broken patch cannot leave orphan cards.
     """
+    if edited_by_editor(path):
+        print(f"  keep {path.name} (edited in visual editor)")
+        return
     text = path.read_text(encoding="utf-8")
     pat = re.compile(
         r'^[ \t]*<div class="works">.*?(?=</section>)',
@@ -784,8 +795,11 @@ def main() -> None:
 
     for p in content_projects:
         copy_assets(p)
-        html = render_detail(p, by_slug)
         out = ROOT / f"{p['slug']}.html"
+        if edited_by_editor(out):
+            print(f"  keep {out.name} (edited in visual editor)")
+            continue
+        html = render_detail(p, by_slug)
         out.write_text(html, encoding="utf-8")
         print(f"  wrote {out.name}")
 

@@ -212,7 +212,7 @@
 
     // Lightbox (legacy selectors)
     var images = document.querySelectorAll(
-      ".bw-primary img, .bw-thumbs img, .detail-fig img, .gallery2 img"
+      ".bw-primary img, .bw-thumbs img, .detail-fig img, .gallery2 img, .axb img"
     );
     images.forEach(function (img) {
       img.style.cursor = "zoom-in";

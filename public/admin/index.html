@@ -4,110 +4,104 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
-  <title>AXEL LAB · 内容后台</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="admin-chrome.css">
+  <title>AXEL LAB · 网站编辑</title>
+  <link rel="stylesheet" href="editor.css">
 </head>
 <body>
-  <!-- Antigravity-style sparse landing; Decap loads on demand -->
-  <div class="al-shell" id="alShell">
-    <nav class="al-nav">
-      <a class="al-logo" href="/">
-        <span class="mark">AL</span>
-        <span>AXEL LAB</span>
-      </a>
-      <div class="al-nav-links">
-        <a href="/">网站首页</a>
-        <a href="/projects.html">项目</a>
-        <a href="https://github.com/majianglong500-sketch/axellab-web" target="_blank" rel="noopener">仓库</a>
-      </div>
-      <a class="al-nav-cta" href="/" title="返回站点">返回站点</a>
-    </nav>
+  <!-- 顶部编辑栏 -->
+  <div id="axBar" class="bar">
+    <div class="bar-l">
+      <span class="brand"><b>AL</b> 网站编辑</span>
+      <label class="page-pick" title="选择要编辑的页面">页面
+        <select id="axPage"></select>
+      </label>
+      <button id="axEditToggle" class="btn toggle" title="开：点文字改字、点图片换图；关：像普通访客一样浏览">编辑模式：关</button>
+      <button id="axAdd" class="btn" title="在页面里加一个新板块">＋ 新增板块</button>
+      <button id="axImgs" class="btn" title="列出本页所有图片：换图、删除、拖动排序、追加">🖼 本页图片</button>
+      <button id="axUndo" class="btn icon" title="撤销（Ctrl+Z）">↶ 撤销</button>
+      <button id="axRedo" class="btn icon" title="重做（Ctrl+Y）">↷</button>
+      <button id="axMobile" class="btn" title="看看手机上的样子">📱 手机效果</button>
+    </div>
+    <div class="bar-r">
+      <span id="axStatus" class="status"></span>
+      <button id="axDiscard" class="btn ghost" title="把还没保存的修改全部丢掉">放弃修改</button>
+      <button id="axSave" class="btn primary" title="保存并发布到网站（Ctrl+S）">保存</button>
+      <button id="axHelp" class="btn ghost icon" title="使用说明">？</button>
+      <button id="axLogout" class="btn ghost icon" title="退出登录">退出</button>
+    </div>
+  </div>
+  <div id="axHint" class="hint"></div>
 
-    <main class="al-main">
-      <section class="al-hero" aria-label="内容后台">
-        <div class="al-hero-inner">
-          <div class="al-kicker">Content Studio</div>
-          <h1>编辑文字与图片<br>一键发布到网站</h1>
-          <p>用 GitHub 账号登录后，可改项目标题、摘要、封面与图库。保存即提交到仓库，站点会自动重建。</p>
-          <div class="al-actions">
-            <button type="button" class="al-btn al-btn-primary" id="alEnterCms">用 GitHub 进入后台</button>
-            <a class="al-btn al-btn-ghost" href="help.html" id="alHelpLink">使用说明</a>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <footer class="al-foot">
-      <div>
-        <h2>干净地改内容</h2>
-        <p style="margin:0;max-width:28rem;line-height:1.6">不必碰代码。登录 → 选项目 → 改字换图 → 发布。适合在浏览器里完成日常更新。</p>
-      </div>
-      <div class="al-cols">
-        <div>
-          <strong>后台</strong>
-          <ul>
-            <li><a href="#enter" id="alEnterLink">登录编辑</a></li>
-            <li><a href="https://github.com/majianglong500-sketch/axellab-web/blob/main/怎么用后台.md" target="_blank" rel="noopener">中文说明</a></li>
-          </ul>
-        </div>
-        <div>
-          <strong>站点</strong>
-          <ul>
-            <li><a href="/">axellab.org</a></li>
-            <li><a href="/projects.html">项目列表</a></li>
-          </ul>
-        </div>
-      </div>
-    </footer>
+  <div id="axStage" class="stage">
+    <iframe id="axFrame" title="网站页面"></iframe>
   </div>
 
-  <script>
-    (function () {
-      var loaded = false;
-      function bootCms() {
-        if (loaded) return;
-        loaded = true;
-        document.body.classList.add("al-cms-active");
-        var shell = document.getElementById("alShell");
-        if (shell) shell.style.display = "none";
+  <!-- 本页图片 -->
+  <aside id="axPanel" class="panel" hidden>
+    <div class="panel-head">
+      <b>本页图片</b>
+      <button class="btn ghost icon" id="axPanelClose" title="收起">✕</button>
+    </div>
+    <p class="panel-tip">点缩略图可以跳到那张图。同一组里的图可以上下拖动换顺序。</p>
+    <div id="axPanelBody"></div>
+  </aside>
 
-        var s = document.createElement("script");
-        s.src = "https://unpkg.com/decap-cms@3.3.3/dist/decap-cms.js";
+  <!-- 登录 -->
+  <div id="axLogin" class="overlay" hidden>
+    <div class="card login">
+      <div class="login-brand"><b>AL</b> AXEL LAB</div>
+      <h1>网站编辑</h1>
+      <p>登录后看到的就是你的网站。打开「编辑模式」，点文字就能改，点图片就能换，改完点「保存」。</p>
+      <button id="axLoginBtn" class="btn primary big">用 GitHub 账号登录</button>
+      <p class="small">只有有网站修改权限的账号能保存，别人登录了也改不了。</p>
+      <p id="axLoginErr" class="err"></p>
+    </div>
+  </div>
 
-        s.onload = function () {
-          /* Decap reads ./config.yml automatically */
-          var bar = document.createElement("div");
-          bar.id = "alCmsBar";
-          bar.innerHTML = '<a href="/" style="color:#f97316;text-decoration:none;font-weight:700;letter-spacing:0.06em">AL</a><span style="opacity:0.5">·</span><span>内容后台</span><a href="help.html" style="margin-left:auto;color:#a3a3a3;text-decoration:none;font-size:12px">说明</a>';
-          bar.setAttribute("style", "position:fixed;top:0;left:0;right:0;z-index:9999;display:flex;align-items:center;gap:10px;padding:10px 18px;background:#0a0a0a;color:#fff;font:600 12px Inter,system-ui,sans-serif;letter-spacing:0.04em");
-          document.body.appendChild(bar);
-          document.body.style.paddingTop = "40px";
-        };
-        s.onerror = function () {
-          document.body.classList.remove("al-cms-active");
-          if (shell) shell.style.display = "";
-          loaded = false;
-          alert("后台脚本加载失败，请检查网络后重试。");
-        };
-        document.body.appendChild(s);
-      }
+  <!-- 新增板块 -->
+  <div id="axModal" class="overlay" hidden>
+    <div class="card modal">
+      <div class="modal-head"><b id="axModalTitle">新增板块：选一个样式</b><button class="btn ghost icon" id="axModalClose">✕</button></div>
+      <div id="axTpls" class="tpls"></div>
+      <div id="axDrop" class="drop" hidden>
+        <div class="drop-inner">
+          <div class="drop-big">把图片拖到这里</div>
+          <div>或 <button class="btn" id="axDropPick">从电脑里选图片</button>（可以一次选多张）</div>
+          <div id="axDropList" class="drop-list"></div>
+        </div>
+        <div class="modal-foot">
+          <button class="btn ghost" id="axDropBack">← 换个样式</button>
+          <button class="btn primary" id="axDropOk" disabled>放进页面</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-      var btn = document.getElementById("alEnterCms");
-      var link = document.getElementById("alEnterLink");
-      if (btn) btn.addEventListener("click", bootCms);
-      if (link) link.addEventListener("click", function (e) {
-        e.preventDefault();
-        bootCms();
-      });
+  <!-- 使用说明 -->
+  <div id="axHelpBox" class="overlay" hidden>
+    <div class="card modal help">
+      <div class="modal-head"><b>怎么用</b><button class="btn ghost icon" data-close>✕</button></div>
+      <ol>
+        <li>点顶部 <b>编辑模式</b> 打开（按钮变橙色）。</li>
+        <li><b>改字</b>：直接点网页上的文字，就能打字修改；点别处就改好了。按 Esc 取消这次修改。</li>
+        <li><b>换图</b>：点一下图片，选新图；或者直接把电脑里的图片拖到那张图上。图片会自动压缩。</li>
+        <li><b>进项目</b>：双击首页 / 项目页上的项目卡片，就进到这个项目里编辑。上方「页面」下拉框也能切换。</li>
+        <li><b>本页图片</b>：把这一页所有图片列出来，可以换、删、拖动排序、追加新图。</li>
+        <li><b>新增板块</b>：点「＋ 新增板块」，选样式（左图右文、整宽大图、多图……），把图片拖进去就做好了，再点板块里的文字填写内容。</li>
+        <li><b>排版</b>：鼠标移到板块上，右上角会出现小工具条：按住「⠿ 拖动」上下拖动换位置，或用 ↑ ↓；「⇄」左右互换图和字；「删除」去掉板块。多图板块里的图片可以直接拖动换位置。</li>
+        <li><b>撤销</b>：点错了就点「↶ 撤销」。</li>
+        <li><b>保存</b>：改完点「保存」，大约 1 分钟后网站上就能看到。可以连着改好几页，最后一起保存。</li>
+        <li><b>英文</b>：网页右上角的 EN 按钮可以切换到英文，再点文字就是改英文。</li>
+      </ol>
+      <p class="small">左上角 AXEL LAB 标志和导航菜单是固定的，不能在这里改。</p>
+    </div>
+  </div>
 
-      /* Deep link: /admin/#cms or ?cms=1 skips landing */
-      if (location.hash === "#cms" || /[?&]cms=1(?:&|$)/.test(location.search)) {
-        bootCms();
-      }
-    })();
-  </script>
+  <div id="axToast" class="toast" hidden></div>
+  <input type="file" id="axFile" accept="image/*" hidden>
+  <input type="file" id="axFiles" accept="image/*" multiple hidden>
+
+  <script src="vendor/Sortable.min.js"></script>
+  <script src="editor.js"></script>
 </body>
 </html>

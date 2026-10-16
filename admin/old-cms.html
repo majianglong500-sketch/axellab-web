@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>AXEL LAB · 内容后台</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin-chrome.css">
+</head>
+<body>
+  <!-- Antigravity-style sparse landing; Decap loads on demand -->
+  <div class="al-shell" id="alShell">
+    <nav class="al-nav">
+      <a class="al-logo" href="/">
+        <span class="mark">AL</span>
+        <span>AXEL LAB</span>
+      </a>
+      <div class="al-nav-links">
+        <a href="/">网站首页</a>
+        <a href="/projects.html">项目</a>
+        <a href="https://github.com/majianglong500-sketch/axellab-web" target="_blank" rel="noopener">仓库</a>
+      </div>
+      <a class="al-nav-cta" href="/" title="返回站点">返回站点</a>
+    </nav>
+
+    <main class="al-main">
+      <section class="al-hero" aria-label="内容后台">
+        <div class="al-hero-inner">
+          <div class="al-kicker">Content Studio</div>
+          <h1>编辑文字与图片<br>一键发布到网站</h1>
+          <p>用 GitHub 账号登录后，可改项目标题、摘要、封面与图库。保存即提交到仓库，站点会自动重建。</p>
+          <div class="al-actions">
+            <button type="button" class="al-btn al-btn-primary" id="alEnterCms">用 GitHub 进入后台</button>
+            <a class="al-btn al-btn-ghost" href="help.html" id="alHelpLink">使用说明</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="al-foot">
+      <div>
+        <h2>干净地改内容</h2>
+        <p style="margin:0;max-width:28rem;line-height:1.6">不必碰代码。登录 → 选项目 → 改字换图 → 发布。适合在浏览器里完成日常更新。</p>
+      </div>
+      <div class="al-cols">
+        <div>
+          <strong>后台</strong>
+          <ul>
+            <li><a href="#enter" id="alEnterLink">登录编辑</a></li>
+            <li><a href="https://github.com/majianglong500-sketch/axellab-web/blob/main/怎么用后台.md" target="_blank" rel="noopener">中文说明</a></li>
+          </ul>
+        </div>
+        <div>
+          <strong>站点</strong>
+          <ul>
+            <li><a href="/">axellab.org</a></li>
+            <li><a href="/projects.html">项目列表</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      var loaded = false;
+      function bootCms() {
+        if (loaded) return;
+        loaded = true;
+        document.body.classList.add("al-cms-active");
+        var shell = document.getElementById("alShell");
+        if (shell) shell.style.display = "none";
+
+        var s = document.createElement("script");
+        s.src = "https://unpkg.com/decap-cms@3.3.3/dist/decap-cms.js";
+
+        s.onload = function () {
+          /* Decap reads ./config.yml automatically */
+          var bar = document.createElement("div");
+          bar.id = "alCmsBar";
+          bar.innerHTML = '<a href="/" style="color:#f97316;text-decoration:none;font-weight:700;letter-spacing:0.06em">AL</a><span style="opacity:0.5">·</span><span>内容后台</span><a href="help.html" style="margin-left:auto;color:#a3a3a3;text-decoration:none;font-size:12px">说明</a>';
+          bar.setAttribute("style", "position:fixed;top:0;left:0;right:0;z-index:9999;display:flex;align-items:center;gap:10px;padding:10px 18px;background:#0a0a0a;color:#fff;font:600 12px Inter,system-ui,sans-serif;letter-spacing:0.04em");
+          document.body.appendChild(bar);
+          document.body.style.paddingTop = "40px";
+        };
+        s.onerror = function () {
+          document.body.classList.remove("al-cms-active");
+          if (shell) shell.style.display = "";
+          loaded = false;
+          alert("后台脚本加载失败，请检查网络后重试。");
+        };
+        document.body.appendChild(s);
+      }
+
+      var btn = document.getElementById("alEnterCms");
+      var link = document.getElementById("alEnterLink");
+      if (btn) btn.addEventListener("click", bootCms);
+      if (link) link.addEventListener("click", function (e) {
+        e.preventDefault();
+        bootCms();
+      });
+
+      /* Deep link: /admin/#cms or ?cms=1 skips landing */
+      if (location.hash === "#cms" || /[?&]cms=1(?:&|$)/.test(location.search)) {
+        bootCms();
+      }
+    })();
+  </script>
+</body>
+</html>

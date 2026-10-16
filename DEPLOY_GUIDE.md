@@ -56,7 +56,7 @@ npx wrangler deploy          # 若 assets 仍指向仓库根，同样会扫到 .
 
 ## 内容后台（Decap CMS）
 
-- 地址：https://axellab.org/admin/
+- 地址：https://axellab.org/admin/（所见即所得编辑器，旧 Decap 在 /admin/old-cms.html）
 - 说明：仓库根目录《怎么用后台.md》
 - OAuth：Worker `worker/oauth.js` 处理 `/api/auth` 与 `/api/callback`
 - Cloudflare Secrets：`GITHUB_CLIENT_ID`、`GITHUB_CLIENT_SECRET`
