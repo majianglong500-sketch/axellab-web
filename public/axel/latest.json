@@ -2,7 +2,7 @@
   "version": "1.0.18",
   "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.18/AXEL-Setup-1.0.18.exe",
   "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.18/AXEL-Portable-1.0.18.exe",
-  "notes": "1.0.18：报价按名字保存——同名确认替换、换名存新版本、版本列表可打开旧版编辑；保留另存为新报价与.axelquote；含升级不丢序列号、大PDF、材料库与小册子。需序列号。GitHub直链；百度若未更新可能仍是旧包（提取码AXEL）。",
+  "notes": "1.0.18：报价按名字保存——同名确认替换、换名存新版本、版本列表可打开旧版编辑；保留另存为新报价与.axelquote；含升级不丢序列号、大PDF、材料库与小册子。需序列号。主下载 GitHub；百度网盘备用（提取码 AXEL）。",
   "ad": {
     "enabled": false,
     "image": "https://axellab.org/assets/ad/banner.png",
@@ -16,6 +16,6 @@
       "splash"
     ]
   },
-  "setupUrlAlt": "https://pan.baidu.com/s/1xwQJM0_TiuyidSzWXnw6BA?pwd=AXEL",
-  "portableUrlAlt": "https://pan.baidu.com/s/1giAd_S3vBSlWs1Izrsf1zA?pwd=AXEL"
+  "setupUrlAlt": "https://pan.baidu.com/s/1dZ8t7u6XbfnLVxVpuqx5UA?pwd=AXEL",
+  "portableUrlAlt": "https://pan.baidu.com/s/1hTwK3gPLuXjF_kvMfgRViQ?pwd=AXEL"
 }
