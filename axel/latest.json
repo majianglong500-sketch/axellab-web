@@ -2,7 +2,6 @@
   "version": "1.0.24",
   "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.24/AXEL-Setup-1.0.24.exe",
   "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.24/AXEL-Portable-1.0.24.exe",
-  "notes": "1.0.24：软件内打开 Word/WPS（含图显示与另存保图）；A4 满页自动换页预览；本机字体可搜索；打印设置；接小册子排版/图片提取；AI 整理格式不再塞大图 base64（人话报错）。导图保持 1.0.23 双击打字与主题。需序列号。",
   "ad": {
     "enabled": false,
     "image": "https://axellab.org/assets/ad/banner.png",
@@ -17,5 +16,6 @@
     ]
   },
   "setupUrlAlt": "https://pan.baidu.com/s/1dZ8t7u6XbfnLVxVpuqx5UA?pwd=AXEL",
-  "portableUrlAlt": "https://pan.baidu.com/s/1hTwK3gPLuXjF_kvMfgRViQ?pwd=AXEL"
+  "portableUrlAlt": "https://pan.baidu.com/s/1hTwK3gPLuXjF_kvMfgRViQ?pwd=AXEL",
+  "notes": "1.0.24：软件内打开 Word/WPS（含图显示与另存保图）；A4 满页自动换页预览；本机字体可搜索；打印设置；接小册子排版/图片提取；AI 整理格式只送精简文本（去大图 base64、超长截断、人话报错）。导图保持 1.0.23。需序列号。"
 }
