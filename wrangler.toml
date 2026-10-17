@@ -7,7 +7,7 @@ main = "./worker/oauth.js"
 [assets]
 directory = "./public"
 binding = "ASSETS"
-run_worker_first = ["/api/*"]
+run_worker_first = ["/api/*", "/axel/latest.json", "/axel/latest"]
 
 # AXEL 在线心跳存储（先 wrangler kv namespace create AXEL_PRESENCE，再把 id 填到下面）
 # 未填真实 id 时本地 mock 仍可用；部署前务必替换。
