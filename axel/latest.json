@@ -1,8 +1,8 @@
 {
-  "version": "1.0.19",
-  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.19/AXEL-Setup-1.0.19.exe",
-  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.19/AXEL-Portable-1.0.19.exe",
-  "notes": "1.0.19：分项拆分报价——大项下拆1.1/1.2工艺明细、一键草稿并对齐金额、导出汇总+分项+说明三表、可导入Excel；含1.0.18按名字保存与版本切换。需序列号。主下载 GitHub；百度网盘备用（提取码 AXEL，若未更新可能仍是1.0.18包）。",
+  "version": "1.0.20",
+  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.20/AXEL-Setup-1.0.20.exe",
+  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.20/AXEL-Portable-1.0.20.exe",
+  "notes": "1.0.20：分项草稿按「项目名+工艺」拆工序（线性灯/射灯/电源/宣绒/PVC/玻璃等），对接材料库参考价；含分项三表导出与导入。需序列号。主下载 GitHub；百度网盘备用（提取码 AXEL，若未更新可能仍是旧包）。",
   "ad": {
     "enabled": false,
     "image": "https://axellab.org/assets/ad/banner.png",
