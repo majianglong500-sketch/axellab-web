@@ -1,7 +1,7 @@
 {
-  "version": "1.0.27",
-  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.27/AXEL-Setup-1.0.27.exe",
-  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.27/AXEL-Portable-1.0.27.exe",
+  "version": "1.0.28",
+  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.28/AXEL-Setup-1.0.28.exe",
+  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.28/AXEL-Portable-1.0.28.exe",
   "ad": {
     "enabled": false,
     "image": "https://axellab.org/assets/ad/banner.png",
@@ -17,5 +17,5 @@
   },
   "setupUrlAlt": "https://pan.baidu.com/s/1dZ8t7u6XbfnLVxVpuqx5UA?pwd=AXEL",
   "portableUrlAlt": "https://pan.baidu.com/s/1hTwK3gPLuXjF_kvMfgRViQ?pwd=AXEL",
-  "notes": "1.0.27：AI「从图/表识别」—拖入截图或粘贴表格，本机解析表格+现有AI识图，预览可改再写入；不写死库。含axelquote完整包与Word/Excel抽图。轻量便携。需序列号。"
+  "notes": "1.0.28：设置去掉在线汇报UI（后台默认仍开）；导图多中心/插图/删除拖移撤销；材料库分项回流与分享包、Word/Excel历史报价筛入库；报价/分项显眼保存与另存为；分项选中后+分项插下方、拖动换位、序号重排。轻量便携。需序列号。"
 }
