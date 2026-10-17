@@ -1,8 +1,8 @@
 {
-  "version": "1.0.18",
-  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.18/AXEL-Setup-1.0.18.exe",
-  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.18/AXEL-Portable-1.0.18.exe",
-  "notes": "1.0.18：报价按名字保存——同名确认替换、换名存新版本、版本列表可打开旧版编辑；保留另存为新报价与.axelquote；含升级不丢序列号、大PDF、材料库与小册子。需序列号。主下载 GitHub；百度网盘备用（提取码 AXEL）。",
+  "version": "1.0.19",
+  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.19/AXEL-Setup-1.0.19.exe",
+  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.19/AXEL-Portable-1.0.19.exe",
+  "notes": "1.0.19：分项拆分报价——大项下拆1.1/1.2工艺明细、一键草稿并对齐金额、导出汇总+分项+说明三表、可导入Excel；含1.0.18按名字保存与版本切换。需序列号。主下载 GitHub；百度网盘备用（提取码 AXEL，若未更新可能仍是1.0.18包）。",
   "ad": {
     "enabled": false,
     "image": "https://axellab.org/assets/ad/banner.png",
