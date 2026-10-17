@@ -1,7 +1,7 @@
 {
-  "version": "1.0.30",
-  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.30/AXEL-Setup-1.0.30.exe",
-  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.30/AXEL-Portable-1.0.30.exe",
+  "version": "1.0.31",
+  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.31/AXEL-Setup-1.0.31.exe",
+  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.31/AXEL-Portable-1.0.31.exe",
   "ad": {
     "enabled": false,
     "image": "https://axellab.org/assets/ad/banner.png",
@@ -17,5 +17,5 @@
   },
   "setupUrlAlt": "https://pan.baidu.com/s/1dZ8t7u6XbfnLVxVpuqx5UA?pwd=AXEL",
   "portableUrlAlt": "https://pan.baidu.com/s/1hTwK3gPLuXjF_kvMfgRViQ?pwd=AXEL",
-  "notes": "1.0.30：文案编辑按 Word 原文分页、页边距与行距排版，目录换行正常；图片拖角缩放并存进 Word；思维导图工具栏窄窗自动换行、节点图片可调小/中/大；全软件窄窗适配。轻量便携。需序列号。"
+  "notes": "1.0.31：单价可拆材料费/工费/损耗；按材料设整张开料（自动算张数与利用率）、损耗率和最小起算；价格历史与超 3 个月提醒，参考价灰色待确认；本地提醒单价偏离和漏工序；侧栏重新归类，启动直接进报价单；报价/材料/文案/导图文件有专属图标，安装版双击即可打开。旧数据自动兼容、金额不变。需序列号。"
 }
