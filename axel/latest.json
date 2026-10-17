@@ -2,7 +2,7 @@
   "version": "1.0.21",
   "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.21/AXEL-Setup-1.0.21.exe",
   "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.21/AXEL-Portable-1.0.21.exe",
-  "notes": "1.0.21：默认本机 LM Studio（五家可切换）；修好浏览器 OAuth；分项 AI 审核默认追加缺工序；改分项单价锁定并对齐总价。需序列号。主下载 GitHub；百度网盘备用（提取码 AXEL，若未更新可能仍是旧包）。",
+  "notes": "1.0.21：默认本机 LM Studio（五家可切换）；修好浏览器 OAuth；分项 AI 审核默认追加缺工序；改分项单价锁定并对齐总价；生成合同合入总报价明细，有分项则附分项表。需序列号。主下载 GitHub；百度网盘备用（提取码 AXEL，若未更新可能仍是旧包）。",
   "ad": {
     "enabled": false,
     "image": "https://axellab.org/assets/ad/banner.png",
