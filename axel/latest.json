@@ -1,8 +1,8 @@
 {
-  "version": "1.0.21",
-  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.21/AXEL-Setup-1.0.21.exe",
-  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.21/AXEL-Portable-1.0.21.exe",
-  "notes": "1.0.21：默认本机 LM Studio；修好 OAuth；分项 AI 审名称/类型/合理性/可丢弃/价格区间（总价对齐本地）；改单价锁定并对齐总价；合同合入总报价明细与分项表。需序列号。主下载 GitHub；百度备用提取码 AXEL（可能仍是旧包）。",
+  "version": "1.0.22",
+  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.22/AXEL-Setup-1.0.22.exe",
+  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.22/AXEL-Portable-1.0.22.exe",
+  "notes": "1.0.22：思维导图画布（无限画布、贝塞尔连线、折叠、本地保存、导出 XMind/OPML/Freemind/JSON/PDF）；文案轻编辑（标题段落列表表格、导出 DOCX/PDF、AI 润色预览后写入、合同可转入编辑）；单位预设㎡联动面积数量。需序列号。主下载 GitHub；百度备用提取码 AXEL（可能仍是旧包）。",
   "ad": {
     "enabled": false,
     "image": "https://axellab.org/assets/ad/banner.png",
@@ -11,10 +11,7 @@
     "text": "",
     "until": "2026-12-31",
     "maxPerDay": 3,
-    "slots": [
-      "about",
-      "splash"
-    ]
+    "slots": ["about", "splash"]
   },
   "setupUrlAlt": "https://pan.baidu.com/s/1dZ8t7u6XbfnLVxVpuqx5UA?pwd=AXEL",
   "portableUrlAlt": "https://pan.baidu.com/s/1hTwK3gPLuXjF_kvMfgRViQ?pwd=AXEL"
