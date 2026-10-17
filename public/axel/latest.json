@@ -1,8 +1,8 @@
 {
-  "version": "1.0.22",
-  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.22/AXEL-Setup-1.0.22.exe",
-  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.22/AXEL-Portable-1.0.22.exe",
-  "notes": "1.0.22：思维导图画布（无限画布、贝塞尔连线、折叠、本地保存、导出 XMind/OPML/Freemind/JSON/PDF）；文案轻编辑（标题段落列表表格、导出 DOCX/PDF、AI 润色预览后写入、合同可转入编辑）；单位预设㎡联动面积数量。需序列号。主下载 GitHub；百度备用提取码 AXEL（可能仍是旧包）。",
+  "version": "1.0.23",
+  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.23/AXEL-Setup-1.0.23.exe",
+  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.23/AXEL-Portable-1.0.23.exe",
+  "notes": "1.0.23：修好思维导图双击打字；两套层级主题（灰橙专业/经典彩虹）；文案编辑日常办公档（纸张页边距、字体字号行距、撤销重做、插图、表格行列、保存/另存/打开、PDF按纸张）。需序列号。",
   "ad": {
     "enabled": false,
     "image": "https://axellab.org/assets/ad/banner.png",
