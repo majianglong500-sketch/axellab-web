@@ -167,6 +167,22 @@ export default {
       }
     }
 
+    // AXEL 更新清单：优先读 KV（便于发版后立刻生效，无需重传整站静态资源）
+    if ((path === "/axel/latest.json" || path === "/axel/latest") && env.AXEL_LICENSE) {
+      try {
+        const cached = await env.AXEL_LICENSE.get("axel:latest.json");
+        if (cached) {
+          return new Response(cached, {
+            status: 200,
+            headers: {
+              "content-type": "application/json; charset=utf-8",
+              "cache-control": "public, max-age=60, must-revalidate",
+            },
+          });
+        }
+      } catch (_) { /* fall through to ASSETS */ }
+    }
+
     if (env.ASSETS) {
       return env.ASSETS.fetch(request);
     }
