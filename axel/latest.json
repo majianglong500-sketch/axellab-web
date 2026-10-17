@@ -1,8 +1,8 @@
 {
-  "version": "1.0.23",
-  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.23/AXEL-Setup-1.0.23.exe",
-  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.23/AXEL-Portable-1.0.23.exe",
-  "notes": "1.0.23：修好思维导图双击打字；两套层级主题（灰橙专业/经典彩虹）；文案编辑日常办公档（纸张页边距、字体字号行距、撤销重做、插图、表格行列、保存/另存/打开、PDF按纸张）。需序列号。",
+  "version": "1.0.24",
+  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.24/AXEL-Setup-1.0.24.exe",
+  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.24/AXEL-Portable-1.0.24.exe",
+  "notes": "1.0.24：软件内打开 Word/WPS（含图显示与另存保图）；A4 满页自动换页预览；本机字体可搜索；打印设置；接小册子排版/图片提取；AI 整理格式不再塞大图 base64（人话报错）。导图保持 1.0.23 双击打字与主题。需序列号。",
   "ad": {
     "enabled": false,
     "image": "https://axellab.org/assets/ad/banner.png",
@@ -11,7 +11,10 @@
     "text": "",
     "until": "2026-12-31",
     "maxPerDay": 3,
-    "slots": ["about", "splash"]
+    "slots": [
+      "about",
+      "splash"
+    ]
   },
   "setupUrlAlt": "https://pan.baidu.com/s/1dZ8t7u6XbfnLVxVpuqx5UA?pwd=AXEL",
   "portableUrlAlt": "https://pan.baidu.com/s/1hTwK3gPLuXjF_kvMfgRViQ?pwd=AXEL"
