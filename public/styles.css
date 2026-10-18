@@ -340,6 +340,7 @@ footer .logo{font-size:15px;font-family:var(--sans)}
 .axel-download__alts{margin-top:14px;display:flex;flex-wrap:wrap;gap:10px 18px;font-size:13px}
 .axel-download__alt{color:var(--muted,rgba(255,255,255,.65));text-decoration:underline;text-underline-offset:3px}
 .axel-download__alt:hover{color:var(--blue,#6eb6ff)}
+.axel-download__serial-hint{margin:8px 0 0;font-size:13px;opacity:.75;line-height:1.5}
 
 /* ===== 可视化编辑器 · 新增板块（axb） ===== */
 .axb{margin:0 0 56px}

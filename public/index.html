@@ -84,9 +84,14 @@
           <a class="btn btn-ghost" data-axel-portable href="#" aria-disabled="true" hidden><span class="cn">下载便携版</span><span class="en">Portable</span></a>
           <span class="axel-download__soon" data-axel-soon><span class="cn">安装包即将开放下载</span><span class="en">Installer coming soon</span></span>
         </div>
+        <div class="cta" style="margin-top:12px">
+          <a class="btn btn-ghost" data-axel-serial href="#" aria-disabled="true" hidden><span class="cn">获取序列号</span><span class="en">Get license key</span></a>
+        </div>
+        <p class="axel-download__serial-hint" data-axel-serial-hint hidden><span class="cn">百度网盘 · 文件「序列号.txt」· 提取码 <strong>AXEL</strong></span><span class="en">Baidu Pan · file serial.txt · extract code <strong>AXEL</strong></span></p>
         <div class="axel-download__alts" data-axel-alts hidden>
           <a class="axel-download__alt" data-axel-setup-alt href="#" hidden>百度网盘备用 · 安装包（提取码 AXEL）</a>
           <a class="axel-download__alt" data-axel-portable-alt href="#" hidden>百度网盘备用 · 便携版（提取码 AXEL）</a>
+          <a class="axel-download__alt" data-axel-serial-alt href="#" hidden>百度网盘 · 获取序列号（提取码 AXEL）</a>
         </div>
       </div>
     </section>
@@ -190,6 +195,9 @@
       var alts = root.querySelector("[data-axel-alts]");
       var setupAlt = root.querySelector("[data-axel-setup-alt]");
       var portableAlt = root.querySelector("[data-axel-portable-alt]");
+      var serial = root.querySelector("[data-axel-serial]");
+      var serialAlt = root.querySelector("[data-axel-serial-alt]");
+      var serialHint = root.querySelector("[data-axel-serial-hint]");
       function setLink(a, url) {
         if (!a) return;
         if (url) {
@@ -214,6 +222,7 @@
           var pu = (d.portableUrl || "").trim();
           var sua = (d.setupUrlAlt || "").trim();
           var pua = (d.portableUrlAlt || "").trim();
+          var sru = (d.serialUrlAlt || d.licenseUrlAlt || "").trim();
           setLink(setup, su);
           setLink(portable, pu);
           if (portable) portable.hidden = !pu;
@@ -221,7 +230,11 @@
           if (!su && setup) setup.hidden = true;
           setLink(setupAlt, sua);
           setLink(portableAlt, pua);
-          if (alts) alts.hidden = !(sua || pua);
+          setLink(serial, sru);
+          setLink(serialAlt, sru);
+          if (serial) serial.hidden = !sru;
+          if (serialHint) serialHint.hidden = !sru;
+          if (alts) alts.hidden = !(sua || pua || sru);
         })
         .catch(function () {
           if (ver) ver.textContent = "—";
