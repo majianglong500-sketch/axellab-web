@@ -1,7 +1,7 @@
 {
-  "version": "1.0.32",
-  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.32/AXEL-Setup-1.0.32.exe",
-  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.32/AXEL-Portable-1.0.32.exe",
+  "version": "1.0.33",
+  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.33/AXEL-Setup-1.0.33.exe",
+  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.33/AXEL-Portable-1.0.33.exe",
   "ad": {
     "enabled": false,
     "image": "https://axellab.org/assets/ad/banner.png",
@@ -17,5 +17,5 @@
   },
   "setupUrlAlt": "https://pan.baidu.com/s/1dZ8t7u6XbfnLVxVpuqx5UA?pwd=AXEL",
   "portableUrlAlt": "https://pan.baidu.com/s/1hTwK3gPLuXjF_kvMfgRViQ?pwd=AXEL",
-  "notes": "1.0.32：修复「另存为」「更多操作」弹窗图标撑大与竖排字；自有文件（.axelquote 等）图标改 BMP+更醒目角标并打进安装包；仅安装版注册关联，装后若仍白纸可注销/重启资源管理器刷缓存。百度网盘链接暂不换。需序列号。"
+  "notes": "1.0.33：修复文案编辑按 Enter 后光标跳回上一段；打字自动重分页用标记恢复选区；中文输入法合成中不打断光标；标题末尾 Enter 改为正文段。百度网盘链接暂不换。需序列号。"
 }
