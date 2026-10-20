@@ -1,7 +1,7 @@
 {
-  "version": "1.0.33",
-  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.33/AXEL-Setup-1.0.33.exe",
-  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.33/AXEL-Portable-1.0.33.exe",
+  "version": "1.0.34",
+  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.34/AXEL-Setup-1.0.34.exe",
+  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.34/AXEL-Portable-1.0.34.exe",
   "ad": {
     "enabled": false,
     "image": "https://axellab.org/assets/ad/banner.png",
@@ -17,7 +17,7 @@
   },
   "setupUrlAlt": "https://pan.baidu.com/s/1KyRbxmRzhao2bqirzqaQwg?pwd=AXEL",
   "portableUrlAlt": "https://pan.baidu.com/s/1mUSCinLg6Mf2XFyEJebEQw?pwd=AXEL",
-  "notes": "1.0.33：修复文案编辑按 Enter 后光标跳回上一段；打字自动重分页用标记恢复选区；中文输入法合成中不打断光标；标题末尾 Enter 改为正文段。需序列号。",
+  "notes": "1.0.34：Excel 导入报价；合同付款比例（30+40+30 / 50+30+20 / 自定义，金额尾差对齐）。需序列号。",
   "serialUrlAlt": "https://pan.baidu.com/s/1qMf8D9iNvo7R5zAS8fkaDA?pwd=AXEL",
   "licenseUrlAlt": "https://pan.baidu.com/s/1qMf8D9iNvo7R5zAS8fkaDA?pwd=AXEL"
 }
