@@ -3,6 +3,17 @@
 import worker, { renderBody, allowedGitHubPath } from "../worker/oauth.js";
 import { makeSerial } from "../worker/axel-license.js";
 import { safeEqual, jsLiteral } from "../worker/util.js";
+import { generateKeyPairSync, verify as edVerify } from "node:crypto";
+
+// 测试用的一次性签名密钥（正式私钥只放在 Cloudflare Secret 里）
+const kp = generateKeyPairSync("ed25519");
+const SIGN_KEY = kp.privateKey.export({ type: "pkcs8", format: "der" }).toString("base64");
+function checkToken(tok) {
+  const [body, sig] = String(tok || "").split(".");
+  if (!body || !sig) return null;
+  const good = edVerify(null, Buffer.from(body), kp.publicKey, Buffer.from(sig, "base64url"));
+  return good ? JSON.parse(Buffer.from(body, "base64url").toString("utf8")) : null;
+}
 
 let failed = 0;
 const ok = (n, c, d) => { console.log(c ? "  ✓" : "  ✗", n, d === undefined ? "" : d); if (!c) failed++; };
@@ -24,7 +35,7 @@ const SECRET = "test-secret-123";
 const presence = makeKV(), license = makeKV();
 const env = {
   GITHUB_CLIENT_ID: "cid", GITHUB_CLIENT_SECRET: "csecret",
-  AXEL_ADMIN_TOKEN: "tok", AXEL_LICENSE_SECRET: SECRET,
+  AXEL_ADMIN_TOKEN: "tok", AXEL_LICENSE_SECRET: SECRET, AXEL_LICENSE_SIGN_KEY: SIGN_KEY,
   AXEL_PRESENCE: presence, AXEL_LICENSE: license,
   ASSETS: { fetch: async () => new Response("asset", { status: 200 }) },
 };
@@ -130,6 +141,7 @@ section("序列号");
 r = await jreq("/api/axel-license/admin", "POST", { action: "issue", machineCode: "5D70-99B4-1ACF-D5A5", note: "测试" }, "tok");
 const serial = r.data && r.data.serial;
 ok("发号", r.data.ok && /^AXEL-/.test(serial), serial);
+ok("发号同时给离线授权码（绑定本机码）", (() => { const p = checkToken(r.data.token); return p && p.s === serial && p.mc === "5D70-99B4-1ACF-D5A5"; })());
 ok("无口令发号被拒", (await jreq("/api/axel-license/admin", "POST", { action: "issue", machineCode: "5D70-99B4-1ACF-D5A5" })).status === 401);
 r = await jreq("/api/axel-license", "POST", { serial, machineCode: "5D70-99B4-1ACF-D5A5", version: "1.0.34" });
 ok("报到 ok", r.data.status === "ok");
@@ -184,6 +196,58 @@ ok("再手动锁定 → locked", (await jreq("/api/axel-license", "POST", { seri
 
 ok("坏参数 400", (await jreq("/api/axel-license", "POST", { serial: "x", machineCode: "" })).status === 400);
 ok("非对象 JSON → 400", (await req("/api/axel-license", { method: "POST", body: "null" })).status === 400);
+
+/* ---------------- 自助领号 / 签名授权 ---------------- */
+section("自助领号与签名授权");
+const MC = "ABCD-1234-ABCD-5678";
+const regBody = { company: "乌鲁木齐某某广告有限公司", contact: "张三", phone: "138 0000 0000", region: "乌鲁木齐", mode: "both", machineCode: MC, version: "1.0.35", agree: true };
+r = await jreq("/api/axel-license/register", "POST", regBody, null, { "CF-Connecting-IP": "1.1.1.1" });
+ok("领号成功", r.status === 200 && r.data.ok && /^AXEL-/.test(r.data.serial), JSON.stringify(r.data).slice(0, 80));
+const regSerial = r.data.serial;
+let tk = checkToken(r.data.token);
+ok("token 签名有效、绑定本机码", tk && tk.s === regSerial && tk.mc === MC && tk.v === 1);
+ok("token 带公司名（截短）", tk && tk.co && tk.co.length <= 20);
+r = await jreq("/api/axel-license", "POST", { serial: regSerial, machineCode: MC, version: "1.0.34" });
+ok("领到的号旧版软件也认", r.data.status === "ok");
+r = await jreq("/api/axel-license/register", "POST", regBody, null, { "CF-Connecting-IP": "1.1.1.1" });
+ok("同一台电脑再领 → 同一个号", r.data.ok && r.data.serial === regSerial && r.data.again === true);
+r = await jreq("/api/axel-license", "GET", null, "tok");
+const regRec = r.data.licenses.find((x) => x.serialLast6 === regSerial.replace(/-/g, "").slice(-6));
+ok("后台能看到公司 / 电话 / 地区", regRec && regRec.profile && regRec.profile.phone === "13800000000" && regRec.profile.region === "乌鲁木齐" && regRec.source === "self");
+ok("缺手机号被拒", (await jreq("/api/axel-license/register", "POST", { ...regBody, phone: "123", machineCode: "ABCD-1234-ABCD-0001" })).status === 400);
+ok("没勾同意被拒", (await jreq("/api/axel-license/register", "POST", { ...regBody, agree: false, machineCode: "ABCD-1234-ABCD-0002" })).status === 400);
+ok("本机码无效被拒", (await jreq("/api/axel-license/register", "POST", { ...regBody, machineCode: "XYZ" })).status === 400);
+ok("公司名过短被拒", (await jreq("/api/axel-license/register", "POST", { ...regBody, company: "a", machineCode: "ABCD-1234-ABCD-0003" })).status === 400);
+let limited = 0;
+for (let i = 0; i < 22; i++) {
+  const mc = "EEEE-0000-0000-" + String(i).padStart(4, "0");
+  const x = await jreq("/api/axel-license/register", "POST", { ...regBody, machineCode: mc }, null, { "CF-Connecting-IP": "9.9.9.9" });
+  if (x.status === 429) limited++;
+}
+ok("同一 IP 一天最多 20 个", limited === 2, limited);
+
+// 换签名授权
+r = await jreq("/api/axel-license/token", "POST", { serial, machineCode: "5D70-99B4-1ACF-D5A5", version: "1.0.35" });
+tk = r.data && checkToken(r.data.token);
+ok("手工发的号能换签名授权", r.status === 200 && tk && tk.s === serial && tk.mc === "5D70-99B4-1ACF-D5A5");
+ok("伪造号不能换授权", (await jreq("/api/axel-license/token", "POST", { serial: "AXEL-AAAA-BBBB-CCCC-DDDD", machineCode: MC })).status === 400);
+await jreq("/api/axel-license/admin", "POST", { action: "lock", serialHash: issued.serialHash }, "tok");
+r = await jreq("/api/axel-license/token", "POST", { serial, machineCode: "5D70-99B4-1ACF-D5A5" });
+ok("停用的号不能换授权", r.status === 403 && r.data.status === "locked");
+await jreq("/api/axel-license/admin", "POST", { action: "unlock", serialHash: issued.serialHash }, "tok");
+await jreq("/api/axel-license/admin", "POST", { action: "lock", serialHash: regRec.serialHash }, "tok");
+r = await jreq("/api/axel-license/register", "POST", regBody, null, { "CF-Connecting-IP": "1.1.1.1" });
+ok("号被停用后，同一台电脑重新领也不给", r.status === 403 && r.data.status === "locked");
+await jreq("/api/axel-license/admin", "POST", { action: "unlock", serialHash: regRec.serialHash }, "tok");
+env.AXEL_MAX_MACHINES = "2";
+await jreq("/api/axel-license/token", "POST", { serial: regSerial, machineCode: "FFFF-0000-0000-0001" });
+r = await jreq("/api/axel-license/token", "POST", { serial: regSerial, machineCode: "FFFF-0000-0000-0002" });
+ok("限制台数时第 3 台被拒", r.status === 403 && r.data.status === "tooMany", r.data && r.data.error);
+delete env.AXEL_MAX_MACHINES;
+const noKey = { ...env, AXEL_LICENSE_SIGN_KEY: "" };
+r = await worker.fetch(new Request(ORIGIN + "/api/axel-license/token", { method: "POST", body: JSON.stringify({ serial, machineCode: MC }) }), noKey);
+ok("未配置私钥时明确报错", r.status === 500 && /AXEL_LICENSE_SIGN_KEY/.test((await r.json()).error));
+
 
 globalThis.fetch = realFetch;
 if (failed) { console.error("\nFAILED", failed); process.exit(1); }

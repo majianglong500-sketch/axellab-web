@@ -3,7 +3,7 @@
  * + AXEL presence heartbeat (/api/axel-presence)
  * + AXEL license (/api/axel-license)
  *
- * Secrets: GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, AXEL_ADMIN_TOKEN, AXEL_LICENSE_SECRET
+ * Secrets: GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, AXEL_ADMIN_TOKEN, AXEL_LICENSE_SECRET, AXEL_LICENSE_SIGN_KEY
  * 可选变量（[vars] 或 Dashboard）：
  *   GITHUB_REPO         允许代理访问的仓库，默认 majianglong500-sketch/axellab-web
  *   GITHUB_OAUTH_SCOPE  登录申请的权限，默认 "repo"；仓库是公开的话建议改成 "public_repo"
@@ -179,7 +179,7 @@ export default {
     const url = new URL(request.url);
     const path = url.pathname.replace(/\/$/, "") || "/";
 
-    if (path === "/api/axel-license" || path === "/api/axel-license/admin") {
+    if (path === "/api/axel-license" || path.startsWith("/api/axel-license/")) {
       return handleAxelLicense(request, env);
     }
     if (path === "/api/axel-presence") {

@@ -7,6 +7,7 @@ on:
       - "content/**"
       - "build.py"
       - "admin/**"
+      - "axel/**"
       - "worker/**"
       - "wrangler.toml"
       - "requirements.txt"

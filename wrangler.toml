@@ -34,4 +34,8 @@ GITHUB_OAUTH_SCOPE = "public_repo"
 # GITHUB_CLIENT_ID
 # GITHUB_CLIENT_SECRET
 # AXEL_ADMIN_TOKEN
-# AXEL_LICENSE_SECRET   （= 软件 scripts/license-secret.local.json 里的 secret，勿公开）
+# AXEL_LICENSE_SECRET   （= 软件 scripts/license-secret.local.json 里的 secret，勿公开；只在服务器上用来生成/校验序列号）
+# AXEL_LICENSE_SIGN_KEY （1.0.35 起：Ed25519 签名私钥，PKCS8 base64；软件里只带对应公钥。没配置时「免费领号」会报错）
+#
+# 可选：一个序列号最多绑几台电脑（默认不限）。需要时取消注释：
+# AXEL_MAX_MACHINES = "3"     ← 写在上面的 [vars] 里

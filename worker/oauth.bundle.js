@@ -261,6 +261,26 @@ async function makeSerial(secret) {
 var cleanCode = (c) => String(c || "").toUpperCase().replace(/[^0-9A-F-]/g, "").slice(0, 19);
 var cleanVer = (v) => String(v || "").replace(/[^0-9A-Za-z.\-+_]/g, "").slice(0, 32);
 var cleanText = (s, n) => String(s || "").replace(/[\u0000-\u001f<>]/g, "").trim().slice(0, n);
+var MC_RE = /^[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}$/;
+var MACHINE_PREFIX = "axel:machine:";
+var REG_IP_PREFIX = "axel:regip:";
+var REG_PER_IP_DAY = 20;
+var b64u = (u8) => btoa(String.fromCharCode(...u8)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+async function signToken(env, payload) {
+  const raw = String(env.AXEL_LICENSE_SIGN_KEY || "").trim();
+  if (!raw) throw new Error("\u670D\u52A1\u5668\u672A\u914D\u7F6E\u7B7E\u540D\u79C1\u94A5 AXEL_LICENSE_SIGN_KEY");
+  const der = Uint8Array.from(atob(raw), (c) => c.charCodeAt(0));
+  const key = await crypto.subtle.importKey("pkcs8", der, { name: "Ed25519" }, false, ["sign"]);
+  const body = b64u(enc2.encode(JSON.stringify(payload)));
+  const sig = new Uint8Array(await crypto.subtle.sign({ name: "Ed25519" }, key, enc2.encode(body)));
+  return body + "." + b64u(sig);
+}
+var tokenPayload = (serial, machineCode, company) => ({ v: 1, kid: "k1", s: serial, mc: machineCode, co: cleanText(company, 20), iat: (/* @__PURE__ */ new Date()).toISOString() });
+function normPhone(p) {
+  const s = String(p || "").replace(/[\s\-()（）]/g, "");
+  if (/^1[3-9]\d{9}$/.test(s) || /^0\d{9,11}$/.test(s)) return s;
+  return "";
+}
 async function saveRec(store, key, rec, ttl) {
   const opts = { metadata: kvMeta(rec) };
   if (ttl) opts.expirationTtl = ttl;
@@ -363,17 +383,142 @@ async function handleAdmin(request, env, origin) {
     if (!/^[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}$/.test(machineCode)) return json2({ ok: false, error: "\u672C\u673A\u7801\u683C\u5F0F\u5E94\u4E3A XXXX-XXXX-XXXX-XXXX" }, 400, origin);
     const serial = await makeSerial(secret);
     const serialHash = await sha256Hex(serial);
-    const rec = { serialHash, serialLast6: serial.replace(/-/g, "").slice(-6), issuedFor: machineCode, issuedAt: now, note: cleanText(b.note, 60), machines: [], locked: false };
+    const note = cleanText(b.note, 60);
+    const rec = { serialHash, serialLast6: serial.replace(/-/g, "").slice(-6), issuedFor: machineCode, issuedAt: now, note, machines: [], locked: false };
     await saveRec(store, KEY_PREFIX2 + serialHash, rec);
-    return json2({ ok: true, serial, record: rec }, 200, origin);
+    let token = "";
+    try {
+      if ((env.AXEL_LICENSE_SIGN_KEY || "").trim()) token = await signToken(env, tokenPayload(serial, machineCode, note));
+    } catch {
+      token = "";
+    }
+    return json2({ ok: true, serial, token, record: rec }, 200, origin);
   }
   return json2({ ok: false, error: "\u672A\u77E5\u64CD\u4F5C" }, 400, origin);
+}
+async function handleRegister(request, env, origin) {
+  const store = kv(env);
+  if (!store) return json2({ ok: false, error: "\u672A\u914D\u7F6E KV" }, 500, origin);
+  const secret = (env.AXEL_LICENSE_SECRET || "").trim();
+  if (!secret) return json2({ ok: false, error: "\u670D\u52A1\u5668\u672A\u914D\u7F6E AXEL_LICENSE_SECRET" }, 500, origin);
+  let b;
+  try {
+    b = await readBody(request);
+  } catch {
+    return json2({ ok: false, error: "\u8BF7\u6C42\u65E0\u6548" }, 400, origin);
+  }
+  if (!b || typeof b !== "object") return json2({ ok: false, error: "\u8BF7\u6C42\u65E0\u6548" }, 400, origin);
+  const machineCode = cleanCode(b.machineCode);
+  if (!MC_RE.test(machineCode)) return json2({ ok: false, error: "\u672C\u673A\u7801\u65E0\u6548" }, 400, origin);
+  const company = cleanText(b.company, 60);
+  if (company.length < 2) return json2({ ok: false, error: "\u8BF7\u586B\u5199\u516C\u53F8\u540D\u79F0" }, 400, origin);
+  const phone = normPhone(b.phone);
+  if (!phone) return json2({ ok: false, error: "\u8BF7\u586B\u5199\u6B63\u786E\u7684\u624B\u673A\u53F7\uFF08\u6216\u5E26\u533A\u53F7\u7684\u5EA7\u673A\uFF09" }, 400, origin);
+  if (b.agree !== true) return json2({ ok: false, error: "\u9700\u8981\u540C\u610F\u9690\u79C1\u8BF4\u660E\u624D\u80FD\u9886\u53D6" }, 400, origin);
+  const profile = {
+    company,
+    phone,
+    contact: cleanText(b.contact, 20),
+    region: cleanText(b.region, 20),
+    mode: ["project", "shop", "both"].includes(b.mode) ? b.mode : "project"
+  };
+  const now = (/* @__PURE__ */ new Date()).toISOString();
+  const mkey = MACHINE_PREFIX + machineCode;
+  const had = await store.get(mkey, { type: "json" });
+  if (had && had.serial && SERIAL_RE.test(had.serial)) {
+    const sh = await sha256Hex(had.serial);
+    const rec2 = await store.get(KEY_PREFIX2 + sh, { type: "json" }) || null;
+    if (rec2 && rec2.locked) return json2({ ok: false, status: "locked", error: rec2.lockMsg || LOCK_MSG }, 403, origin);
+    if (rec2) {
+      rec2.profile = profile;
+      rec2.note = rec2.note || company;
+      rec2.reRegisteredAt = now;
+      await saveRec(store, KEY_PREFIX2 + sh, rec2);
+    }
+    return json2({ ok: true, serial: had.serial, token: await signToken(env, tokenPayload(had.serial, machineCode, company)), again: true }, 200, origin);
+  }
+  const ip = request.headers.get("CF-Connecting-IP") || request.headers.get("X-Forwarded-For") || "local";
+  const day = now.slice(0, 10).replace(/-/g, "");
+  const ipKey = REG_IP_PREFIX + ip + ":" + day;
+  const cnt = Number(await store.get(ipKey)) || 0;
+  if (cnt >= REG_PER_IP_DAY) return json2({ ok: false, error: "\u4ECA\u5929\u9886\u53D6\u6B21\u6570\u592A\u591A\u4E86\uFF0C\u8BF7\u660E\u5929\u518D\u8BD5\u6216\u8054\u7CFB\u6211\u4EEC" }, 429, origin);
+  await store.put(ipKey, String(cnt + 1), { expirationTtl: 60 * 60 * 48 });
+  const serial = await makeSerial(secret);
+  const serialHash = await sha256Hex(serial);
+  const rec = {
+    serialHash,
+    serialLast6: serial.replace(/-/g, "").slice(-6),
+    issuedFor: machineCode,
+    issuedAt: now,
+    note: company,
+    profile,
+    source: "self",
+    machines: [machineCode],
+    lastMachine: machineCode,
+    version: cleanVer(b.version),
+    firstSeenAt: now,
+    lastSeenAt: now,
+    locked: false,
+    country: request.cf && request.cf.country || ""
+  };
+  await saveRec(store, KEY_PREFIX2 + serialHash, rec);
+  await store.put(mkey, JSON.stringify({ serial, at: now }));
+  return json2({ ok: true, serial, token: await signToken(env, tokenPayload(serial, machineCode, company)) }, 200, origin);
+}
+async function handleToken(request, env, origin) {
+  const store = kv(env);
+  if (!store) return json2({ ok: false, error: "\u672A\u914D\u7F6E KV" }, 500, origin);
+  const secret = (env.AXEL_LICENSE_SECRET || "").trim();
+  if (!secret) return json2({ ok: false, error: "\u670D\u52A1\u5668\u672A\u914D\u7F6E AXEL_LICENSE_SECRET" }, 500, origin);
+  let b;
+  try {
+    b = await readBody(request);
+  } catch {
+    return json2({ ok: false, error: "\u8BF7\u6C42\u65E0\u6548" }, 400, origin);
+  }
+  if (!b || typeof b !== "object") return json2({ ok: false, error: "\u8BF7\u6C42\u65E0\u6548" }, 400, origin);
+  const serial = normalizeSerial(b.serial);
+  const machineCode = cleanCode(b.machineCode);
+  if (!SERIAL_RE.test(serial) || !MC_RE.test(machineCode)) return json2({ ok: false, error: "\u53C2\u6570\u65E0\u6548" }, 400, origin);
+  const serialHash = await sha256Hex(serial);
+  const key = KEY_PREFIX2 + serialHash;
+  const prev = await store.get(key, { type: "json" }) || null;
+  if (!(prev && prev.allowed) && !await validSerial(secret, serial)) return json2({ ok: false, status: "invalid", error: "\u5E8F\u5217\u53F7\u4E0D\u6B63\u786E\uFF0C\u8BF7\u6838\u5BF9\u540E\u91CD\u65B0\u8F93\u5165" }, 400, origin);
+  if (prev && prev.locked && !prev.forged) return json2({ ok: false, status: "locked", error: prev.lockMsg || LOCK_MSG }, 403, origin);
+  const machines = Array.isArray(prev && prev.machines) ? prev.machines.slice() : [];
+  const max = Number(env.AXEL_MAX_MACHINES) || 0;
+  if (max > 0 && !machines.includes(machineCode) && machines.length >= max) {
+    return json2({ ok: false, status: "tooMany", error: `\u8FD9\u4E2A\u5E8F\u5217\u53F7\u5DF2\u7ECF\u5728 ${machines.length} \u53F0\u7535\u8111\u4E0A\u7528\u8FC7\u4E86\uFF0C\u8BF7\u8054\u7CFB\u6211\u4EEC\u89E3\u7ED1\u6216\u53E6\u9886\u4E00\u4E2A` }, 403, origin);
+  }
+  if (!machines.includes(machineCode)) machines.push(machineCode);
+  const now = (/* @__PURE__ */ new Date()).toISOString();
+  const rec = Object.assign({}, prev || {}, {
+    serialHash,
+    serialLast6: serial.replace(/-/g, "").slice(-6),
+    machines: machines.slice(-10),
+    lastMachine: machineCode,
+    version: cleanVer(b.version) || prev && prev.version || "",
+    firstSeenAt: prev && prev.firstSeenAt || now,
+    lastSeenAt: now,
+    tokenAt: now,
+    country: request.cf && request.cf.country || prev && prev.country || ""
+  });
+  if (rec.forged) {
+    rec.locked = false;
+    rec.lockMsg = "";
+    delete rec.forged;
+  }
+  await saveRec(store, key, rec);
+  const company = rec.profile && rec.profile.company || rec.note || "";
+  return json2({ ok: true, token: await signToken(env, tokenPayload(serial, machineCode, company)) }, 200, origin);
 }
 async function handleAxelLicense(request, env) {
   const url = new URL(request.url);
   const origin = url.origin;
   if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors(origin) });
   if (url.pathname === "/api/axel-license/admin" && request.method === "POST") return handleAdmin(request, env, origin);
+  if (url.pathname === "/api/axel-license/register" && request.method === "POST") return handleRegister(request, env, origin).catch((e) => json2({ ok: false, error: e.message || String(e) }, 500, origin));
+  if (url.pathname === "/api/axel-license/token" && request.method === "POST") return handleToken(request, env, origin).catch((e) => json2({ ok: false, error: e.message || String(e) }, 500, origin));
   if (url.pathname === "/api/axel-license" && request.method === "POST") return handleReport(request, env, origin);
   if (url.pathname === "/api/axel-license" && request.method === "GET") return handleList(request, env, origin);
   return json2({ ok: false, error: "Method Not Allowed" }, 405, origin);
@@ -512,7 +657,7 @@ var oauth_default = {
   async fetch(request, env) {
     const url = new URL(request.url);
     const path = url.pathname.replace(/\/$/, "") || "/";
-    if (path === "/api/axel-license" || path === "/api/axel-license/admin") {
+    if (path === "/api/axel-license" || path.startsWith("/api/axel-license/")) {
       return handleAxelLicense(request, env);
     }
     if (path === "/api/axel-presence") {

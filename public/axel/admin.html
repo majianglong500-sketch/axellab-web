@@ -171,18 +171,27 @@
           <button class="btn btn-ghost btn-sm" id="btnCopy" type="button">复制</button>
           <span class="hint" style="margin:0">请复制发给客户，只显示这一次</span>
         </div>
+        <div id="issueTokBox" hidden style="margin-top:8px">
+          <span class="hint" style="margin:0 0 4px;display:block">离线授权码（客户电脑连不上网时用：整段粘贴到软件激活框，只对这个本机码有效）</span>
+          <div class="row" style="align-items:flex-start">
+            <textarea class="inp mono" id="issueTok" readonly rows="3" style="max-width:640px;width:100%;font-size:12px;word-break:break-all"></textarea>
+            <button class="btn btn-ghost btn-sm" id="btnCopyTok" type="button">复制授权码</button>
+          </div>
+        </div>
         <p class="err" id="licWarn" hidden></p>
       </div>
       <div class="lic-tools">
-        <input class="inp" id="licFilter" placeholder="搜索末 6 位、机器码、备注">
+        <input class="inp" id="licFilter" placeholder="搜索公司、电话、地区、末 6 位、机器码、备注">
         <label><input type="checkbox" id="licMulti"> 只看一码多机</label>
         <label><input type="checkbox" id="licHideForged"> 隐藏伪造号</label>
+        <label><input type="checkbox" id="licSelf"> 只看自助领取</label>
+        <button class="btn btn-ghost btn-sm" id="licCsv" type="button">导出客户表 CSV</button>
         <span class="meta mono" id="licCount" style="font-size:12px;color:var(--muted)"></span>
       </div>
       <div style="overflow-x:auto;border:1px solid var(--line-strong);border-radius:12px;background:var(--bg-elev)">
         <table>
-          <thead><tr><th>状态</th><th>序列号末 6 位</th><th>机器码</th><th>版本</th><th>首次</th><th>最近</th><th>备注</th><th>操作</th></tr></thead>
-          <tbody id="licBody"><tr><td colspan="8" class="empty">加载中…</td></tr></tbody>
+          <thead><tr><th>状态</th><th>客户</th><th>序列号末 6 位</th><th>机器码</th><th>版本</th><th>首次</th><th>最近</th><th>备注</th><th>操作</th></tr></thead>
+          <tbody id="licBody"><tr><td colspan="9" class="empty">加载中…</td></tr></tbody>
         </table>
       </div>
     </div>
@@ -190,7 +199,8 @@
     <div class="privacy">
       <strong style="color:var(--ink)">隐私说明</strong><br>
       软件仅在用户开启「向官网汇报在线状态」且已激活时，约每 5 分钟上报：机器码哈希（非本机路径明文）、软件版本、激活布尔、可选公司简称、时区与活跃时间。
-      不上报报价明细、客户电话、文件内容或 API Key。地区粗略来自 Cloudflare 边缘国家码，非精确定位。
+      不上报报价明细、客户电话、文件内容或 API Key。地区粗略来自 Cloudflare 边缘国家码，非精确定位。<br>
+      「客户」一栏只来自用户在软件里<b>主动填写</b>的免费领号表（公司、联系人、电话、地区、业务类型），用于联系和售后；请勿外传，导出的 CSV 注意保管。
     </div>
   </div>
   <script>
@@ -309,29 +319,33 @@
       licAll = data.licenses || [];
       licRender();
     } catch (e) {
-      licBody.innerHTML = '<tr><td colspan="8" class="empty">加载失败：' + esc(e.message || e) + "</td></tr>";
+      licBody.innerHTML = '<tr><td colspan="9" class="empty">加载失败：' + esc(e.message || e) + "</td></tr>";
     }
   }
   function licRender() {
     var q = (document.getElementById("licFilter").value || "").trim().toUpperCase();
     var onlyMulti = document.getElementById("licMulti").checked;
     var hideForged = document.getElementById("licHideForged").checked;
+    var onlySelf = document.getElementById("licSelf").checked;
     var multiN = licAll.filter(function (r) { return (r.machines || []).length > 1; }).length;
     var list = licAll.filter(function (r) {
       if (onlyMulti && (r.machines || []).length < 2) return false;
       if (hideForged && r.forged) return false;
+      if (onlySelf && r.source !== "self") return false;
       if (!q) return true;
-      return [r.serialLast6, r.note, r.version, r.issuedFor].concat(r.machines || []).some(function (x) { return String(x || "").toUpperCase().indexOf(q) >= 0; });
+      var p = r.profile || {};
+      return [r.serialLast6, r.note, r.version, r.issuedFor, p.company, p.contact, p.phone, p.region].concat(r.machines || []).some(function (x) { return String(x || "").toUpperCase().indexOf(q) >= 0; });
     });
     document.getElementById("licCount").textContent = "共 " + licAll.length + " 个" + (multiN ? "，一码多机 " + multiN + " 个" : "") + (list.length !== licAll.length ? "，筛出 " + list.length + " 个" : "");
-    if (!licAll.length) { licBody.innerHTML = '<tr><td colspan="8" class="empty">尚无序列号报到</td></tr>'; return; }
-    if (!list.length) { licBody.innerHTML = '<tr><td colspan="8" class="empty">没有符合条件的序列号</td></tr>'; return; }
+    if (!licAll.length) { licBody.innerHTML = '<tr><td colspan="9" class="empty">尚无序列号报到</td></tr>'; return; }
+    if (!list.length) { licBody.innerHTML = '<tr><td colspan="9" class="empty">没有符合条件的序列号</td></tr>'; return; }
     licBody.innerHTML = list.map(function (r) {
       var ms = r.machines && r.machines.length ? r.machines : (r.issuedFor ? [r.issuedFor + "（发号）"] : []);
       var multi = (r.machines || []).length > 1;
       var stateTag = r.locked ? '<span class="tag bad">' + (r.forged ? "伪造/已锁" : "已锁定") + "</span>" : '<span class="tag on">正常</span>';
       return "<tr>" +
         "<td>" + stateTag + (multi ? '<span class="tag warn" title="同一序列号在多台电脑上报到过，可能被转借">' + r.machines.length + " 台机器</span>" : "") + "</td>" +
+        "<td>" + custCell(r) + "</td>" +
         '<td class="mono">' + esc(r.serialLast6 || "—") + "</td>" +
         '<td class="mono">' + (ms.length ? ms.map(esc).join("<br>") : "—") + "</td>" +
         "<td>" + esc(r.version || "—") + "</td>" +
@@ -352,7 +366,30 @@
       };
     });
   }
-  ["licFilter", "licMulti", "licHideForged"].forEach(function (id) {
+  var MODE_NAME = { project: "广告制作/标识", shop: "图文快印", both: "两者都做" };
+  function custCell(r) {
+    var p = r.profile;
+    if (!p) return '<span style="color:var(--muted)">—</span>';
+    return '<div style="min-width:180px;white-space:normal;line-height:1.5"><b>' + esc(p.company || "") + "</b>" +
+      (r.source === "self" ? ' <span class="tag on" title="软件里免费自助领取">自助</span>' : "") + "<br>" +
+      '<span class="mono">' + esc([p.contact, p.phone].filter(Boolean).join(" · ")) + "</span><br>" +
+      '<span style="color:var(--muted)">' + esc([p.region, MODE_NAME[p.mode] || ""].filter(Boolean).join(" · ")) + "</span></div>";
+  }
+  document.getElementById("licCsv").onclick = function () {
+    var q = function (v) { v = String(v == null ? "" : v); if (/^[=+\-@\t\r]/.test(v)) v = "'" + v; return '"' + v.replace(/"/g, '""') + '"'; };
+    var rows = [["公司", "联系人", "电话", "地区", "业务", "来源", "序列号末6位", "机器数", "版本", "首次", "最近", "状态", "备注"]];
+    licAll.forEach(function (r) {
+      var p = r.profile || {};
+      rows.push([p.company, p.contact, p.phone, p.region, MODE_NAME[p.mode] || "", r.source === "self" ? "自助" : "手工", r.serialLast6, (r.machines || []).length, r.version, fmtTime(r.firstSeenAt || r.issuedAt), fmtTime(r.lastSeenAt), r.locked ? "已锁定" : "正常", r.note]);
+    });
+    var csv = "\ufeff" + rows.map(function (row) { return row.map(q).join(","); }).join("\r\n");
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+    a.download = "axel-客户-" + new Date().toISOString().slice(0, 10) + ".csv";
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000);
+  };
+  ["licFilter", "licMulti", "licHideForged", "licSelf"].forEach(function (id) {
     document.getElementById(id).addEventListener(id === "licFilter" ? "input" : "change", licRender);
   });
   async function licAdmin(body) {
@@ -368,6 +405,8 @@
     if (d) {
       document.getElementById("issueOut").textContent = d.serial;
       document.getElementById("issueBox").hidden = false;
+      document.getElementById("issueTok").value = d.token || "";
+      document.getElementById("issueTokBox").hidden = !d.token;
       document.getElementById("issueCode").value = "";
       document.getElementById("issueNote").value = "";
       licLoad();
@@ -378,6 +417,12 @@
     function done() { btn.textContent = "已复制 ✓"; setTimeout(function () { btn.textContent = "复制"; }, 1800); }
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, function () { prompt("复制下面的序列号：", t); });
     else prompt("复制下面的序列号：", t);
+  };
+  document.getElementById("btnCopyTok").onclick = function () {
+    var ta = document.getElementById("issueTok"), btn = this;
+    function done() { btn.textContent = "已复制 ✓"; setTimeout(function () { btn.textContent = "复制授权码"; }, 1800); }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(ta.value).then(done, function () { ta.select(); });
+    else ta.select();
   };
   var _load = load;
   load = async function () { await _load(); licLoad(); };
