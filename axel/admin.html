@@ -21,6 +21,7 @@
       --sans: "Inter", "Helvetica Neue", -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    [hidden] { display: none !important; }
     body {
       font-family: var(--sans); color: var(--ink); background: var(--bg);
       min-height: 100vh; -webkit-font-smoothing: antialiased; line-height: 1.5;
@@ -73,7 +74,7 @@
     .toolbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
     .toolbar .meta { font-size: 12px; color: var(--muted); font-family: var(--mono); }
     table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    th, td { text-align: left; padding: 11px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th, td { text-align: left; padding: 11px 12px; border-bottom: 1px solid var(--line); vertical-align: top; white-space: nowrap; }
     th { color: var(--muted); font-weight: 500; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; font-family: var(--mono); }
     tr:hover td { background: rgba(255,90,42,.04); }
     .dot {
@@ -87,6 +88,12 @@
       border: 1px solid var(--line-strong); color: var(--muted);
     }
     .tag.on { border-color: rgba(61,214,140,.4); color: var(--ok); }
+    .tag.warn { border-color: rgba(255,90,42,.5); color: var(--accent); margin-left: 6px; }
+    .tag.bad { border-color: rgba(255,123,114,.5); color: #ff7b72; }
+    .lic-tools { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin: 12px 0; }
+    .lic-tools .inp { max-width: 260px; padding: 9px 12px; }
+    .lic-tools label { font-size: 13px; color: var(--muted); display: flex; gap: 6px; align-items: center; cursor: pointer; }
+    .btn-sm { padding: 6px 12px; font-size: 13px; }
     .empty { color: var(--muted); padding: 28px 0; text-align: center; }
     .panel { display: none; }
     .panel.show { display: block; }
@@ -159,8 +166,18 @@
           <input class="inp" id="issueNote" placeholder="备注（客户名，可选）" style="max-width:220px">
           <button class="btn btn-primary" id="btnIssue" type="button">生成序列号</button>
         </div>
-        <p class="mono" id="issueOut" style="font-size:18px;margin-top:8px"></p>
+        <div class="row" id="issueBox" hidden style="align-items:center">
+          <p class="mono" id="issueOut" style="font-size:18px"></p>
+          <button class="btn btn-ghost btn-sm" id="btnCopy" type="button">复制</button>
+          <span class="hint" style="margin:0">请复制发给客户，只显示这一次</span>
+        </div>
         <p class="err" id="licWarn" hidden></p>
+      </div>
+      <div class="lic-tools">
+        <input class="inp" id="licFilter" placeholder="搜索末 6 位、机器码、备注">
+        <label><input type="checkbox" id="licMulti"> 只看一码多机</label>
+        <label><input type="checkbox" id="licHideForged"> 隐藏伪造号</label>
+        <span class="meta mono" id="licCount" style="font-size:12px;color:var(--muted)"></span>
       </div>
       <div style="overflow-x:auto;border:1px solid var(--line-strong);border-radius:12px;background:var(--bg-elev)">
         <table>
@@ -186,8 +203,9 @@
   var gateErr = document.getElementById("gateErr");
   var tbody = document.getElementById("tbody");
 
-  function getToken() { return sessionStorage.getItem(KEY) || ""; }
-  function setToken(t) { if (t) sessionStorage.setItem(KEY, t); else sessionStorage.removeItem(KEY); }
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function getToken() { try { return sessionStorage.getItem(KEY) || ""; } catch (e) { return ""; } }
+  function setToken(t) { try { if (t) sessionStorage.setItem(KEY, t); else sessionStorage.removeItem(KEY); } catch (e) {} }
 
   function showGate(msg) {
     gate.classList.add("show");
@@ -242,16 +260,16 @@
         var on = !!c.online;
         return "<tr>" +
           '<td><span class="tag ' + (on ? "on" : "") + '"><span class="dot ' + (on ? "on" : "") + '"></span>' + (on ? "在线" : "离线") + "</span></td>" +
-          '<td class="mono" title="' + (c.machineHash || "") + '">' + (c.machineHashShort || (c.machineHash || "").slice(0, 8)) + "…</td>" +
-          "<td>" + (c.version || "—") + "</td>" +
-          "<td>" + (c.companyShort || "—") + "</td>" +
-          '<td class="mono">' + (c.timezone || "—") + "</td>" +
-          "<td>" + (c.country || "—") + "</td>" +
-          '<td class="mono">' + fmtTime(c.lastSeenAt) + "</td>" +
+          '<td class="mono" title="' + esc(c.machineHash) + '">' + esc(c.machineHashShort || String(c.machineHash || "").slice(0, 8)) + "…</td>" +
+          "<td>" + esc(c.version || "—") + "</td>" +
+          "<td>" + esc(c.companyShort || "—") + "</td>" +
+          '<td class="mono">' + esc(c.timezone || "—") + "</td>" +
+          "<td>" + esc(c.country || "—") + "</td>" +
+          '<td class="mono">' + esc(fmtTime(c.lastSeenAt)) + "</td>" +
           "</tr>";
       }).join("");
     } catch (e) {
-      tbody.innerHTML = '<tr><td colspan="7" class="empty">加载失败：' + String(e.message || e) + "</td></tr>";
+      tbody.innerHTML = '<tr><td colspan="7" class="empty">加载失败：' + esc(e.message || e) + "</td></tr>";
     }
   }
 
@@ -279,7 +297,7 @@
   // ---------- 序列号管理 ----------
   var LAPI = "/api/axel-license";
   var licBody = document.getElementById("licBody");
-  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  var licAll = [];
   async function licLoad() {
     var token = getToken(); if (!token) return;
     try {
@@ -288,34 +306,55 @@
       if (!res.ok || !data.ok) throw new Error((data && data.error) || ("HTTP " + res.status));
       var w = document.getElementById("licWarn");
       w.hidden = !!data.secretConfigured; w.textContent = data.secretConfigured ? "" : "服务器未配置 AXEL_LICENSE_SECRET：无法发号，也不会识别伪造序列号。";
-      var list = data.licenses || [];
-      if (!list.length) { licBody.innerHTML = '<tr><td colspan="8" class="empty">尚无序列号报到</td></tr>'; return; }
-      licBody.innerHTML = list.map(function (r) {
-        var machines = (r.machines && r.machines.length ? r.machines : (r.issuedFor ? [r.issuedFor + "（发号）"] : [])).join("<br>");
-        return "<tr>" +
-          '<td><span class="tag ' + (r.locked ? "" : "on") + '">' + (r.locked ? (r.forged ? "伪造/已锁" : "已锁定") : "正常") + "</span></td>" +
-          '<td class="mono">' + esc(r.serialLast6 || "—") + "</td>" +
-          '<td class="mono">' + (machines || "—") + "</td>" +
-          "<td>" + esc(r.version || "—") + "</td>" +
-          '<td class="mono">' + fmtTime(r.firstSeenAt || r.issuedAt) + "</td>" +
-          '<td class="mono">' + fmtTime(r.lastSeenAt) + "</td>" +
-          "<td>" + esc(r.note || "") + "</td>" +
-          '<td><button class="btn btn-ghost" data-lic="' + (r.locked ? "unlock" : "lock") + '" data-sh="' + esc(r.serialHash) + '">' + (r.locked ? "解锁" : "锁定") + "</button></td>" +
-          "</tr>";
-      }).join("");
-      Array.prototype.forEach.call(licBody.querySelectorAll("[data-lic]"), function (b) {
-        b.onclick = async function () {
-          var act = b.getAttribute("data-lic");
-          if (act === "lock" && !confirm("确定锁定此序列号？对方软件下次联网时将停用。")) return;
-          b.disabled = true;
-          await licAdmin({ action: act, serialHash: b.getAttribute("data-sh") });
-          licLoad();
-        };
-      });
+      licAll = data.licenses || [];
+      licRender();
     } catch (e) {
       licBody.innerHTML = '<tr><td colspan="8" class="empty">加载失败：' + esc(e.message || e) + "</td></tr>";
     }
   }
+  function licRender() {
+    var q = (document.getElementById("licFilter").value || "").trim().toUpperCase();
+    var onlyMulti = document.getElementById("licMulti").checked;
+    var hideForged = document.getElementById("licHideForged").checked;
+    var multiN = licAll.filter(function (r) { return (r.machines || []).length > 1; }).length;
+    var list = licAll.filter(function (r) {
+      if (onlyMulti && (r.machines || []).length < 2) return false;
+      if (hideForged && r.forged) return false;
+      if (!q) return true;
+      return [r.serialLast6, r.note, r.version, r.issuedFor].concat(r.machines || []).some(function (x) { return String(x || "").toUpperCase().indexOf(q) >= 0; });
+    });
+    document.getElementById("licCount").textContent = "共 " + licAll.length + " 个" + (multiN ? "，一码多机 " + multiN + " 个" : "") + (list.length !== licAll.length ? "，筛出 " + list.length + " 个" : "");
+    if (!licAll.length) { licBody.innerHTML = '<tr><td colspan="8" class="empty">尚无序列号报到</td></tr>'; return; }
+    if (!list.length) { licBody.innerHTML = '<tr><td colspan="8" class="empty">没有符合条件的序列号</td></tr>'; return; }
+    licBody.innerHTML = list.map(function (r) {
+      var ms = r.machines && r.machines.length ? r.machines : (r.issuedFor ? [r.issuedFor + "（发号）"] : []);
+      var multi = (r.machines || []).length > 1;
+      var stateTag = r.locked ? '<span class="tag bad">' + (r.forged ? "伪造/已锁" : "已锁定") + "</span>" : '<span class="tag on">正常</span>';
+      return "<tr>" +
+        "<td>" + stateTag + (multi ? '<span class="tag warn" title="同一序列号在多台电脑上报到过，可能被转借">' + r.machines.length + " 台机器</span>" : "") + "</td>" +
+        '<td class="mono">' + esc(r.serialLast6 || "—") + "</td>" +
+        '<td class="mono">' + (ms.length ? ms.map(esc).join("<br>") : "—") + "</td>" +
+        "<td>" + esc(r.version || "—") + "</td>" +
+        '<td class="mono">' + esc(fmtTime(r.firstSeenAt || r.issuedAt)) + "</td>" +
+        '<td class="mono">' + esc(fmtTime(r.lastSeenAt)) + "</td>" +
+        "<td>" + esc(r.note || "") + "</td>" +
+        '<td><button class="btn btn-ghost btn-sm" data-lic="' + (r.locked ? "unlock" : "lock") + '" data-sh="' + esc(r.serialHash) + '">' + (r.locked ? "解锁" : "锁定") + "</button></td>" +
+        "</tr>";
+    }).join("");
+    Array.prototype.forEach.call(licBody.querySelectorAll("[data-lic]"), function (b) {
+      b.onclick = async function () {
+        var act = b.getAttribute("data-lic");
+        if (act === "lock" && !confirm("确定锁定此序列号？对方软件下次联网时将停用。")) return;
+        if (act === "unlock" && b.closest("tr").textContent.indexOf("伪造") >= 0 && !confirm("这个号没通过校验（疑似伪造）。解锁后它将被永久认可，确定吗？")) return;
+        b.disabled = true;
+        await licAdmin({ action: act, serialHash: b.getAttribute("data-sh") });
+        licLoad();
+      };
+    });
+  }
+  ["licFilter", "licMulti", "licHideForged"].forEach(function (id) {
+    document.getElementById(id).addEventListener(id === "licFilter" ? "input" : "change", licRender);
+  });
   async function licAdmin(body) {
     var res = await fetch(LAPI + "/admin", { method: "POST", headers: { Authorization: "Bearer " + getToken(), "Content-Type": "application/json" }, body: JSON.stringify(body) });
     var data = await res.json().catch(function () { return {}; });
@@ -326,7 +365,19 @@
     var code = (document.getElementById("issueCode").value || "").trim().toUpperCase();
     if (!/^[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}$/.test(code)) { alert("本机码格式应为 XXXX-XXXX-XXXX-XXXX"); return; }
     var d = await licAdmin({ action: "issue", machineCode: code, note: document.getElementById("issueNote").value || "" });
-    if (d) { document.getElementById("issueOut").textContent = d.serial + "　（请复制发给客户，只显示这一次）"; licLoad(); }
+    if (d) {
+      document.getElementById("issueOut").textContent = d.serial;
+      document.getElementById("issueBox").hidden = false;
+      document.getElementById("issueCode").value = "";
+      document.getElementById("issueNote").value = "";
+      licLoad();
+    }
+  };
+  document.getElementById("btnCopy").onclick = function () {
+    var t = document.getElementById("issueOut").textContent, btn = this;
+    function done() { btn.textContent = "已复制 ✓"; setTimeout(function () { btn.textContent = "复制"; }, 1800); }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, function () { prompt("复制下面的序列号：", t); });
+    else prompt("复制下面的序列号：", t);
   };
   var _load = load;
   load = async function () { await _load(); licLoad(); };

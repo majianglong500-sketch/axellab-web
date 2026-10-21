@@ -7,7 +7,13 @@
  * GET  /api/axel-license        后台列表（Bearer AXEL_ADMIN_TOKEN）
  * POST /api/axel-license/admin  后台操作（Bearer）{action:'lock'|'unlock', serialHash, msg?} | {action:'issue', machineCode, note?}
  */
+import { isAdmin, kvMeta, listRecords } from "./util.js";
+
 const KEY_PREFIX = "axel:license:";
+// 同一序列号、同一台机器、版本没变时，这段时间内的重复报到不再写 KV（省写入额度）
+const MIN_WRITE_GAP_MS = 10 * 60 * 1000;
+// 从没发过、也没人手动处理过的伪造号，记录 30 天后自动清掉，防止被刷爆
+const FORGED_TTL = 60 * 60 * 24 * 30;
 const MAX_BODY = 4096;
 const LOCK_MSG = "此序列号已被停用，请联系天进广告 13201200112";
 const ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -59,13 +65,10 @@ const cleanCode = (c) => String(c || "").toUpperCase().replace(/[^0-9A-F-]/g, ""
 const cleanVer = (v) => String(v || "").replace(/[^0-9A-Za-z.\-+_]/g, "").slice(0, 32);
 const cleanText = (s, n) => String(s || "").replace(/[\u0000-\u001f<>]/g, "").trim().slice(0, n);
 
-function isAdmin(request, env) {
-  const want = (env.AXEL_ADMIN_TOKEN || "").trim();
-  if (!want) return false;
-  const auth = request.headers.get("Authorization") || "";
-  const m = /^Bearer\s+(.+)$/i.exec(auth);
-  const got = m ? m[1].trim() : (request.headers.get("X-Admin-Token") || "").trim();
-  return !!got && got === want;
+async function saveRec(store, key, rec, ttl) {
+  const opts = { metadata: kvMeta(rec) };
+  if (ttl) opts.expirationTtl = ttl;
+  await store.put(key, JSON.stringify(rec), opts);
 }
 async function readBody(request) {
   const raw = await request.text();
@@ -78,28 +81,52 @@ async function handleReport(request, env, origin) {
   if (!store) return json({ ok: false, error: "未配置 KV" }, 500, origin);
   let b;
   try { b = await readBody(request); } catch { return json({ ok: false, error: "请求无效" }, 400, origin); }
+  if (!b || typeof b !== "object") return json({ ok: false, error: "请求无效" }, 400, origin);
   const serial = normalizeSerial(b.serial);
   const machineCode = cleanCode(b.machineCode);
   if (!SERIAL_RE.test(serial) || !machineCode) return json({ ok: false, error: "参数无效" }, 400, origin);
   const serialHash = await sha256Hex(serial);
   if (b.serialHash && String(b.serialHash).toLowerCase() !== serialHash) return json({ ok: false, error: "参数无效" }, 400, origin);
-  const secret = (env.AXEL_LICENSE_SECRET || "").trim();
-  // 未配置密钥时不做真伪判断（只记录 + 停用名单），避免误锁
-  const forged = secret ? !(await validSerial(secret, serial)) : false;
   const key = KEY_PREFIX + serialHash;
-  const now = new Date().toISOString();
-  const prev = (await store.get(key, { type: "json" })) || {};
-  const machines = Array.isArray(prev.machines) ? prev.machines : [];
+  const prev = (await store.get(key, { type: "json" })) || null;
+  const secret = (env.AXEL_LICENSE_SECRET || "").trim();
+  // 未配置密钥时不做真伪判断（只记录 + 停用名单），避免误锁；后台手动「解锁」过的号（allowed）也不再判伪
+  const forged = secret && !(prev && prev.allowed) ? !(await validSerial(secret, serial)) : false;
+  const version = cleanVer(b.version) || (prev && prev.version) || "";
+  const now = Date.now();
+  const nowIso = new Date(now).toISOString();
+
+  // 重复报到且没有任何变化：直接按已有状态回复，不写 KV
+  if (
+    prev && !!prev.forged === forged &&
+    Array.isArray(prev.machines) && prev.machines.includes(machineCode) &&
+    prev.lastMachine === machineCode && (prev.version || "") === version &&
+    now - Date.parse(prev.lastSeenAt || 0) < MIN_WRITE_GAP_MS
+  ) {
+    return prev.locked
+      ? json({ status: "locked", msg: prev.lockMsg || LOCK_MSG }, 200, origin)
+      : json({ status: "ok", msg: "" }, 200, origin);
+  }
+
+  const machines = Array.isArray(prev && prev.machines) ? prev.machines.slice() : [];
   if (!machines.includes(machineCode)) machines.push(machineCode);
-  const rec = Object.assign({}, prev, {
+  const rec = Object.assign({}, prev || {}, {
     serialHash, serialLast6: serial.replace(/-/g, "").slice(-6),
     machines: machines.slice(-10), lastMachine: machineCode,
-    version: cleanVer(b.version) || prev.version || "",
-    firstSeenAt: prev.firstSeenAt || now, lastSeenAt: now,
-    country: (request.cf && request.cf.country) || prev.country || "",
+    version,
+    firstSeenAt: (prev && prev.firstSeenAt) || nowIso, lastSeenAt: nowIso,
+    country: (request.cf && request.cf.country) || (prev && prev.country) || "",
   });
-  if (forged) { rec.locked = true; rec.lockMsg = "序列号无效，请联系天进广告 13201200112"; rec.forged = true; }
-  await store.put(key, JSON.stringify(rec));
+  if (forged) {
+    rec.locked = true; rec.lockMsg = "序列号无效，请联系天进广告 13201200112"; rec.forged = true;
+  } else if (rec.forged && secret) {
+    // 以前判成伪造（例如服务器密钥一度配错），现在密钥在、校验通过：自动恢复，不必人工解锁
+    // （没配密钥时不自动恢复，免得临时删掉密钥就把真伪造号放出去）
+    rec.locked = false; rec.lockMsg = ""; delete rec.forged; rec.lockChangedAt = nowIso;
+  }
+  // 伪造号且从没发过 / 没人管过：30 天自动过期
+  const ttl = forged && !rec.issuedAt && !rec.lockChangedAt ? FORGED_TTL : undefined;
+  await saveRec(store, key, rec, ttl);
   if (rec.locked) return json({ status: "locked", msg: rec.lockMsg || LOCK_MSG }, 200, origin);
   return json({ status: "ok", msg: "" }, 200, origin);
 }
@@ -108,16 +135,7 @@ async function handleList(request, env, origin) {
   if (!isAdmin(request, env)) return json({ ok: false, error: "未授权" }, 401, origin);
   const store = kv(env);
   if (!store) return json({ ok: false, error: "未配置 KV" }, 500, origin);
-  const list = [];
-  let cursor;
-  do {
-    const page = await store.list({ prefix: KEY_PREFIX, cursor, limit: 1000 });
-    for (const k of page.keys || []) {
-      const r = await store.get(k.name, { type: "json" });
-      if (r && r.serialHash) list.push(r);
-    }
-    cursor = page.list_complete ? undefined : page.cursor;
-  } while (cursor);
+  const list = (await listRecords(store, KEY_PREFIX)).filter((r) => r && r.serialHash);
   list.sort((a, b) => String(b.lastSeenAt || b.issuedAt || "").localeCompare(String(a.lastSeenAt || a.issuedAt || "")));
   return json({ ok: true, secretConfigured: !!(env.AXEL_LICENSE_SECRET || "").trim(), total: list.length, licenses: list }, 200, origin);
 }
@@ -137,8 +155,10 @@ async function handleAdmin(request, env, origin) {
     rec.locked = b.action === "lock";
     rec.lockMsg = rec.locked ? (cleanText(b.msg, 120) || LOCK_MSG) : "";
     rec.lockChangedAt = now;
-    if (!rec.locked) delete rec.forged;
-    await store.put(key, JSON.stringify(rec));
+    delete rec.forged;
+    // 手动解锁 = 认可这个号（以后不再因判伪被自动锁）；手动锁定则取消认可
+    if (rec.locked) delete rec.allowed; else rec.allowed = true;
+    await saveRec(store, key, rec);
     return json({ ok: true, record: rec }, 200, origin);
   }
   if (b.action === "issue") {
@@ -149,7 +169,7 @@ async function handleAdmin(request, env, origin) {
     const serial = await makeSerial(secret);
     const serialHash = await sha256Hex(serial);
     const rec = { serialHash, serialLast6: serial.replace(/-/g, "").slice(-6), issuedFor: machineCode, issuedAt: now, note: cleanText(b.note, 60), machines: [], locked: false };
-    await store.put(KEY_PREFIX + serialHash, JSON.stringify(rec));
+    await saveRec(store, KEY_PREFIX + serialHash, rec);
     return json({ ok: true, serial, record: rec }, 200, origin);
   }
   return json({ ok: false, error: "未知操作" }, 400, origin);

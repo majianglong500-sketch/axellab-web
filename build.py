@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Scan content/ and generate project pages + update lists."""
 from __future__ import annotations
-import re, shutil
+import html as _html, json, re, shutil
 from pathlib import Path
 
 try:
@@ -121,6 +121,51 @@ FOOT_SCRIPTS = """  <div class=\"lightbox\" id=\"lb\"><span class=\"close\" id=\
 </html>
 """
 
+
+
+WARNINGS: list[str] = []
+
+
+def warn(msg: str) -> None:
+    WARNINGS.append(msg)
+    print(f"  WARN {msg}")
+
+
+def esc_all(obj):
+    """把要写进 HTML 的文字统一转义（& < > " '），防止标题或说明里的引号把页面弄乱。"""
+    if isinstance(obj, str):
+        return _html.escape(obj, quote=True)
+    if isinstance(obj, list):
+        return [esc_all(x) for x in obj]
+    if isinstance(obj, dict):
+        return {k: (v if k == "folder" else esc_all(v)) for k, v in obj.items()}
+    return obj
+
+
+def check_assets(p: dict) -> None:
+    """建站前检查图片是否齐全：文案.md 里写了、但 images/ 里没有的文件。"""
+    src = p["folder"] / "images"
+    name = p["folder"].name
+    if not src.exists():
+        return  # copy_assets 已经提示过
+    have = {f.name for f in src.iterdir() if f.is_file()}
+    lower = {n.lower(): n for n in have}
+
+    def need(fname: str, what: str) -> None:
+        if fname in have:
+            return
+        hint = f"（文件夹里有 {lower[fname.lower()]}，注意大小写）" if fname.lower() in lower else ""
+        warn(f"{name}: 缺少{what} images/{fname}{hint}")
+
+    need(p["cover"], "封面")
+    for g in p["gallery"]:
+        need(g["file"], "图库图片")
+    if p.get("video"):
+        need(p["video"]["file"], "视频")
+        need(p["video"]["poster"], "视频封面")
+    for f in have:
+        if f != "把图放这里.txt" and (src / f).stat().st_size > 2 * 1024 * 1024 and not f.lower().endswith((".mp4", ".mov", ".webm")):
+            warn(f"{name}: images/{f} 超过 2 MB，建议压缩到 500 KB 左右再放进来")
 
 
 def meta_line(text: str, key: str) -> str:
@@ -436,6 +481,7 @@ def copy_assets(p: dict) -> None:
 
 
 def render_detail(p: dict, by_slug: dict) -> str:
+    p = esc_all(p)
     tags_html = "".join(f'<span class="tag">{t}</span>' for t in p["tags"])
 
     # Metric chips (optional)
@@ -548,6 +594,7 @@ def render_detail(p: dict, by_slug: dict) -> str:
                         other = L
                         break
             if other:
+                other = esc_all(dict(other))
                 title = other.get("title_cn", slug)
                 url = other.get("url", f"{slug}.html")
                 links.append(f'<a class="btn btn-ghost" href="{url}">{title} →</a>')
@@ -611,6 +658,7 @@ def render_detail(p: dict, by_slug: dict) -> str:
 
 
 def project_card(p: dict) -> str:
+    p = esc_all(p)
     return f'''          <a class="project" href="{p["url"]}">
             <div class="project-media"><img src="{p.get("cover_web", p.get("cover"))}" alt=""></div>
             <div class="project-title">
@@ -664,6 +712,14 @@ def patch_works_in_file(path: Path, works_html: str) -> None:
     """
     if edited_by_editor(path):
         print(f"  keep {path.name} (edited in visual editor)")
+        text = path.read_text(encoding="utf-8")
+        for url in re.findall(r'href="([^"]+)"', works_html):
+            if f'href="{url}"' not in text:
+                warn(
+                    f"{path.name} 被可视化编辑器保存过，build 不再改它的项目卡片，所以 {url} 没出现在这一页。"
+                    f"想自动加上：删掉 {path.name} <head> 里 axel-editor 那一行再 build"
+                    "（只重排项目卡片，页面其它改动保留；在编辑器里改过的卡片文字/封面会恢复成 content/ 里的）。"
+                )
         return
     text = path.read_text(encoding="utf-8")
     pat = re.compile(
@@ -678,34 +734,30 @@ def patch_works_in_file(path: Path, works_html: str) -> None:
 
 
 def write_data_js(content_projects: list[dict]) -> None:
-    # Keep simple; append content projects to AXEL_DATA style
+    """生成 data.js（字符串用 json.dumps，标题里有引号也不会把脚本写坏）。"""
+    js = lambda v: json.dumps(v, ensure_ascii=False)  # noqa: E731
+    items = [
+        (L["id"], L["title_cn"], L["title_en"], L["summary_cn"], L["summary_en"], L["cover"], L["url"]) for L in LEGACY
+    ] + [
+        (p["id"], p["title_cn"], p["title_en"], p["summary_cn"], p["summary_en"], p["cover_web"], p["url"])
+        for p in content_projects
+    ]
     lines = ["const AXEL_DATA = {", "  projects: ["]
-    for L in LEGACY:
+    for pid, tcn, ten, scn, sen, hero, url in items:
         lines.append(
-            f'''    {{
-      id: "{L["id"]}",
-      title: {{ cn: "{L["title_cn"]}", en: "{L["title_en"]}" }},
-      intro: {{ cn: "{L["summary_cn"]}", en: "{L["summary_en"]}" }},
-      heroImage: "{L["cover"]}",
-      url: "{L["url"]}"
-    }},'''
-        )
-    for p in content_projects:
-        lines.append(
-            f'''    {{
-      id: "{p["id"]}",
-      title: {{ cn: "{p["title_cn"]}", en: "{p["title_en"]}" }},
-      intro: {{ cn: "{p["summary_cn"]}", en: "{p["summary_en"]}" }},
-      heroImage: "{p["cover_web"]}",
-      url: "{p["url"]}"
-    }},'''
+            f"""    {{
+      id: {js(pid)},
+      title: {{ cn: {js(tcn)}, en: {js(ten)} }},
+      intro: {{ cn: {js(scn)}, en: {js(sen)} }},
+      heroImage: {js(hero)},
+      url: {js(url)}
+    }},"""
         )
     lines.append("  ],")
     lines.append("  builtWorks: []")
     lines.append("};")
     (ROOT / "data.js").write_text("\n".join(lines) + "\n", encoding="utf-8")
     print("  wrote data.js")
-
 
 
 def assemble_public() -> None:
@@ -793,8 +845,17 @@ def main() -> None:
     for L in LEGACY:
         by_slug.setdefault(L["slug"], L)
 
+    slugs: dict[str, str] = {}
+    for p in content_projects:
+        if p["slug"] in slugs:
+            raise SystemExit(f"两个项目用了同一个 slug「{p['slug']}」：{slugs[p['slug']]} 和 {p['folder'].name}，请改掉一个。")
+        slugs[p["slug"]] = p["folder"].name
+        if not re.fullmatch(r"[a-z0-9][a-z0-9\-]*", p["slug"]):
+            warn(f"{p['folder'].name}: slug「{p['slug']}」建议只用小写字母、数字和横线（它会变成网址）")
+
     for p in content_projects:
         copy_assets(p)
+        check_assets(p)
         out = ROOT / f"{p['slug']}.html"
         if edited_by_editor(out):
             print(f"  keep {out.name} (edited in visual editor)")
@@ -817,7 +878,10 @@ def main() -> None:
     patch_works_in_file(ROOT / "index.html", works)
     write_data_js(content_projects)
     assemble_public()
-    print("Done.")
+    if WARNINGS:
+        print(f"Done，但有 {len(WARNINGS)} 条提醒（见上面 WARN），建议处理后再发布。")
+    else:
+        print("Done.")
 
 
 if __name__ == "__main__":

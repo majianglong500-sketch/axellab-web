@@ -41,6 +41,9 @@ jobs:
       - name: Install deps
         run: pip install -r requirements.txt
 
+      - name: Test worker (login / license / presence)
+        run: node scripts/test-worker.mjs && node scripts/test-axel-license.mjs
+
       - name: Build
         run: python build.py
 

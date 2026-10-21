@@ -72,6 +72,22 @@ npx wrangler deploy
 
 首次上线后台前务必配置好两个 Secrets，否则登录会失败。
 
+可选变量（Cloudflare → Worker → Settings → Variables，或 `wrangler.toml` 的 `[vars]`）：
+
+| 变量 | 默认 | 说明 |
+|---|---|---|
+| `GITHUB_OAUTH_SCOPE` | `repo` | 本仓库是公开的，已在 `wrangler.toml` 的 `[vars]` 设为 `public_repo`：登录令牌只能改公开仓库，碰不到私有仓库（比如报价软件源码）。仓库改成私有时要改回 `repo` |
+| `GITHUB_REPO` | `majianglong500-sketch/axellab-web` | `/api/github` 代理只放行这个仓库和 `/user`；仓库改名时要同步改 |
+
+## 本地测试（改了 worker/ 之后跑一下）
+
+```bash
+node scripts/test-worker.mjs        # 登录 / 代理 / 在线心跳 / 序列号，全部本地模拟，不联网
+node scripts/test-axel-license.mjs  # 旧的序列号测试（旁边有报价软件仓库时还会核对两端算法一致）
+```
+
+GitHub Action 每次构建前也会自动跑这两个测试，没通过就不会更新 `public/`。
+
 ## AXEL 在线汇报（管理页）
 
 - 管理页：https://axellab.org/axel/admin.html
