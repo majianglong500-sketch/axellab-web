@@ -1,7 +1,7 @@
 {
-  "version": "1.0.37",
-  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.37/AXEL-Setup-1.0.37.exe",
-  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.37/AXEL-Portable-1.0.37.exe",
+  "version": "1.0.38",
+  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.38/AXEL-Setup-1.0.38.exe",
+  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.38/AXEL-Portable-1.0.38.exe",
   "ad": {
     "enabled": false,
     "image": "https://axellab.org/assets/ad/banner.png",
@@ -18,7 +18,7 @@
   },
   "setupUrlAlt": "https://pan.baidu.com/s/1kO-3QbmiWnreMQXiL89LJA?pwd=AXEL",
   "portableUrlAlt": "https://pan.baidu.com/s/1qziXjOXbpf-jaJl7VECJ5Q?pwd=AXEL",
-  "notes": "1.0.37：装修材料并入「材料与单价」分类子集；装修报价独立模板入口；材料按规格折叠、行内选材质；工具箱 CDR 转 X4–X8 与转曲（需本机 CorelDRAW）；其余同 1.0.36。GitHub 与百度网盘安装包/便携版均已更新为 1.0.37。",
+  "notes": "1.0.38：材料库按业务大类重分（板材/广告标识/图文/加工厂/展厅常用/电工/安装/综合服务）；侧栏恢复独立「装修材料库」；CDR 转版本不再卡死界面、另存与错误日志可读；其余同 1.0.37。GitHub 已是 1.0.38；百度网盘安装包/便携版仍为 1.0.37，待本人测完再换。",
   "serialUrlAlt": "https://pan.baidu.com/s/1qMf8D9iNvo7R5zAS8fkaDA?pwd=AXEL",
   "licenseUrlAlt": "https://pan.baidu.com/s/1qMf8D9iNvo7R5zAS8fkaDA?pwd=AXEL"
 }
