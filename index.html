@@ -200,6 +200,7 @@
       var serialHint = root.querySelector("[data-axel-serial-hint]");
       function setLink(a, url) {
         if (!a) return;
+        if (url && !/^https:\/\//i.test(url)) url = ""; // 只接受 https 链接
         if (url) {
           a.href = url;
           a.target = "_blank";

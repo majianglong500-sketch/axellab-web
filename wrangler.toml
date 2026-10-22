@@ -22,8 +22,20 @@ binding = "AXEL_LICENSE"
 id = "82998eac3c844fd28ceefffdace10405"
 preview_id = "1dde93e19c2b4b89b6cbaf1eaddc7432"
 
+# 可选变量：
+#   GITHUB_REPO = "majianglong500-sketch/axellab-web"   # /api/github 代理只放行这个仓库和 /user（默认就是它）
+#   GITHUB_OAUTH_SCOPE                                  # 后台登录申请的 GitHub 权限
+# 本仓库是公开仓库，所以只申请 public_repo：登录令牌改不了你的私有仓库。
+# ⚠ 以后如果把仓库改成私有，要把这里改成 "repo"，否则后台保存会失败。
+[vars]
+GITHUB_OAUTH_SCOPE = "public_repo"
+
 # Secrets（Dashboard 或 wrangler secret put；勿写入仓库）
 # GITHUB_CLIENT_ID
 # GITHUB_CLIENT_SECRET
 # AXEL_ADMIN_TOKEN
-# AXEL_LICENSE_SECRET   （= 软件 scripts/license-secret.local.json 里的 secret，勿公开）
+# AXEL_LICENSE_SECRET   （= 软件 scripts/license-secret.local.json 里的 secret，勿公开；只在服务器上用来生成/校验序列号）
+# AXEL_LICENSE_SIGN_KEY （1.0.35 起：Ed25519 签名私钥，PKCS8 base64；软件里只带对应公钥。没配置时「免费领号」会报错）
+#
+# 可选：一个序列号最多绑几台电脑（默认不限）。需要时取消注释：
+# AXEL_MAX_MACHINES = "3"     ← 写在上面的 [vars] 里
