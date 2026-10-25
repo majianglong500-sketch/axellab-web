@@ -1,7 +1,7 @@
 {
-  "version": "1.0.40",
-  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.40/AXEL-Setup-1.0.40.exe",
-  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.40/AXEL-Portable-1.0.40.exe",
+  "version": "1.0.43",
+  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.43/AXEL-Setup-1.0.43.exe",
+  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.43/AXEL-Portable-1.0.43.exe",
   "ad": {
     "enabled": false,
     "image": "https://axellab.org/assets/ad/banner.png",
@@ -16,9 +16,9 @@
       "side"
     ]
   },
-  "setupUrlAlt": "https://pan.baidu.com/s/1kO-3QbmiWnreMQXiL89LJA?pwd=AXEL",
-  "portableUrlAlt": "https://pan.baidu.com/s/1qziXjOXbpf-jaJl7VECJ5Q?pwd=AXEL",
-  "notes": "1.0.40：图文店默认参数与打印检查清单从设置迁入工具箱「图片打印」；侧栏去掉「装修材料库」，装修作为「材料与单价」内「装修」子集；桌面图标小尺寸更清晰（16–48px 加粗）；其余同 1.0.39（加工计价/DXF/设备工时/阶梯价）。GitHub 已覆盖同版本安装包/便携版；百度网盘安装包/便携版链接未改。",
+  "setupUrlAlt": "",
+  "portableUrlAlt": "",
+  "notes": "1.0.43：AXEL.exe 自有图标与版本信息（桌面/任务栏）；便携换位置可用原位置钥匙解开旧授权；数据防写坏补漏（杀毒/网盘锁文件不当坏文件，全坏时提示）；激活页进入按钮反馈；材料库装修类默认折叠；另含自 1.0.41 起合入的知识库/文案/导图追加报价/出错记录/材料导入等。GitHub 安装包/便携版已更新；百度网盘安装包/便携版链接待老马发来再补。",
   "serialUrlAlt": "https://pan.baidu.com/s/1qMf8D9iNvo7R5zAS8fkaDA?pwd=AXEL",
   "licenseUrlAlt": "https://pan.baidu.com/s/1qMf8D9iNvo7R5zAS8fkaDA?pwd=AXEL"
 }
