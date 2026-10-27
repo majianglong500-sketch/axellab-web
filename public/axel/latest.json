@@ -1,7 +1,7 @@
 {
-  "version": "1.0.43",
-  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.43/AXEL-Setup-1.0.43.exe",
-  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.43/AXEL-Portable-1.0.43.exe",
+  "version": "1.0.44",
+  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.44/AXEL-Setup-1.0.44.exe",
+  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.44/AXEL-Portable-1.0.44.exe",
   "ad": {
     "enabled": false,
     "image": "https://axellab.org/assets/ad/banner.png",
@@ -18,7 +18,7 @@
   },
   "setupUrlAlt": "https://pan.baidu.com/s/14NgeahZx8ffA0RmoKug-qw?pwd=AXEL",
   "portableUrlAlt": "https://pan.baidu.com/s/13wFPq0aENR58vxTe5Fh0Cg?pwd=AXEL",
-  "notes": "1.0.43：AXEL.exe 自有图标与版本信息（桌面/任务栏）；便携换位置可用原位置钥匙解开旧授权；数据防写坏补漏（杀毒/网盘锁文件不当坏文件，全坏时提示）；激活页进入按钮反馈；材料库装修类默认折叠；另含自 1.0.41 起合入的知识库/文案/导图追加报价/出错记录/材料导入等。GitHub 与百度网盘安装包/便携版备用下载均已更新。",
+  "notes": "1.0.44：材料库折叠修复；客户导出不再带草稿/AI 提示；三表 Excel 导回客户名称与金额对齐；文案编辑表格合并/拆分。另含自 1.0.43 起的自有图标与版本信息、便携换位授权、数据防写坏、激活页反馈、知识库/文案/导图追加报价等。GitHub 安装包/便携版已更新；百度网盘备用链接仍为上一版包，待换新包。",
   "serialUrlAlt": "https://pan.baidu.com/s/1qMf8D9iNvo7R5zAS8fkaDA?pwd=AXEL",
   "licenseUrlAlt": "https://pan.baidu.com/s/1qMf8D9iNvo7R5zAS8fkaDA?pwd=AXEL"
 }
