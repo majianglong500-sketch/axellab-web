@@ -18,11 +18,11 @@
   },
   "setupUrlAlt": "https://pan.baidu.com/s/14NgeahZx8ffA0RmoKug-qw?pwd=AXEL",
   "portableUrlAlt": "https://pan.baidu.com/s/13wFPq0aENR58vxTe5Fh0Cg?pwd=AXEL",
-  "notes": "1.0.45：含 #50（旋转页/表单真删字）+#53（编辑预览真删原字，不再盖近色色块）；另含 #51 Excel 缩进一页+#52 图文横稿自动旋转。PDF 改字真正删掉原字并可嵌中文字体搜索复制；「保存」覆盖，「另存为」保留原版。未合入 #54（混排英数真删仍有缺口，下轮修）。GitHub 安装包/便携版已更新；百度网盘备用仍为上一版包，待换新包。",
+  "notes": "1.0.45：含 #50+#53+#54（Type3 混排英数真删字；删不掉的补盖底色；编辑预览真删原字）；另含 #51 Excel 缩进一页+#52 图文横稿自动旋转。PDF 改字真正删掉原字并可嵌中文字体搜索复制；「保存」覆盖，「另存为」保留原版。GitHub 安装包/便携版已同号覆盖更新；百度网盘备用仍为上一版包，待换新包。",
   "serialUrlAlt": "https://pan.baidu.com/s/1qMf8D9iNvo7R5zAS8fkaDA?pwd=AXEL",
   "licenseUrlAlt": "https://pan.baidu.com/s/1qMf8D9iNvo7R5zAS8fkaDA?pwd=AXEL",
-  "setupSha256": "9af06cb4521985136ff964d9237326b338b0a39a2c07995964797a0f342c8d6c",
-  "portableSha256": "c8ee1042374a6ed85cb09f62bb61b279a6075590d75fa491d057271aa3a174c6",
-  "setupSize": 78549967,
-  "portableSize": 78250285
+  "setupSha256": "e4fae2b690d5804c1f08bf8b7afdb5c8bd485656ee0a64a767459d72ba7f35e7",
+  "portableSha256": "adcd5c2afb0dcdef73a9e152c316cfa147b644683b5d0f349c3e7c780a27db0b",
+  "setupSize": 78551140,
+  "portableSize": 78251448
 }
