@@ -18,7 +18,11 @@
   },
   "setupUrlAlt": "https://pan.baidu.com/s/14NgeahZx8ffA0RmoKug-qw?pwd=AXEL",
   "portableUrlAlt": "https://pan.baidu.com/s/13wFPq0aENR58vxTe5Fh0Cg?pwd=AXEL",
-  "notes": "1.0.45：PDF 改字真正删掉原字（复制/搜索不再出现旧字）；新字用本机中文字体写入，能搜索、复制；「保存」覆盖，「另存为」保留原版。另含自 1.0.44 起的材料库折叠、客户导出、三表对齐、文案表格合并拆分等。GitHub 安装包/便携版已更新；百度网盘备用仍为上一版包，待换新包。",
+  "notes": "1.0.45：含 #50（旋转页/表单真删字）+#53（编辑预览真删原字，不再盖近色色块）；另含 #51 Excel 缩进一页+#52 图文横稿自动旋转。PDF 改字真正删掉原字并可嵌中文字体搜索复制；「保存」覆盖，「另存为」保留原版。未合入 #54（混排英数真删仍有缺口，下轮修）。GitHub 安装包/便携版已更新；百度网盘备用仍为上一版包，待换新包。",
   "serialUrlAlt": "https://pan.baidu.com/s/1qMf8D9iNvo7R5zAS8fkaDA?pwd=AXEL",
-  "licenseUrlAlt": "https://pan.baidu.com/s/1qMf8D9iNvo7R5zAS8fkaDA?pwd=AXEL"
+  "licenseUrlAlt": "https://pan.baidu.com/s/1qMf8D9iNvo7R5zAS8fkaDA?pwd=AXEL",
+  "setupSha256": "9af06cb4521985136ff964d9237326b338b0a39a2c07995964797a0f342c8d6c",
+  "portableSha256": "c8ee1042374a6ed85cb09f62bb61b279a6075590d75fa491d057271aa3a174c6",
+  "setupSize": 78549967,
+  "portableSize": 78250285
 }
