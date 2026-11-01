@@ -18,11 +18,11 @@
   },
   "setupUrlAlt": "https://pan.baidu.com/s/14NgeahZx8ffA0RmoKug-qw?pwd=AXEL",
   "portableUrlAlt": "https://pan.baidu.com/s/13wFPq0aENR58vxTe5Fh0Cg?pwd=AXEL",
-  "notes": "1.0.45：含 #50+#53+#54（Type3 混排英数真删字；删不掉的补盖底色；编辑预览真删原字）；另含 #51 Excel 缩进一页+#52 图文横稿自动旋转。PDF 改字真正删掉原字并可嵌中文字体搜索复制；「保存」覆盖，「另存为」保留原版。GitHub 安装包/便携版已同号覆盖更新；百度网盘备用仍为上一版包，待换新包。",
+  "notes": "1.0.45：含 #55 CDR 转版本 PowerShell 修复（$label: → InvalidVariableReferenceWithDrive）；另含 #50+#53+#54（Type3 混排英数真删字；删不掉的补盖底色；编辑预览真删原字）与 #51+#52。PDF 改字真正删掉原字并可嵌中文字体搜索复制；「保存」覆盖，「另存为」保留原版。GitHub 安装包/便携版已同号覆盖更新；百度网盘备用仍为上一版包，待换新包。",
   "serialUrlAlt": "https://pan.baidu.com/s/1qMf8D9iNvo7R5zAS8fkaDA?pwd=AXEL",
   "licenseUrlAlt": "https://pan.baidu.com/s/1qMf8D9iNvo7R5zAS8fkaDA?pwd=AXEL",
-  "setupSha256": "e4fae2b690d5804c1f08bf8b7afdb5c8bd485656ee0a64a767459d72ba7f35e7",
-  "portableSha256": "adcd5c2afb0dcdef73a9e152c316cfa147b644683b5d0f349c3e7c780a27db0b",
-  "setupSize": 78551140,
-  "portableSize": 78251448
+  "setupSha256": "1b83e47e60e2a0789481b3e822391360d8318cc8b2da73a83c08ed66d437666a",
+  "portableSha256": "ee7a20acbdd9d9f0967984711e4f3dba9ee0947e0454cc0b17312fb3deb8fbf2",
+  "setupSize": 78551107,
+  "portableSize": 78251419
 }
