@@ -1,7 +1,7 @@
 {
-  "version": "1.0.48",
-  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.48/AXEL-Setup-1.0.48.exe",
-  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.48/AXEL-Portable-1.0.48.exe",
+  "version": "1.0.49",
+  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.49/AXEL-Setup-1.0.49.exe",
+  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.49/AXEL-Portable-1.0.49.exe",
   "ad": {
     "enabled": false,
     "image": "https://axellab.org/assets/ad/banner.png",
@@ -18,11 +18,11 @@
   },
   "setupUrlAlt": "https://pan.baidu.com/s/14NgeahZx8ffA0RmoKug-qw?pwd=AXEL",
   "portableUrlAlt": "https://pan.baidu.com/s/13wFPq0aENR58vxTe5Fh0Cg?pwd=AXEL",
-  "notes": "1.0.48：CDR 转曲 PDF 不依赖本机 Corel（Inkscape 导出文字转路径；首次可下载约 105MB 便携包，GPL）。含 1.0.47 PDF 改字优先用原嵌字体（#58）与 1.0.46 叠层字分开删改等。GitHub 安装包/便携版已发；百度网盘备用仍为旧包，待老马确认后再换。",
+  "notes": "1.0.49：PDF 改字并进文案编辑（字体框/字号同一套）+ 叠层「换一层」（#61/#62）。含 1.0.48 CDR 转曲 PDF 不依赖本机 Corel。GitHub 安装包/便携版已发；百度网盘备用仍为旧包，待老马确认后再换。",
   "serialUrlAlt": "https://pan.baidu.com/s/1qMf8D9iNvo7R5zAS8fkaDA?pwd=AXEL",
   "licenseUrlAlt": "https://pan.baidu.com/s/1qMf8D9iNvo7R5zAS8fkaDA?pwd=AXEL",
-  "setupSha256": "abd873e93f5d512c6c1799650c1a8c7f9182c1393feb15eef782ea60d2efb15f",
-  "portableSha256": "3dffcd90cbc26ebb36fd55f10af36b618f66feccdb4ca6384cb7ef9cd491f407",
-  "setupSize": 78569752,
-  "portableSize": 78270053
+  "setupSha256": "76c004b93f0ffac2c9a830825869fe2b55d76ddd10072584cad187bed71f436a",
+  "portableSha256": "2f18176dd5a7fed8ea2c88696a256ac0bb29fd0b751fb9c3781bc1f61160f707",
+  "setupSize": 78577527,
+  "portableSize": 78277767
 }
