@@ -1,7 +1,7 @@
 {
-  "version": "1.0.51",
-  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.51/AXEL-Setup-1.0.51.exe",
-  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.51/AXEL-Portable-1.0.51.exe",
+  "version": "1.0.54",
+  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.54/AXEL-Setup-1.0.54.exe",
+  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.54/AXEL-Portable-1.0.54.exe",
   "ad": {
     "enabled": false,
     "image": "https://axellab.org/assets/ad/banner.png",
@@ -16,13 +16,13 @@
       "side"
     ]
   },
-  "setupUrlAlt": "https://pan.baidu.com/s/1Xq5cPKxnAl4LsgNcbD2Meg?pwd=AXEL",
-  "portableUrlAlt": "https://pan.baidu.com/s/1PL3S2x9ov-b0-XvTBND9AQ?pwd=AXEL",
-  "notes": "1.0.51：PDF 改字字像图层一样拖动（#67）。含 1.0.50 文案编辑工具条 + 字体名乱码修复。GitHub 安装包/便携版与百度网盘备用均已是本版。",
+  "setupUrlAlt": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.54/AXEL-Setup-1.0.54.exe",
+  "portableUrlAlt": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.54/AXEL-Portable-1.0.54.exe",
+  "notes": "1.0.54 测试版：文案编辑对标 WPS——Word 打开再存回不走样（兼容模式、孤行控制）；页眉靠左/居中/靠右、首页不同（封面不出页眉页脚，或另写封面页眉如「投标文件」）；只放分页符的段落不再多空行；打印和导出 PDF 一模一样（页眉页脚页码都在）；页边距不再四舍五入、项目符号不再显示方框；水印（编辑区/PDF/打印/Word 一样）；横竖页混排（Word 存回、编辑区、PDF、打印按每节方向，可插「分节：下一页起横向/纵向」）；修长文 PDF 比编辑区多一页。文案目录下一版。百度网盘暂未更新，请用安装包或便携版。",
   "serialUrlAlt": "https://pan.baidu.com/s/1qMf8D9iNvo7R5zAS8fkaDA?pwd=AXEL",
   "licenseUrlAlt": "https://pan.baidu.com/s/1qMf8D9iNvo7R5zAS8fkaDA?pwd=AXEL",
-  "setupSha256": "5dcfa41f52e9ea076e0d21e45d412d68cec0e2b44b4fbcbf62c2d080930847d3",
-  "portableSha256": "6d324508a6c9ffb742851f92c19697336ad4588c715f1261cfe7a7a95a93fea0",
-  "setupSize": 78584083,
-  "portableSize": 69541694
+  "setupSha256": "663ffae693a831367a033b3deeea50ca615928582c027b03f7df41c3ea3e8683",
+  "portableSha256": "f7bff1e3bb0b54467aee92283f076445fe8cc20c51695d92ea9d506cfec97793",
+  "setupSize": 78591985,
+  "portableSize": 78292199
 }
