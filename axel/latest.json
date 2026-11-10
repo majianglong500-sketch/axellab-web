@@ -1,7 +1,7 @@
 {
-  "version": "1.0.58",
-  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.58/AXEL-Setup-1.0.58.exe",
-  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.58/AXEL-Portable-1.0.58.exe",
+  "version": "1.0.59",
+  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.59/AXEL-Setup-1.0.59.exe",
+  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.59/AXEL-Portable-1.0.59.exe",
   "ad": {
     "enabled": false,
     "image": "https://axellab.org/assets/ad/banner.png",
@@ -16,13 +16,13 @@
       "side"
     ]
   },
-  "setupUrlAlt": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.58/AXEL-Setup-1.0.58.exe",
-  "portableUrlAlt": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.58/AXEL-Portable-1.0.58.exe",
-  "notes": "1.0.58 测试版：本次修了 Word 页整页扫描图导出 PDF 多出空白页的问题（一张图最高一页、按比例缩小，已经放进去的图打开和导出也会生效），并加了「插入 → 页面 → 删除页」（默认删光标所在页，先告诉这页上有什么；跨页的段落、表格和分节符不删，可撤销）。另外还包含：删开票类型不串票——删掉中间一种后，选专票的还是专票，没改过的报价也不会突然显示「有未保存改动」。记收款时金额带 ¥ 或「元」也认；比还没收的多、已收齐或填了负数，先问一句再记，防多打一个 0。删报价时，成交过或记过收款的先建议改成作废，删掉的编号不再给下一张用。首页新增待办：报价发出超过 3 天没回音提醒跟进，成交后钱没收齐提醒催收，超过 30 天标红。Word 页换成菜单栏（文件 / 开始 / 插入 / 设计 / 布局），设计栏可一键换样式集（简约 / 公文 / 商务）、段落间距和水印。分节中间只有空行的一节会提示，导出前问要不要删。「增加缩进」存进 Word 不再顶格，网址、邮箱存成真链接。版权改为「本软件免费使用」，侧栏「文案编辑」改名 Word。已装过 1.0.58 的检查更新可能不会自动提示，需再下一遍。百度网盘暂未更新，请用安装包或便携版。",
+  "setupUrlAlt": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.59/AXEL-Setup-1.0.59.exe",
+  "portableUrlAlt": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.59/AXEL-Portable-1.0.59.exe",
+  "notes": "1.0.59 测试版：图文店打印加了图片就能在右边看到排出来的样子，不用先点「生成」。改纸张、尺寸、出血、间距、方向，或在「调整」里改裁切位置，预览跟着变。预览下面写共几页、几件、每页几乘几、利用率和预计应收（张数 × 份数 × 单价）。预览按纸张横竖显示；黑白预设预览也是黑白。点「生成」后预览换成生成出来的文件。六寸冲印、A4 打印的文件名改叫「图片打印_…」，只有证件照才叫证件拼版。本包也包含 1.0.58：Word 整页扫描图导出不再多出空白页，并加了「插入 → 页面 → 删除页」。正式版仍是 1.0.51。百度网盘暂未更新，请用安装包或便携版。",
   "serialUrlAlt": "https://pan.baidu.com/s/1qMf8D9iNvo7R5zAS8fkaDA?pwd=AXEL",
   "licenseUrlAlt": "https://pan.baidu.com/s/1qMf8D9iNvo7R5zAS8fkaDA?pwd=AXEL",
-  "setupSha256": "8d4f8b7234f6df017a020f64155abc8bbebcfe258898c013fbee74d4adf8ff5d",
-  "portableSha256": "f772d31210a23481ba56e30ffcc41a8f0323d8d16c8b49ede9899839512645d2",
-  "setupSize": 78600817,
-  "portableSize": 78300819
+  "setupSha256": "dfca0dae232fb7507cee2a2124fed27d4604df2b1c959cdcd37e4ddf87ef078f",
+  "portableSha256": "344373210afce535b34420e4fd76821ec3448172536019f9450f3f7ab736a8e7",
+  "setupSize": 78600497,
+  "portableSize": 78300763
 }
