@@ -1,7 +1,7 @@
 {
-  "version": "1.0.56",
-  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.56/AXEL-Setup-1.0.56.exe",
-  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.56/AXEL-Portable-1.0.56.exe",
+  "version": "1.0.57",
+  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.57/AXEL-Setup-1.0.57.exe",
+  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.57/AXEL-Portable-1.0.57.exe",
   "ad": {
     "enabled": false,
     "image": "https://axellab.org/assets/ad/banner.png",
@@ -16,13 +16,13 @@
       "side"
     ]
   },
-  "setupUrlAlt": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.56/AXEL-Setup-1.0.56.exe",
-  "portableUrlAlt": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.56/AXEL-Portable-1.0.56.exe",
-  "notes": "1.0.56 测试版：Word 多级编号「一、」「（一）」「1.」对齐悬挂缩进；Word 文本框保住方框；脚注不丢（存回还是真脚注），原文有修订/批注时打开提醒；页眉可加公司 Logo（编辑区/PDF/打印/Word 一样）；PDF 浏览 Ctrl+滚轮缩放。图文加工：「每件出血」和纸边留白分开，角线对准成品边、不压相邻成品；每张图可「调整」裁切位置和方向，改参数张数实时变；拼版可选统一宽度/长边/短边/按图片自带尺寸。百度网盘暂未更新，请用安装包或便携版。",
+  "setupUrlAlt": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.57/AXEL-Setup-1.0.57.exe",
+  "portableUrlAlt": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.57/AXEL-Portable-1.0.57.exe",
+  "notes": "1.0.57 测试版：套模板和分项选材料时，单价按这一行的单位取，不再把「元/张」填进按㎡算的行；老报价里带错的会在内部核算里标红。合同「其他约定」不再重复写付款、工期、质保、税费、报价有效期。分节符被挤到下一页时不再压正文、线不超出纸边。Word 尾注存回去还是尾注。材料库搜索名称对得上的排前面，空格可同时搜几个词。记了收款、这单还是草稿或已发送时，可以一键标为已成交；统计卡片写明「累计成交率」。百度网盘暂未更新，请用安装包或便携版。",
   "serialUrlAlt": "https://pan.baidu.com/s/1qMf8D9iNvo7R5zAS8fkaDA?pwd=AXEL",
   "licenseUrlAlt": "https://pan.baidu.com/s/1qMf8D9iNvo7R5zAS8fkaDA?pwd=AXEL",
-  "setupSha256": "0cc9732781857e2176a941327331ae65c2a828417675adee900a5d6b13f712af",
-  "portableSha256": "2f9e1059aa21f8f31b137926c7da68edf35382a7a31a08658c49c40ce31a604e",
-  "setupSize": 78579224,
-  "portableSize": 78279320
+  "setupSha256": "0ebecf62c6e2af163250d920685b755addb7be39051ec24298951a1482c836af",
+  "portableSha256": "35f38988bfdce83548b49c1b77c7ee83240318e3e3d40616c3cbeca66df21da0",
+  "setupSize": 78582373,
+  "portableSize": 78282503
 }
