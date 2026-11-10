@@ -1,7 +1,7 @@
 {
-  "version": "1.0.55",
-  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.55/AXEL-Setup-1.0.55.exe",
-  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.55/AXEL-Portable-1.0.55.exe",
+  "version": "1.0.56",
+  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.56/AXEL-Setup-1.0.56.exe",
+  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.56/AXEL-Portable-1.0.56.exe",
   "ad": {
     "enabled": false,
     "image": "https://axellab.org/assets/ad/banner.png",
@@ -16,13 +16,13 @@
       "side"
     ]
   },
-  "setupUrlAlt": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.55/AXEL-Setup-1.0.55.exe",
-  "portableUrlAlt": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.55/AXEL-Portable-1.0.55.exe",
-  "notes": "1.0.55 测试版（1.0.54 修复版）：文案目录（插入后自动更新页码、PDF 里能点、存 Word 是真目录域，Word 里没结尾的目录不再吞正文）；Ctrl+滚轮缩放纸面（以鼠标为中心，Ctrl+0 复原）；PDF 浏览横版放大后左右都能滚到；横竖混排不再多出一页空白竖版，分节插在光标段后面，页眉按每页的纸。图文加工：选好预设再添加文件参数不再被冲回默认；一寸照打出来方向正确（人像跟着格子转、竖图偏上裁）；拼版转 90° 的图不再拉伸；混合拼版放不下的排到下一张。每件出血/裁切位置调整下一版。百度网盘暂未更新，请用安装包或便携版。",
+  "setupUrlAlt": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.56/AXEL-Setup-1.0.56.exe",
+  "portableUrlAlt": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.56/AXEL-Portable-1.0.56.exe",
+  "notes": "1.0.56 测试版：Word 多级编号「一、」「（一）」「1.」对齐悬挂缩进；Word 文本框保住方框；脚注不丢（存回还是真脚注），原文有修订/批注时打开提醒；页眉可加公司 Logo（编辑区/PDF/打印/Word 一样）；PDF 浏览 Ctrl+滚轮缩放。图文加工：「每件出血」和纸边留白分开，角线对准成品边、不压相邻成品；每张图可「调整」裁切位置和方向，改参数张数实时变；拼版可选统一宽度/长边/短边/按图片自带尺寸。百度网盘暂未更新，请用安装包或便携版。",
   "serialUrlAlt": "https://pan.baidu.com/s/1qMf8D9iNvo7R5zAS8fkaDA?pwd=AXEL",
   "licenseUrlAlt": "https://pan.baidu.com/s/1qMf8D9iNvo7R5zAS8fkaDA?pwd=AXEL",
-  "setupSha256": "a1fe4502098431b4943255298651f6f10799042c13e8c056381c6795143dc6ec",
-  "portableSha256": "47ad62ee0321644eb184e19c15770ec30bf5298fabdfe5a41b27be2714384dc2",
-  "setupSize": 78586424,
-  "portableSize": 78286477
+  "setupSha256": "0cc9732781857e2176a941327331ae65c2a828417675adee900a5d6b13f712af",
+  "portableSha256": "2f9e1059aa21f8f31b137926c7da68edf35382a7a31a08658c49c40ce31a604e",
+  "setupSize": 78579224,
+  "portableSize": 78279320
 }
