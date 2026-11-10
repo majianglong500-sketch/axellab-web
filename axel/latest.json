@@ -1,7 +1,7 @@
 {
-  "version": "1.0.57",
-  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.57/AXEL-Setup-1.0.57.exe",
-  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.57/AXEL-Portable-1.0.57.exe",
+  "version": "1.0.58",
+  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.58/AXEL-Setup-1.0.58.exe",
+  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.58/AXEL-Portable-1.0.58.exe",
   "ad": {
     "enabled": false,
     "image": "https://axellab.org/assets/ad/banner.png",
@@ -16,13 +16,13 @@
       "side"
     ]
   },
-  "setupUrlAlt": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.57/AXEL-Setup-1.0.57.exe",
-  "portableUrlAlt": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.57/AXEL-Portable-1.0.57.exe",
-  "notes": "1.0.57 测试版：套模板和分项选材料时，单价按这一行的单位取，不再把「元/张」填进按㎡算的行；老报价里带错的会在内部核算里标红。合同「其他约定」不再重复写付款、工期、质保、税费、报价有效期。分节符被挤到下一页时不再压正文、线不超出纸边。Word 尾注存回去还是尾注。材料库搜索名称对得上的排前面，空格可同时搜几个词。记了收款、这单还是草稿或已发送时，可以一键标为已成交；统计卡片写明「累计成交率」。百度网盘暂未更新，请用安装包或便携版。",
+  "setupUrlAlt": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.58/AXEL-Setup-1.0.58.exe",
+  "portableUrlAlt": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.58/AXEL-Portable-1.0.58.exe",
+  "notes": "1.0.58 测试版：记收款时金额带 ¥ 或「元」也认；比还没收的多、已收齐或填了负数，先问一句再记，防多打一个 0。删报价时，成交过或记过收款的先建议改成作废，删掉的编号不再给下一张用。首页新增待办：报价发出超过 3 天没回音提醒跟进，成交后钱没收齐提醒催收，超过 30 天标红。Word 页换成菜单栏（文件 / 开始 / 插入 / 设计 / 布局），设计栏可一键换样式集（简约 / 公文 / 商务）、段落间距和水印。分节中间只有空行的一节会提示，导出前问要不要删。「增加缩进」存进 Word 不再顶格，网址、邮箱存成真链接。版权改为「本软件免费使用」，侧栏「文案编辑」改名 Word。百度网盘暂未更新，请用安装包或便携版。",
   "serialUrlAlt": "https://pan.baidu.com/s/1qMf8D9iNvo7R5zAS8fkaDA?pwd=AXEL",
   "licenseUrlAlt": "https://pan.baidu.com/s/1qMf8D9iNvo7R5zAS8fkaDA?pwd=AXEL",
-  "setupSha256": "0ebecf62c6e2af163250d920685b755addb7be39051ec24298951a1482c836af",
-  "portableSha256": "35f38988bfdce83548b49c1b77c7ee83240318e3e3d40616c3cbeca66df21da0",
-  "setupSize": 78582373,
-  "portableSize": 78282503
+  "setupSha256": "ab387400bd9629634af87cf1e70f001b6c539742b32b7687afb9827b482ed5fb",
+  "portableSha256": "4c946beb693ef9dfb06290717566aa355f9c6a2c1e2dd10429aa9e9b635c9f98",
+  "setupSize": 78599419,
+  "portableSize": 78299420
 }
