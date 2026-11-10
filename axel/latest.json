@@ -1,7 +1,7 @@
 {
-  "version": "1.0.59",
-  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.59/AXEL-Setup-1.0.59.exe",
-  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.59/AXEL-Portable-1.0.59.exe",
+  "version": "1.0.60",
+  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.60/AXEL-Setup-1.0.60.exe",
+  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.60/AXEL-Portable-1.0.60.exe",
   "ad": {
     "enabled": false,
     "image": "https://axellab.org/assets/ad/banner.png",
@@ -16,13 +16,13 @@
       "side"
     ]
   },
-  "setupUrlAlt": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.59/AXEL-Setup-1.0.59.exe",
-  "portableUrlAlt": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.59/AXEL-Portable-1.0.59.exe",
-  "notes": "1.0.59 测试版：图文店打印加了图片就能在右边看到排出来的样子，不用先点「生成」。改纸张、尺寸、出血、间距、方向，或在「调整」里改裁切位置，预览跟着变。预览下面写共几页、几件、每页几乘几、利用率和预计应收（张数 × 份数 × 单价）。预览按纸张横竖显示；黑白预设预览也是黑白。点「生成」后预览换成生成出来的文件。六寸冲印、A4 打印的文件名改叫「图片打印_…」，只有证件照才叫证件拼版。本包也包含 1.0.58：Word 整页扫描图导出不再多出空白页，并加了「插入 → 页面 → 删除页」。正式版仍是 1.0.51。百度网盘暂未更新，请用安装包或便携版。",
+  "setupUrlAlt": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.60/AXEL-Setup-1.0.60.exe",
+  "portableUrlAlt": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.60/AXEL-Portable-1.0.60.exe",
+  "notes": "1.0.60 测试版：图文店打印——每张图可单独设份数，证件照两个人各排一张纸，点预览能看大图；「调整」里可以同比拉亮框或自由拉伸，预设卡片标毫米尺寸，拼版预览旁可选纸张；二寸证件照一张排 8 个（以前只排 4 个，纸边留白从 2mm 收到 1mm），一寸仍是 12 个。打印 PDF 的应收按页数算（以前 10 页只收 1 张的钱），双面按每个文件各自的纸张数，右边能预览第一页和页数。Word「文件」菜单加了「新建」，编辑页右上角可以关闭当前文档。本包也包含 1.0.59：加图即可预览，改参数/裁切跟着变。正式版仍是 1.0.51。百度网盘暂未更新，请用安装包或便携版。",
   "serialUrlAlt": "https://pan.baidu.com/s/1qMf8D9iNvo7R5zAS8fkaDA?pwd=AXEL",
   "licenseUrlAlt": "https://pan.baidu.com/s/1qMf8D9iNvo7R5zAS8fkaDA?pwd=AXEL",
-  "setupSha256": "dfca0dae232fb7507cee2a2124fed27d4604df2b1c959cdcd37e4ddf87ef078f",
-  "portableSha256": "344373210afce535b34420e4fd76821ec3448172536019f9450f3f7ab736a8e7",
-  "setupSize": 78600497,
-  "portableSize": 78300763
+  "setupSha256": "767f0c5d7ac429e792d9ea24a1f65765cdacda6b001cdec03b60d36f9404a87a",
+  "portableSha256": "2e85c4c58d55b59650e079f10df40d497dffcc7221557308c089a50238447832",
+  "setupSize": 78604126,
+  "portableSize": 78304066
 }
