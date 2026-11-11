@@ -16,9 +16,9 @@
       "side"
     ]
   },
-  "setupUrlAlt": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.62/AXEL-Setup-1.0.62.exe",
-  "portableUrlAlt": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.62/AXEL-Portable-1.0.62.exe",
-  "notes": "1.0.62 测试版：混合模板排整齐、每人各排一套，点「预估」按套数算张数（#123）。报价可以按重量（长度×米重）、按定尺根数（零头买整根）、按涂布率（面积÷涂布率×遍数）算料（#124）。本包也包含 1.0.61、1.0.60。正式版仍是 1.0.51。百度网盘暂未更新，请用安装包或便携版。",
+  "setupUrlAlt": "https://pan.baidu.com/s/1sPFspKu0pZSIsH54Whm08g?pwd=AXEL",
+  "portableUrlAlt": "https://pan.baidu.com/s/1VgLeRPGXefkmttqdAyn3MQ?pwd=AXEL",
+  "notes": "1.0.62 测试版：混合模板排整齐、每人各排一套，点「预估」按套数算张数（#123）。报价可以按重量（长度×米重）、按定尺根数（零头买整根）、按涂布率（面积÷涂布率×遍数）算料（#124）。本包也包含 1.0.61、1.0.60。正式版仍是 1.0.51。GitHub 安装包/便携版与百度网盘备用均已是本版。",
   "serialUrlAlt": "https://pan.baidu.com/s/1qMf8D9iNvo7R5zAS8fkaDA?pwd=AXEL",
   "licenseUrlAlt": "https://pan.baidu.com/s/1qMf8D9iNvo7R5zAS8fkaDA?pwd=AXEL",
   "setupSha256": "4bfd985341555dbae83caf38192ac41f3884a424c7ab7edb29754f126166e359",
