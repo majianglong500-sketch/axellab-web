@@ -16,9 +16,9 @@
       "side"
     ]
   },
-  "setupUrlAlt": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.61/AXEL-Setup-1.0.61.exe",
-  "portableUrlAlt": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.61/AXEL-Portable-1.0.61.exe",
-  "notes": "1.0.61 测试版：图文店打印——改「份数」后应收马上跟着变，「预估」和预览、生成用同一套计数；一次打多个 PDF 有的没打成时按实际打成的页数记账；纸边留白自动收到 1mm 时各处写明实际留白。冲印照片排 A4/A3 可横竖混排：六寸排 A4 从 2 张变 3 张、A3 从 4 张变 6 张，证件照仍整齐排（一寸 12、二寸 8）。文档预设换纸成品跟着换。「更多参数」里调好的纸张、尺寸、留白、单双面、黑白、单价可以保存到预设，也能恢复默认；新增单价 ¥/张。本包也包含 1.0.60、1.0.59。正式版仍是 1.0.51。百度网盘暂未更新，请用安装包或便携版。",
+  "setupUrlAlt": "https://pan.baidu.com/s/12Eaw-TZF_6nWBZ6tWCTKcw?pwd=AXEL",
+  "portableUrlAlt": "https://pan.baidu.com/s/1kUzyJfNb4jWpszJ0PcMuxw?pwd=AXEL",
+  "notes": "1.0.61 测试版：图文店打印——改「份数」后应收马上跟着变，「预估」和预览、生成用同一套计数；一次打多个 PDF 有的没打成时按实际打成的页数记账；纸边留白自动收到 1mm 时各处写明实际留白。冲印照片排 A4/A3 可横竖混排：六寸排 A4 从 2 张变 3 张、A3 从 4 张变 6 张，证件照仍整齐排（一寸 12、二寸 8）。文档预设换纸成品跟着换。「更多参数」里调好的纸张、尺寸、留白、单双面、黑白、单价可以保存到预设，也能恢复默认；新增单价 ¥/张。本包也包含 1.0.60、1.0.59。正式版仍是 1.0.51。GitHub 安装包/便携版与百度网盘备用均已是本版。",
   "serialUrlAlt": "https://pan.baidu.com/s/1qMf8D9iNvo7R5zAS8fkaDA?pwd=AXEL",
   "licenseUrlAlt": "https://pan.baidu.com/s/1qMf8D9iNvo7R5zAS8fkaDA?pwd=AXEL",
   "setupSha256": "59abafe5529bcfb998fcc7198c70e20c26f9ed3a8906e0cd2433067bea9acd70",
