@@ -1,7 +1,7 @@
 {
-  "version": "1.0.63",
-  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.63/AXEL-Setup-1.0.63.exe",
-  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.63/AXEL-Portable-1.0.63.exe",
+  "version": "1.0.64",
+  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.64/AXEL-Setup-1.0.64.exe",
+  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.64/AXEL-Portable-1.0.64.exe",
   "ad": {
     "enabled": false,
     "image": "https://axellab.org/assets/ad/banner.png",
@@ -16,16 +16,16 @@
       "side"
     ]
   },
-  "setupUrlAlt": "https://pan.baidu.com/s/1yDzOtTG8wrqtpNu6v7JEgw?pwd=AXEL",
-  "portableUrlAlt": "https://pan.baidu.com/s/1Cdut5VoCPmGHjU4eQpsS_A?pwd=AXEL",
-  "panUrl": "https://pan.baidu.com/s/1yDzOtTG8wrqtpNu6v7JEgw?pwd=AXEL",
+  "setupUrlAlt": "https://pan.baidu.com/s/1HO2gtX6nHnjh7TcntX6Qrw?pwd=AXEL",
+  "portableUrlAlt": "https://pan.baidu.com/s/1eKx6etA6geLGsNEPqYpgqg?pwd=AXEL",
+  "panUrl": "https://pan.baidu.com/s/1HO2gtX6nHnjh7TcntX6Qrw?pwd=AXEL",
   "panCode": "AXEL",
   "panName": "百度网盘",
-  "notes": "1.0.63 测试版：图文店「调整」里同比/自由拉伸改为缩放图本身，可填毫米（#125）。安装包和便携版已自带 LibreDWG 0.14，打开即可处理 DWG，不必再解压支持包；本机有 ODA 仍优先用 ODA（#126）。CDR 转版本不需要本机 Corel，主界面可转到 X4～X8、老版本可开（只改版本标记，不是原生转换；#127）。本包也包含 1.0.62。正式版仍是 1.0.51。GitHub 安装包/便携版与百度网盘备用均已是本版。",
+  "notes": "1.0.64 测试版：侧栏「局域网通讯」可在同一网络发消息，并带与「AXEL 共享」兼容的文件共享（#133、#134）。修了 Win10 桌面/任务栏图标空白：小图标改为系统能认的格式，并避免安装说明过长挤乱快捷方式（#135、#136）。Word 开始/插入/绘图/布局补了常用功能（#128–#130）。CDR 工具改成短说明（#131）。图文店按设定的印出尺寸排版，并按份数排满（#132）。本包也包含 1.0.63。正式版仍是 1.0.51。GitHub 安装包/便携版与百度网盘备用均已是本版。",
   "serialUrlAlt": "https://pan.baidu.com/s/1qMf8D9iNvo7R5zAS8fkaDA?pwd=AXEL",
   "licenseUrlAlt": "https://pan.baidu.com/s/1qMf8D9iNvo7R5zAS8fkaDA?pwd=AXEL",
-  "setupSha256": "b76db8ceab55c47665539d0b4cac3534869bff9dfa78636e471d20598ac98f3d",
-  "portableSha256": "fbf0a6761e40d4d90d0eb386f4308a3692c86bb53c3ccea04e99e66b00fd6c2b",
-  "setupSize": 81931679,
-  "portableSize": 81631800
+  "setupSha256": "37b58a94d103b03f00f0ac26f3f3f819768d24f4fc9d16db1206d108abc09eb6",
+  "portableSha256": "982d4bbd59f49bb8b29ba60c0eb69027397d8fe58fa4222698c6d42c5f7b6a79",
+  "setupSize": 81991684,
+  "portableSize": 81702665
 }
