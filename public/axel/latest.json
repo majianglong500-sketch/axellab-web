@@ -16,16 +16,16 @@
       "side"
     ]
   },
-  "setupUrlAlt": "https://pan.baidu.com/s/1HO2gtX6nHnjh7TcntX6Qrw?pwd=AXEL",
-  "portableUrlAlt": "https://pan.baidu.com/s/1eKx6etA6geLGsNEPqYpgqg?pwd=AXEL",
-  "panUrl": "https://pan.baidu.com/s/1HO2gtX6nHnjh7TcntX6Qrw?pwd=AXEL",
+  "setupUrlAlt": "https://pan.baidu.com/s/1nW0qg2Wyt4-QiWJyE9dXQQ?pwd=AXEL",
+  "portableUrlAlt": "https://pan.baidu.com/s/1RiO7l6H88HzmB9sse093pg?pwd=AXEL",
+  "panUrl": "https://pan.baidu.com/s/1nW0qg2Wyt4-QiWJyE9dXQQ?pwd=AXEL",
   "panCode": "AXEL",
   "panName": "百度网盘",
-  "notes": "1.0.64 测试版：侧栏「局域网通讯」可在同一网络发消息，并带与「AXEL 共享」兼容的文件共享（#133、#134）。修了 Win10 桌面/任务栏图标空白：小图标改为系统能认的格式，并避免安装说明过长挤乱快捷方式（#135、#136）。Word 开始/插入/绘图/布局补了常用功能（#128–#130）。CDR 工具改成短说明（#131）。图文店按设定的印出尺寸排版，并按份数排满（#132）。本包也包含 1.0.63。正式版仍是 1.0.51。GitHub 安装包/便携版与百度网盘备用均已是本版。",
+  "notes": "1.0.64 测试版（重打）：修好局域网通讯 / 文件共享点开卡顿和搜不到共享盘（不再整读报价库、按真网卡网段广播、防火墙跟着软件位置走、重连盘符不叠）；CDR 工具页先出界面再检测；不让把软件自己的报价数据目录共享出去；Word 增加表格底纹 / 框线和「×金额」、导航窗格（默认关）。本包也包含此前 1.0.64 内容。正式版仍是 1.0.51。GitHub 安装包/便携版与百度网盘备用均已是本版。",
   "serialUrlAlt": "https://pan.baidu.com/s/1qMf8D9iNvo7R5zAS8fkaDA?pwd=AXEL",
   "licenseUrlAlt": "https://pan.baidu.com/s/1qMf8D9iNvo7R5zAS8fkaDA?pwd=AXEL",
-  "setupSha256": "37b58a94d103b03f00f0ac26f3f3f819768d24f4fc9d16db1206d108abc09eb6",
-  "portableSha256": "982d4bbd59f49bb8b29ba60c0eb69027397d8fe58fa4222698c6d42c5f7b6a79",
-  "setupSize": 81991684,
-  "portableSize": 81702665
+  "setupSha256": "89f8a51e337494665cf1376b759a3dd4a07b8052f1be6e864f4051e65a22619f",
+  "portableSha256": "93788dbe4fc3cc4efa0845aaab03f0a184fe577b03b6a92ea044ad4a856d24d5",
+  "setupSize": 82032128,
+  "portableSize": 81743110
 }
