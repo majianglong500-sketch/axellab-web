@@ -1,7 +1,7 @@
 {
-  "version": "1.0.64",
-  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.64/AXEL-Setup-1.0.64.exe",
-  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.64/AXEL-Portable-1.0.64.exe",
+  "version": "1.0.65",
+  "setupUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.65/AXEL-Setup-1.0.65.exe",
+  "portableUrl": "https://github.com/majianglong500-sketch/axellab-web/releases/download/axel-v1.0.65/AXEL-Portable-1.0.65.exe",
   "ad": {
     "enabled": false,
     "image": "https://axellab.org/assets/ad/banner.png",
@@ -16,16 +16,16 @@
       "side"
     ]
   },
-  "setupUrlAlt": "https://pan.baidu.com/s/1nW0qg2Wyt4-QiWJyE9dXQQ?pwd=AXEL",
-  "portableUrlAlt": "https://pan.baidu.com/s/1RiO7l6H88HzmB9sse093pg?pwd=AXEL",
-  "panUrl": "https://pan.baidu.com/s/1nW0qg2Wyt4-QiWJyE9dXQQ?pwd=AXEL",
+  "setupUrlAlt": "https://pan.baidu.com/s/1su8xmK2WrpVarDDwa1XGBA?pwd=AXEL",
+  "portableUrlAlt": "https://pan.baidu.com/s/16DwQ3HC1Apc-SdcU7o482w?pwd=AXEL",
+  "panUrl": "https://pan.baidu.com/s/1su8xmK2WrpVarDDwa1XGBA?pwd=AXEL",
   "panCode": "AXEL",
   "panName": "百度网盘",
-  "notes": "1.0.64 测试版（重打）：修好局域网通讯 / 文件共享点开卡顿和搜不到共享盘（不再整读报价库、按真网卡网段广播、防火墙跟着软件位置走、重连盘符不叠）；CDR 工具页先出界面再检测；不让把软件自己的报价数据目录共享出去；Word 增加表格底纹 / 框线和「×金额」、导航窗格（默认关）。本包也包含此前 1.0.64 内容。正式版仍是 1.0.51。GitHub 安装包/便携版与百度网盘备用均已是本版。",
+  "notes": "1.0.65 测试版：报价里「更多」可发微信长图（合计在前，一项一张卡片，不含成本、毛利和参考价，复制图片后到微信粘贴即可）；Word 可插二维码、文本可转表格；网卡识别小修；文件共享打开不再卡约 10 秒（先出「正在打开…」，断开的盘不会再把界面拖住）。本包也包含此前 1.0.64 内容。正式版仍是 1.0.51。GitHub 安装包/便携版与百度网盘备用均已是本版。",
   "serialUrlAlt": "https://pan.baidu.com/s/1qMf8D9iNvo7R5zAS8fkaDA?pwd=AXEL",
   "licenseUrlAlt": "https://pan.baidu.com/s/1qMf8D9iNvo7R5zAS8fkaDA?pwd=AXEL",
-  "setupSha256": "89f8a51e337494665cf1376b759a3dd4a07b8052f1be6e864f4051e65a22619f",
-  "portableSha256": "93788dbe4fc3cc4efa0845aaab03f0a184fe577b03b6a92ea044ad4a856d24d5",
-  "setupSize": 82032128,
-  "portableSize": 81743110
+  "setupSha256": "ce3dbfdb8998639df2c00c6ccb40cfa54975df93396e3d8b57722db1342bc1c2",
+  "portableSha256": "4385a5abe592a186fe091d93c7033a1059e55b7173a49ef5acbb62a2a9f78adb",
+  "setupSize": 82067368,
+  "portableSize": 81778345
 }
